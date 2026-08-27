@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking Confirmation - Silver Village Cinema</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#1c1f29",
+                        "error-container": "#93000a",
+                        "primary": "#f2ca50",
+                        "on-secondary-fixed-variant": "#424753",
+                        "on-secondary": "#2b303c",
+                        "secondary-fixed": "#dee2f2",
+                        "on-surface": "#dfe2ef",
+                        "on-primary-container": "#554300",
+                        "on-tertiary-container": "#434546",
+                        "outline-variant": "#4d4635",
+                        "error": "#ffb4ab",
+                        "background": "#0f131c",
+                        "inverse-primary": "#735c00",
+                        "on-primary-fixed-variant": "#574500",
+                        "inverse-surface": "#dfe2ef",
+                        "tertiary": "#cecece",
+                        "secondary-container": "#444955",
+                        "tertiary-container": "#b2b3b3",
+                        "on-background": "#dfe2ef",
+                        "on-secondary-fixed": "#171c27",
+                        "on-primary-fixed": "#241a00",
+                        "on-error": "#690005",
+                        "surface-container-high": "#262a34",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-container-low": "#181b25",
+                        "outline": "#99907c",
+                        "surface": "#0f131c",
+                        "secondary": "#c2c6d5",
+                        "primary-fixed": "#ffe088",
+                        "on-secondary-container": "#b4b8c7",
+                        "surface-tint": "#e9c349",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-tertiary": "#2f3131",
+                        "surface-container-lowest": "#0a0e17",
+                        "on-surface-variant": "#d0c5af",
+                        "inverse-on-surface": "#2c303a",
+                        "surface-variant": "#31353f",
+                        "primary-container": "#d4af37",
+                        "tertiary-fixed": "#e2e2e2",
+                        "surface-bright": "#353943",
+                        "surface-dim": "#0f131c",
+                        "surface-container-highest": "#31353f",
+                        "on-primary": "#3c2f00",
+                        "primary-fixed-dim": "#e9c349",
+                        "secondary-fixed-dim": "#c2c6d5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "margin-desktop": "80px",
+                        "container-max": "1440px",
+                        "gutter": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        .ticket-cutout {
+            position: relative;
+        }
+        .ticket-cutout::before,
+        .ticket-cutout::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background: #0a0e17;
+            border-radius: 50%;
+            transform: translateY(-50%);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        .ticket-cutout::before { left: -11px; border-right-color: transparent; border-top-color: transparent; border-bottom-color: transparent; transform: translateY(-50%) rotate(45deg); }
+        .ticket-cutout::after { right: -11px; border-left-color: transparent; border-top-color: transparent; border-bottom-color: transparent; transform: translateY(-50%) rotate(-45deg); }
+        
+        .dash-line {
+            border-top: 2px dashed rgba(212, 175, 55, 0.3);
+            margin-top: -1px;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body-md min-h-screen flex flex-col pt-20">
+<!-- TopNavBar (Simulated from JSON intent) -->
+<nav class="bg-background/80 backdrop-blur-xl border-b border-white/10 shadow-2xl fixed top-0 w-full z-50 h-20 transition-all duration-300">
+<div class="flex justify-between items-center px-margin-desktop h-full w-full mx-auto max-w-container-max">
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter">
+                Silver Village Cinema
+            </div>
+<div class="hidden md:flex gap-8">
+<!-- Transactional/Dead End Page: Navigation links suppressed as per Contextual State & Identity rule -->
+<span class="text-on-surface-variant text-label-md font-label-md">Checkout Flow</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-primary hover:bg-white/5 p-2 rounded-full transition-all duration-300 scale-95 active:scale-90 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="flex-grow flex flex-col items-center w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 gap-12">
+<!-- Breadcrumb / Stepper -->
+<div class="w-full flex items-center justify-center gap-2 text-label-sm font-label-sm text-on-surface-variant overflow-x-auto whitespace-nowrap py-4">
+<span>1. Select Movie</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span>2. Select Seats</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span>3. Review Wishlist</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary">4. Confirmation &amp; E-Tickets</span>
+</div>
+<!-- Success Hero -->
+<section class="flex flex-col items-center text-center gap-6 max-w-2xl">
+<div class="w-32 h-32 relative flex items-center justify-center rounded-full glass-panel shadow-[0_0_40px_rgba(212,175,55,0.2)]">
+
+</div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">
+                Booking Confirmed &amp;<br/><span class="text-primary">Digital Tickets Issued!</span>
+</h1>
+<div class="flex items-center gap-3 bg-surface-container-high px-6 py-3 rounded-full border border-white/10 mt-4">
+<span class="text-on-surface-variant font-label-md">Booking Reference:</span>
+<span class="text-primary font-mono tracking-wider font-bold">#SVC-2026-88914</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors ml-2" onclick="alert('Copied to clipboard!')" title="Copy Reference">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+</button>
+</div>
+</section>
+<!-- Main Grid Layout -->
+<div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mt-8">
+<!-- E-Tickets Section -->
+<div class="lg:col-span-8 flex flex-col gap-8">
+<h2 class="font-headline-md text-headline-md text-on-surface border-b border-white/10 pb-4">Your E-Tickets</h2>
+<!-- Ticket 1 -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col sm:flex-row relative group">
+<div class="sm:w-1/3 relative h-48 sm:h-auto">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AEtjO1WmsBeCG3ZXrD78PIMrA0IvfDkkyni7onlonGhQGJyAyPXCmSjxnvrKpaVb2d38IHRxysd64B409S_b1RE2zkngOR2w1mpLfZb9EBHTnwK_fj2oL2RULfwfoOUwSQHES-w3D4upEkmT_1tG4TDBkxeGvkY1zhjLnOwsbe5vj-N7ZBXeUBXclgK1OLehq1RDDAs0NNE8GZqAzM9F-5UTLT3lnD1GDCOZt7iwTFrowhdnAQuAz7aHIS8voJM')"></div>
+<div class="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-surface-container-lowest to-transparent"></div>
+</div>
+<div class="flex-grow p-6 flex flex-col justify-between z-10 ticket-cutout border-t sm:border-t-0 sm:border-l border-white/5 border-dashed sm:border-solid">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="inline-block px-3 py-1 rounded-full border border-primary/30 text-primary text-[10px] font-bold tracking-widest uppercase mb-2">Dolby Atmos</div>
+<h3 class="font-headline-sm text-headline-sm font-bold">Spider-Man: Brand New Day</h3>
+<p class="text-on-surface-variant mt-1 font-label-md">Hall A • Premium Recliners</p>
+</div>
+<div class="text-right">
+<p class="text-primary font-bold">Sat, 30 Aug 2026</p>
+<p class="text-on-surface-variant text-sm">7:30 PM</p>
+</div>
+</div>
+<div class="dash-line my-4"></div>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-on-surface-variant text-xs uppercase tracking-wider mb-1">Seats</p>
+<p class="font-headline-sm text-primary font-bold">D3, D4</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:block text-center opacity-50 transform rotate-[-15deg] border-2 border-error text-error px-2 py-1 rounded font-bold tracking-widest text-xs uppercase">
+                                    Admitted
+                                </div>
+<div class="bg-white p-2 rounded w-20 h-20 flex items-center justify-center">
+<img class="w-full h-full object-cover mix-blend-multiply" data-alt="A high contrast black and white abstract geometric pattern resembling a dense QR code, clean sharp lines, vector graphic style, isolated on solid white background, flat lighting, digital ticket aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOJe0NFRhEbe0dayDmBLI7xLJK5VQ1jRJjqWgflWJ2FPyEBxeAqNq4GaSVxlVYRqu0q0erS9euMACGg8Am2wbvrq94bFEmXJqtdF0j9tl4vOh1NXJMUNDb73uEvBL_OhFL0EaT1N0vhi1D4OAIpe-u_5hC3jQ1FXrYb9lArEa2xsHxZh9XJ3PPDf5QtTLi1i2mBHQAHUOjz0bcs0EHBtzZ2rYmva8TRtJarwwKxOv6Pfrc4bFkTNHzOCXDaqJm3v3v4yg0SdBv68E"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Ticket 2 -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col sm:flex-row relative group">
+<div class="sm:w-1/3 relative h-48 sm:h-auto">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida/AEtjO1WzIUysdFkA6WkjK_jZisdCxMezuXFDkcI6Fuu8BotAMC3-gzlH2JON7cgLPQZhTMvOuZZHF3t0X5EI4wYjgCzrE7CpbGyrqdSWrhmnQEvPYCKuBzFcKI-bGEbmj4wT5kw-3lG3-uOk5y6_6Z8iFNSZWEFlve7Vopz8Yy3o40ou_7YvbNgT0L9CHhaihL681Gh3whXaXSEcaPVGpe6UkEOUK8xZfHqMw7dcT3DD4t_uF-Xps2affHzoaQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-surface-container-lowest to-transparent"></div>
+</div>
+<div class="flex-grow p-6 flex flex-col justify-between z-10 ticket-cutout border-t sm:border-t-0 sm:border-l border-white/5 border-dashed sm:border-solid">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="inline-block px-3 py-1 rounded-full border border-white/20 text-on-surface text-[10px] font-bold tracking-widest uppercase mb-2">Standard</div>
+<h3 class="font-headline-sm text-headline-sm font-bold">Insidious: Out of the Further</h3>
+<p class="text-on-surface-variant mt-1 font-label-md">Hall C • Standard Seats</p>
+</div>
+<div class="text-right">
+<p class="text-primary font-bold">Sun, 31 Aug 2026</p>
+<p class="text-on-surface-variant text-sm">9:30 PM</p>
+</div>
+</div>
+<div class="dash-line my-4"></div>
+<div class="flex justify-between items-end">
+<div>
+<p class="text-on-surface-variant text-xs uppercase tracking-wider mb-1">Seats</p>
+<p class="font-headline-sm text-primary font-bold">C4, C5</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="bg-white p-2 rounded w-20 h-20 flex items-center justify-center">
+<img class="w-full h-full object-cover mix-blend-multiply" data-alt="A high contrast black and white abstract geometric pattern resembling a dense QR code, clean sharp lines, vector graphic style, isolated on solid white background, flat lighting, digital ticket aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkzX-IGpJVRu1iQ0ECs66N_C2QOly-dsbBy7Z89FCoNQR0bUlPebvV-JSqkNOqd_4pucQZFPN99iIBImTpo-sFU_viODEr1MAmzIYS95dKYl0R5MhH975c-8bx3twAHKuA5eMrEDPzqBEi5bo42qEWlVp9wjDTtdaJ38ca3ZdpvAxLR3MaSxXSrGpNhmCU2ITpyuLuf328tW2e45fuNMq9ac985aJY8_0kHHQDAKCnTZJeT6vx04678JXGufzITJtccdGI7ijIU5I"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar / Actions -->
+<div class="lg:col-span-4 flex flex-col gap-6 sticky top-28">
+<!-- Payment Simulation Card -->
+<div class="glass-panel p-6 rounded-xl flex flex-col gap-4 border-t-2 border-t-primary">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+<h3 class="font-label-md text-label-md font-bold">Payment Verified</h3>
+</div>
+<p class="text-sm text-on-surface-variant border-b border-white/10 pb-4">
+                        (Third-Party Sandbox Simulator)
+                    </p>
+<div class="flex justify-between items-center py-2">
+<span class="text-on-surface-variant">Total Paid</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">$53.00</span>
+</div>
+<p class="text-xs text-on-surface-variant italic text-right">via Simulated Payment Gateway</p>
+<div class="flex flex-col gap-3 mt-4">
+<button class="bg-primary/10 border border-primary text-primary px-4 py-3 rounded-lg font-label-md hover:bg-primary hover:text-on-primary transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                            Simulate Payment Success Flow
+                        </button>
+<button class="border border-error/50 text-error hover:bg-error/10 px-4 py-3 rounded-lg font-label-md transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">error</span>
+                            Simulate Payment Failure / Refund
+                        </button>
+</div>
+</div>
+<!-- Local Server Mail Box -->
+<div class="glass-panel p-6 rounded-xl border border-white/10 flex flex-col gap-4">
+<div class="flex items-start gap-4">
+<div class="bg-surface-container-high p-3 rounded-full text-on-surface-variant">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<div>
+<h4 class="font-label-md font-bold mb-1">Receipt Sent</h4>
+<p class="text-xs text-on-surface-variant">user@silvervillage.local</p>
+<p class="text-[10px] text-on-surface-variant/70 mt-1">(via XAMPP Mercury Mail)</p>
+</div>
+</div>
+<button class="text-on-surface border border-white/20 px-4 py-2 rounded font-label-sm hover:bg-white/5 transition-colors w-full">
+                        [View Local Mailbox]
+                    </button>
+</div>
+<!-- Quick Actions -->
+<div class="flex flex-col gap-3 mt-4">
+<button class="bg-primary text-on-primary font-label-md px-6 py-4 rounded-xl hover:scale-[1.02] transition-transform shadow-lg shadow-primary/20 flex justify-center items-center gap-2 font-bold">
+<span class="material-symbols-outlined">download</span>
+                        Download PDF Tickets
+                    </button>
+<div class="grid grid-cols-2 gap-3">
+<button class="glass-panel text-on-surface font-label-md px-4 py-3 rounded-xl hover:bg-white/10 transition-colors flex justify-center items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-[18px]">calendar_add_on</span>
+                            Add to Calendar
+                        </button>
+<button class="glass-panel text-on-surface font-label-md px-4 py-3 rounded-xl hover:bg-white/10 transition-colors flex justify-center items-center gap-2 text-sm">
+<span class="material-symbols-outlined text-[18px]">movie</span>
+                            Return to Movies
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest w-full py-margin-desktop border-t border-white/5 mt-20">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1 flex flex-col gap-4">
+<div class="font-headline-sm text-headline-sm text-primary font-bold">Silver Village Cinema</div>
+<p class="text-on-surface-variant text-label-sm font-label-sm">© 2024 Silver Village Cinema. The Gold Standard of Cinema.</p>
+</div>
+<div class="col-span-1 md:col-span-3 flex flex-wrap gap-6 justify-start md:justify-end items-center mt-6 md:mt-0">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Cookie Settings</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Accessibility</a>
+</div>
+</div>
+</footer>
+</body></html>

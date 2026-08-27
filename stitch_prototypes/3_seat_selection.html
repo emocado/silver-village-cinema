@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Silver Village Cinema - Seat Selection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e2e2e2",
+                        "inverse-primary": "#735c00",
+                        "surface-container-low": "#181b25",
+                        "on-primary-fixed-variant": "#574500",
+                        "on-tertiary-container": "#434546",
+                        "on-primary-fixed": "#241a00",
+                        "error-container": "#93000a",
+                        "secondary-fixed-dim": "#c2c6d5",
+                        "primary-fixed-dim": "#e9c349",
+                        "inverse-surface": "#dfe2ef",
+                        "on-secondary-fixed-variant": "#424753",
+                        "outline": "#99907c",
+                        "on-tertiary": "#2f3131",
+                        "on-primary": "#3c2f00",
+                        "surface-variant": "#31353f",
+                        "on-secondary-fixed": "#171c27",
+                        "on-error": "#690005",
+                        "surface": "#0f131c",
+                        "surface-dim": "#0f131c",
+                        "on-error-container": "#ffdad6",
+                        "secondary-container": "#444955",
+                        "surface-container-high": "#262a34",
+                        "on-background": "#dfe2ef",
+                        "background": "#0f131c",
+                        "surface-container": "#1c1f29",
+                        "on-secondary": "#2b303c",
+                        "surface-tint": "#e9c349",
+                        "primary": "#f2ca50",
+                        "tertiary": "#cecece",
+                        "secondary": "#c2c6d5",
+                        "primary-container": "#d4af37",
+                        "on-surface": "#dfe2ef",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "on-primary-container": "#554300",
+                        "surface-bright": "#353943",
+                        "surface-container-lowest": "#0a0e17",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "inverse-on-surface": "#2c303a",
+                        "surface-container-highest": "#31353f",
+                        "secondary-fixed": "#dee2f2",
+                        "on-surface-variant": "#d0c5af",
+                        "outline-variant": "#4d4635",
+                        "tertiary-container": "#b2b3b3",
+                        "primary-fixed": "#ffe088",
+                        "error": "#ffb4ab",
+                        "on-secondary-container": "#b4b8c7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "container-max": "1440px",
+                        "base": "8px",
+                        "margin-desktop": "80px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(10, 14, 23, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .seat-curve {
+            border-bottom-left-radius: 50% 100%;
+            border-bottom-right-radius: 50% 100%;
+        }
+        .glow-border-gold {
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5), inset 0 0 5px rgba(212, 175, 55, 0.2);
+            border-color: #d4af37;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-white/10 shadow-2xl">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 w-full mx-auto max-w-container-max">
+<div class="flex items-center gap-gutter">
+<a class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter" href="#">Silver Village Cinema</a>
+</div>
+<div class="hidden md:flex items-center gap-6 font-label-md text-label-md">
+<a class="text-on-surface/70 hover:text-on-surface transition-colors hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Home</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Now Showing</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Coming Soon</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Wishlist</a>
+<a class="text-primary border-b-2 border-primary pb-1 px-3 py-2 rounded-t-DEFAULT scale-95 active:scale-90" href="#">My Bookings</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:block font-label-md text-label-md text-on-surface hover:text-primary transition-colors">Login</button>
+<button class="text-on-surface hover:text-primary transition-colors scale-95 active:scale-90">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="pt-24 pb-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Breadcrumbs & Stepper -->
+<div class="flex items-center gap-2 mb-8 font-label-sm text-label-sm text-on-surface-variant overflow-x-auto whitespace-nowrap">
+<span>1. Select Movie</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary font-semibold">2. Select Seats &amp; Preference</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span>3. Review Wishlist / Confirm</span>
+</div>
+<!-- Movie Banner -->
+<div class="relative w-full rounded-xl overflow-hidden mb-12 glass-panel border border-white/10 shadow-lg">
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-surface-container-lowest/80 to-transparent z-10"></div>
+<div class="absolute inset-0 z-0">
+<div class="bg-cover bg-center w-full h-full opacity-30 mix-blend-luminosity" data-alt="A cinematic, high-contrast promotional image for a superhero movie, featuring a masked figure swinging through a futuristic, rain-slicked metropolis at night. The scene is illuminated by neon lights reflecting on wet glass and metal surfaces, conveying an epic, action-packed atmosphere typical of blockbuster films. Dark navy and vibrant red tones dominate." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBeYFNtqMMcZGEHcWzrlAfHju-0IiOMMnQq936tT15XvW-wYHO9v3qLf7TBJ3EHD63237vDB0-HptKGlWLplXa3MfZWcCLxbI7gXESJJA1bmlGExsIqJAJYNVPqd9-lnFqiM9_d4pTnn2oyCbXMXj_46eGAfXKQfMwM2FniWpHkWcZC4tAFDhVg4r3ctyWOOW5anwfduWI3MHyBn3yvSWIDTA4HhjCRMtqj8WR0bJMvHJpXAEcnxDPi4SmvooxkIuslyvOH49UuMc')"></div>
+</div>
+<div class="relative z-20 p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-2 font-bold tracking-wide uppercase">Spider-Man: Brand New Day</h1>
+<div class="flex flex-wrap items-center gap-4 font-body-md text-body-md text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px] text-primary">location_on</span> Hall A</span>
+<span class="w-1 h-1 rounded-full bg-white/30"></span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px] text-primary">calendar_month</span> Sat 30 Aug 2026</span>
+<span class="w-1 h-1 rounded-full bg-white/30"></span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px] text-primary">schedule</span> 7:30 PM</span>
+</div>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-surface-container/50 border border-white/20 font-label-sm text-label-sm text-on-surface uppercase tracking-wider backdrop-blur-md">Dolby Atmos</span>
+<span class="px-3 py-1 rounded-full bg-surface-container/50 border border-white/20 font-label-sm text-label-sm text-on-surface uppercase tracking-wider backdrop-blur-md">4K Laser</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left: Seat Map -->
+<div class="lg:col-span-8 flex flex-col items-center glass-panel rounded-xl p-8 relative overflow-hidden">
+<!-- Screen Indicator -->
+<div class="w-3/4 max-w-2xl mx-auto mb-16 relative">
+<div class="h-8 w-full border-t-[4px] border-primary/80 seat-curve shadow-[0_-15px_30px_rgba(212,175,55,0.15)] relative">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 font-label-sm text-label-sm text-primary tracking-[0.2em] uppercase whitespace-nowrap bg-surface-container-lowest px-4 py-1 rounded-full border border-primary/20">Curved Cinema Screen</div>
+</div>
+<div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none seat-curve"></div>
+</div>
+<!-- Seats Grid -->
+<div class="flex flex-col gap-4 w-full max-w-3xl overflow-x-auto pb-8">
+<!-- Standard Rows -->
+<div class="flex justify-center gap-8 items-center min-w-max">
+<span class="font-label-md text-label-md text-on-surface-variant w-4 text-center">A</span>
+<div class="flex gap-2">
+<button aria-label="Seat A1" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-container-high border border-white/10 hover:border-primary/50 transition-colors flex items-center justify-center group">
+<div class="w-6 h-1 bg-surface-variant rounded-t-sm group-hover:bg-primary/50 transition-colors"></div>
+</button>
+<button aria-label="Seat A2 (Booked)" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-variant text-on-surface-variant/30 flex items-center justify-center cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+<button aria-label="Seat A3" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-container-high border border-white/10 hover:border-primary/50 transition-colors flex items-center justify-center group">
+<div class="w-6 h-1 bg-surface-variant rounded-t-sm group-hover:bg-primary/50 transition-colors"></div>
+</button>
+<div class="w-4"></div> <!-- Aisle -->
+<button aria-label="Seat A4" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-container-high border border-white/10 hover:border-primary/50 transition-colors flex items-center justify-center group">
+<div class="w-6 h-1 bg-surface-variant rounded-t-sm group-hover:bg-primary/50 transition-colors"></div>
+</button>
+<button aria-label="Seat A5" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-container-high border border-white/10 hover:border-primary/50 transition-colors flex items-center justify-center group">
+<div class="w-6 h-1 bg-surface-variant rounded-t-sm group-hover:bg-primary/50 transition-colors"></div>
+</button>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant w-4 text-center">A</span>
+</div>
+<div class="flex justify-center gap-8 items-center min-w-max">
+<span class="font-label-md text-label-md text-on-surface-variant w-4 text-center">B</span>
+<div class="flex gap-2">
+<button aria-label="Seat B1" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-container-high border border-white/10 hover:border-primary/50 transition-colors flex items-center justify-center group">
+<div class="w-6 h-1 bg-surface-variant rounded-t-sm group-hover:bg-primary/50 transition-colors"></div>
+</button>
+<button aria-label="Seat B2" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-container-high border border-white/10 hover:border-primary/50 transition-colors flex items-center justify-center group">
+<div class="w-6 h-1 bg-surface-variant rounded-t-sm group-hover:bg-primary/50 transition-colors"></div>
+</button>
+<button aria-label="Seat B3 (Booked)" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-variant text-on-surface-variant/30 flex items-center justify-center cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+<div class="w-4"></div>
+<button aria-label="Seat B4" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-container-high border border-white/10 hover:border-primary/50 transition-colors flex items-center justify-center group">
+<div class="w-6 h-1 bg-surface-variant rounded-t-sm group-hover:bg-primary/50 transition-colors"></div>
+</button>
+<button aria-label="Seat B5" class="w-8 h-8 rounded-t-lg rounded-b-sm bg-surface-container-high border border-white/10 hover:border-primary/50 transition-colors flex items-center justify-center group">
+<div class="w-6 h-1 bg-surface-variant rounded-t-sm group-hover:bg-primary/50 transition-colors"></div>
+</button>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant w-4 text-center">B</span>
+</div>
+<!-- Spacer between standard and premium -->
+<div class="h-6 flex items-center justify-center">
+<div class="w-1/2 border-t border-white/5"></div>
+</div>
+<!-- Premium Rows -->
+<div class="flex justify-center gap-8 items-center min-w-max">
+<span class="font-label-md text-label-md text-primary w-4 text-center">C</span>
+<div class="flex gap-3">
+<button aria-label="Seat C1 Premium" class="w-10 h-10 rounded-t-xl rounded-b-md bg-surface-container-high border border-primary/30 hover:glow-border-gold transition-all duration-300 flex items-center justify-center relative overflow-hidden">
+<div class="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-primary/10 to-transparent"></div>
+</button>
+<button aria-label="Seat C2 Premium (Booked)" class="w-10 h-10 rounded-t-xl rounded-b-md bg-surface-variant border border-white/5 text-on-surface-variant/30 flex items-center justify-center cursor-not-allowed opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+<button aria-label="Seat C3 Premium" class="w-10 h-10 rounded-t-xl rounded-b-md bg-surface-container-high border border-primary/30 hover:glow-border-gold transition-all duration-300 flex items-center justify-center relative overflow-hidden">
+<div class="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-primary/10 to-transparent"></div>
+</button>
+<div class="w-6"></div> <!-- Wider Aisle -->
+<button aria-label="Seat C4 Premium (Selected)" class="w-10 h-10 rounded-t-xl rounded-b-md bg-primary-container/20 border-2 border-primary glow-border-gold text-primary flex items-center justify-center relative overflow-hidden shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300 transform scale-105">
+<span class="material-symbols-outlined text-[20px] font-bold">check</span>
+</button>
+<button aria-label="Seat C5 Premium (Selected)" class="w-10 h-10 rounded-t-xl rounded-b-md bg-primary-container/20 border-2 border-primary glow-border-gold text-primary flex items-center justify-center relative overflow-hidden shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300 transform scale-105">
+<span class="material-symbols-outlined text-[20px] font-bold">check</span>
+</button>
+</div>
+<span class="font-label-md text-label-md text-primary w-4 text-center">C</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="mt-8 pt-8 border-t border-white/10 w-full flex flex-wrap justify-center gap-6 font-label-sm text-label-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-t bg-surface-container-high border border-white/10"></div>
+<span>Standard ($10.50)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-t bg-surface-container-high border border-primary/50"></div>
+<span class="text-primary">Premium ($14.50)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-t bg-primary-container/20 border border-primary flex items-center justify-center"><span class="material-symbols-outlined text-[10px] text-primary">check</span></div>
+<span>Selected</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-t bg-surface-variant flex items-center justify-center text-on-surface-variant/50"><span class="material-symbols-outlined text-[10px]">close</span></div>
+<span>Booked</span>
+</div>
+</div>
+</div>
+<!-- Right: Summary Card -->
+<div class="lg:col-span-4">
+<div class="glass-panel rounded-xl p-6 md:p-8 sticky top-28 flex flex-col gap-6">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold border-b border-white/10 pb-4">Booking Summary</h2>
+<!-- Selected Seats List -->
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center bg-surface-container-high/50 p-3 rounded-lg border border-white/5">
+<div>
+<div class="font-label-md text-label-md text-primary">C4</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Premium Recliner</div>
+</div>
+<div class="font-body-md text-body-md text-on-surface">$14.50</div>
+</div>
+<div class="flex justify-between items-center bg-surface-container-high/50 p-3 rounded-lg border border-white/5">
+<div>
+<div class="font-label-md text-label-md text-primary">C5</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Premium Recliner</div>
+</div>
+<div class="font-body-md text-body-md text-on-surface">$14.50</div>
+</div>
+</div>
+<!-- Cost Breakdown -->
+<div class="border-t border-b border-white/10 py-4 flex flex-col gap-2 font-body-md text-body-md">
+<div class="flex justify-between text-on-surface-variant">
+<span>Tickets (2x Premium)</span>
+<span>$29.00</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Booking Fee</span>
+<span>$1.50</span>
+</div>
+<div class="flex justify-between items-center mt-2 pt-2 border-t border-white/5">
+<span class="font-semibold text-on-surface">Subtotal</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">$30.50</span>
+</div>
+</div>
+<!-- Preference Selector -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Priority Rank for Wishlist</label>
+<div class="relative">
+<select class="w-full bg-surface-container-low border border-outline/30 rounded-lg py-3 px-4 text-on-surface font-body-md appearance-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors outline-none cursor-pointer">
+<option value="1">Preference #1 (Top Choice)</option>
+<option value="2">Preference #2</option>
+<option value="3">Preference #3</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-3 mt-4">
+<button class="w-full py-3 px-4 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold uppercase tracking-wider hover:bg-primary-container transition-all transform hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                            Proceed to Direct Checkout
+                        </button>
+<button class="w-full py-3 px-4 rounded-lg bg-transparent border border-primary text-primary font-label-md text-label-md font-bold uppercase tracking-wider hover:bg-primary/10 transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">bookmark_add</span> Add to Wishlist
+                        </button>
+<p class="font-label-sm text-label-sm text-on-surface-variant/70 text-center mt-2 leading-relaxed">
+                            Shortlist multiple preferred movies &amp; showtimes to review availability together before final payment.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest w-full py-margin-desktop border-t border-white/5">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1 mb-6 md:mb-0">
+<div class="font-headline-sm text-headline-sm text-primary mb-2">Silver Village Cinema</div>
+<div class="font-body-md text-body-md text-on-surface-variant opacity-80 hover:opacity-100 transition-opacity">
+                    © 2024 Silver Village Cinema. The Gold Standard of Cinema.
+                </div>
+</div>
+<div class="col-span-1 md:col-span-3 flex flex-wrap gap-x-8 gap-y-4 md:justify-end items-center font-label-sm text-label-sm">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Cookie Settings</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Accessibility</a>
+</div>
+</div>
+</footer>
+</body></html>

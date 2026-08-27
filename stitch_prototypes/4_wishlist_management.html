@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Booking Wishlist &amp; Preferences - Silver Village Cinema</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#c2c6d5",
+                        "on-primary": "#3c2f00",
+                        "surface-container-high": "#262a34",
+                        "surface-dim": "#0f131c",
+                        "on-tertiary": "#2f3131",
+                        "surface-tint": "#e9c349",
+                        "on-primary-fixed": "#241a00",
+                        "tertiary-container": "#b2b3b3",
+                        "surface-variant": "#31353f",
+                        "on-secondary-fixed-variant": "#424753",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "secondary-fixed": "#dee2f2",
+                        "surface-container-highest": "#31353f",
+                        "on-secondary-fixed": "#171c27",
+                        "tertiary": "#cecece",
+                        "tertiary-fixed": "#e2e2e2",
+                        "secondary": "#c2c6d5",
+                        "primary-container": "#d4af37",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#735c00",
+                        "on-primary-fixed-variant": "#574500",
+                        "on-background": "#dfe2ef",
+                        "on-error": "#690005",
+                        "on-error-container": "#ffdad6",
+                        "primary": "#f2ca50",
+                        "surface": "#0f131c",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-container": "#1c1f29",
+                        "surface-bright": "#353943",
+                        "on-primary-container": "#554300",
+                        "surface-container-low": "#181b25",
+                        "inverse-surface": "#dfe2ef",
+                        "on-tertiary-container": "#434546",
+                        "on-surface": "#dfe2ef",
+                        "surface-container-lowest": "#0a0e17",
+                        "outline-variant": "#4d4635",
+                        "on-secondary-container": "#b4b8c7",
+                        "on-surface-variant": "#d0c5af",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "inverse-on-surface": "#2c303a",
+                        "primary-fixed-dim": "#e9c349",
+                        "outline": "#99907c",
+                        "on-secondary": "#2b303c",
+                        "background": "#0f131c",
+                        "secondary-container": "#444955",
+                        "primary-fixed": "#ffe088",
+                        "error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-desktop": "80px",
+                        "base": "8px",
+                        "margin-mobile": "20px",
+                        "container-max": "1440px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Playfair Display"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0a0e17; /* surface-container-lowest */
+            color: #dfe2ef; /* on-surface */
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-panel-gold {
+            background: rgba(212, 175, 55, 0.05);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        /* Custom Checkbox */
+        .gold-checkbox:checked {
+            background-color: #d4af37;
+            border-color: #d4af37;
+        }
+        .gold-checkbox:focus {
+            ring-color: #d4af37;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col pt-24 font-body-md text-body-md">
+<!-- TopNavBar (Shared Component JSON) -->
+<nav class="bg-background/80 backdrop-blur-xl border-b border-white/10 shadow-2xl fixed top-0 w-full z-50 transition-colors duration-300">
+<div class="flex justify-between items-center px-margin-desktop h-20 w-full mx-auto max-w-container-max">
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter">
+                Silver Village Cinema
+            </div>
+<div class="hidden md:flex gap-gutter items-center">
+<a class="text-on-surface/70 hover:text-on-surface transition-colors font-label-md text-label-md hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Home</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors font-label-md text-label-md hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Now Showing</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors font-label-md text-label-md hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Coming Soon</a>
+<a class="text-primary border-b-2 border-primary pb-1 font-label-md text-label-md hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Wishlist</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors font-label-md text-label-md hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">My Bookings</a>
+<a class="text-on-surface/70 hover:text-on-surface transition-colors font-label-md text-label-md hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-DEFAULT scale-95 active:scale-90" href="#">Contact</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-md text-label-md text-on-surface/70 hover:text-on-surface hover:bg-white/5 transition-all duration-300 px-4 py-2 rounded-DEFAULT scale-95 active:scale-90">Login</button>
+<button class="text-primary hover:bg-white/5 transition-all duration-300 p-2 rounded-full scale-95 active:scale-90 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Breadcrumb -->
+<div class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-4">
+<div class="flex items-center gap-2 font-label-sm text-label-sm text-on-surface-variant">
+<span>1. Select Movie</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span>2. Select Seats &amp; Preference</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary font-bold">3. Review Wishlist &amp; Final Confirmation</span>
+</div>
+</div>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pb-24">
+<!-- Hero Section -->
+<header class="mb-12 max-w-3xl">
+<h1 class="font-headline-md text-headline-md text-primary mb-4 md:font-display-lg md:text-display-lg">Your Booking Wishlist &amp; Preferences</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Review your shortlisted movie showtimes ranked in order of your preference. Check live seat availability and select one or more bookings to confirm together.</p>
+</header>
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Left Column: Wishlist Cards -->
+<div class="w-full lg:w-2/3 flex flex-col gap-6">
+<!-- Card 1 (Selected) -->
+<article class="glass-panel-gold rounded-xl p-6 flex flex-col md:flex-row gap-6 relative transition-transform hover:-translate-y-1 duration-300">
+<div class="absolute top-4 right-4 z-10 flex items-center gap-3">
+<div class="flex flex-col gap-1 text-on-surface-variant cursor-pointer hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">keyboard_arrow_up</span>
+<span class="material-symbols-outlined text-[20px]">keyboard_arrow_down</span>
+</div>
+</div>
+<div class="w-full md:w-48 h-32 md:h-auto flex-shrink-0 rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Cinematic movie scene, high-quality modern superhero action aesthetic, vibrant city at night with glowing lights. Professional cinematic wide shot. Deep midnight and glowing gold accents. Premium light-mode styling." src="https://lh3.googleusercontent.com/aida/AEtjO1WmsBeCG3ZXrD78PIMrA0IvfDkkyni7onlonGhQGJyAyPXCmSjxnvrKpaVb2d38IHRxysd64B409S_b1RE2zkngOR2w1mpLfZb9EBHTnwK_fj2oL2RULfwfoOUwSQHES-w3D4upEkmT_1tG4TDBkxeGvkY1zhjLnOwsbe5vj-N7ZBXeUBXclgK1OLehq1RDDAs0NNE8GZqAzM9F-5UTLT3lnD1GDCOZt7iwTFrowhdnAQuAz7aHIS8voJM"/>
+<div class="absolute top-2 left-2 bg-primary-container text-on-primary-container font-label-sm text-label-sm px-2 py-1 rounded-full shadow-lg">
+                            #1 Choice
+                        </div>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex items-start gap-4 mb-2">
+<input checked="" class="gold-checkbox w-6 h-6 rounded border-white/20 bg-transparent mt-1 cursor-pointer" type="checkbox"/>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-1">Spider-Man: Brand New Day</h3>
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-3">Top Choice</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 font-body-md text-body-md text-on-surface-variant mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                    Sat 30 Aug 2026 | 7:30 PM
+                                </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                    Hall A (Dolby Atmos)
+                                </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">chair</span>
+                                    D3, D4 (2x Premium Recliner)
+                                </div>
+<div class="flex items-center gap-2 text-green-400">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                    100% Available
+                                </div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/10 mt-auto">
+<span class="font-headline-sm text-headline-sm text-primary">$29.00</span>
+<div class="flex gap-4">
+<button class="font-label-md text-label-md text-on-surface hover:text-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                                </button>
+<button class="font-label-md text-label-md text-on-surface/50 hover:text-error transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete</span> Remove
+                                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 2 (Unselected) -->
+<article class="glass-panel rounded-xl p-6 flex flex-col md:flex-row gap-6 relative transition-transform hover:-translate-y-1 duration-300 opacity-80 hover:opacity-100">
+<div class="absolute top-4 right-4 z-10 flex items-center gap-3">
+<div class="flex flex-col gap-1 text-on-surface-variant cursor-pointer hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">keyboard_arrow_up</span>
+<span class="material-symbols-outlined text-[20px]">keyboard_arrow_down</span>
+</div>
+</div>
+<div class="w-full md:w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Movie poster for The Odyssey. Epic Greek mythology theme, grand scale, majestic and cinematic. Professional high-resolution movie poster art. High-contrast minimalism with deep navy and gold." src="https://lh3.googleusercontent.com/aida/AEtjO1W_nsriSzr52wXcqor4FAyGC0ZBfTj5VOWeG33aNaqUR7_0oz_GqVWuS1memqgF5uqOmOvowiuJdcv0N1t5-VFmI_3hcixCeZCUALDxJ2IizRIyDpn14jwaVlB9qFnCB4lMfeHTPbbtpbmEtlC7Kg0eeeiS1U_NLLlfsZDV86R2u2Bnk5rg-OKJ1e0zp8n6YivKXxGAqOEO7RqcOv6GJtMBg6QJF1ch17qjE-bYppCiVggia-3NP7QDO_0"/>
+<div class="absolute top-2 left-2 bg-surface-variant/80 backdrop-blur text-on-surface font-label-sm text-label-sm px-2 py-1 rounded-full shadow-lg">
+                            #2
+                        </div>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex items-start gap-4 mb-2">
+<input class="gold-checkbox w-6 h-6 rounded border-white/20 bg-transparent mt-1 cursor-pointer" type="checkbox"/>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-1">The Odyssey</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-3">Alternative</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 font-body-md text-body-md text-on-surface-variant mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                    Sat 30 Aug 2026 | 9:00 PM
+                                </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                    Hall B (Premiere)
+                                </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">chair</span>
+                                    E5, E6 (2x Premium Recliner)
+                                </div>
+<div class="flex items-center gap-2 text-yellow-500">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+                                    1 Seat Left in Row
+                                </div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/10 mt-auto">
+<span class="font-headline-sm text-headline-sm text-on-surface">$29.00</span>
+<div class="flex gap-4">
+<button class="font-label-md text-label-md text-on-surface hover:text-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                                </button>
+<button class="font-label-md text-label-md text-on-surface/50 hover:text-error transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete</span> Remove
+                                </button>
+</div>
+</div>
+</div>
+</article>
+<!-- Card 3 (Selected) -->
+<article class="glass-panel-gold rounded-xl p-6 flex flex-col md:flex-row gap-6 relative transition-transform hover:-translate-y-1 duration-300">
+<div class="absolute top-4 right-4 z-10 flex items-center gap-3">
+<div class="flex flex-col gap-1 text-on-surface-variant cursor-pointer hover:text-primary">
+<span class="material-symbols-outlined text-[20px]">keyboard_arrow_up</span>
+<span class="material-symbols-outlined text-[20px]">keyboard_arrow_down</span>
+</div>
+</div>
+<div class="w-full md:w-32 h-48 flex-shrink-0 rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Movie poster for Insidious: Out of the Further. Dark, atmospheric horror aesthetic, eerie and suspenseful. Professional high-resolution movie poster art. Cinematic glassmorphism framing." src="https://lh3.googleusercontent.com/aida/AEtjO1WzIUysdFkA6WkjK_jZisdCxMezuXFDkcI6Fuu8BotAMC3-gzlH2JON7cgLPQZhTMvOuZZHF3t0X5EI4wYjgCzrE7CpbGyrqdSWrhmnQEvPYCKuBzFcKI-bGEbmj4wT5kw-3lG3-uOk5y6_6Z8iFNSZWEFlve7Vopz8Yy3o40ou_7YvbNgT0L9CHhaihL681Gh3whXaXSEcaPVGpe6UkEOUK8xZfHqMw7dcT3DD4t_uF-Xps2affHzoaQ"/>
+<div class="absolute top-2 left-2 bg-surface-variant/80 backdrop-blur text-on-surface font-label-sm text-label-sm px-2 py-1 rounded-full shadow-lg">
+                            #3
+                        </div>
+</div>
+<div class="flex-grow flex flex-col justify-between">
+<div>
+<div class="flex items-start gap-4 mb-2">
+<input checked="" class="gold-checkbox w-6 h-6 rounded border-white/20 bg-transparent mt-1 cursor-pointer" type="checkbox"/>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-1">Insidious: Out of the Further</h3>
+<p class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-3">Backup</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 font-body-md text-body-md text-on-surface-variant mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                                    Sun 31 Aug 2026 | 9:30 PM
+                                </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                                    Hall C (Standard)
+                                </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">chair</span>
+                                    C4, C5 (2x Standard Seats)
+                                </div>
+<div class="flex items-center gap-2 text-green-400">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+                                    100% Available
+                                </div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/10 mt-auto">
+<span class="font-headline-sm text-headline-sm text-primary">$21.00</span>
+<div class="flex gap-4">
+<button class="font-label-md text-label-md text-on-surface hover:text-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                                </button>
+<button class="font-label-md text-label-md text-on-surface/50 hover:text-error transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete</span> Remove
+                                </button>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Right Column: Sticky Sidebar -->
+<aside class="w-full lg:w-1/3">
+<div class="sticky top-28 glass-panel rounded-xl p-8 flex flex-col gap-6">
+<h2 class="font-headline-sm text-headline-sm text-primary border-b border-white/10 pb-4">Selected for Final Booking <span class="text-on-surface-variant font-body-md text-body-md">(2 Shows)</span></h2>
+<ul class="flex flex-col gap-3 font-body-md text-body-md">
+<li class="flex justify-between items-center text-on-surface">
+<span>Spider-Man</span>
+<span>$29.00</span>
+</li>
+<li class="flex justify-between items-center text-on-surface">
+<span>Insidious</span>
+<span>$21.00</span>
+</li>
+<li class="flex justify-between items-center text-on-surface-variant border-t border-white/5 pt-3 mt-1">
+<span>Booking Fee</span>
+<span>$3.00</span>
+</li>
+</ul>
+<div class="flex justify-between items-center font-headline-sm text-headline-sm text-primary border-t border-white/10 pt-4 mt-2">
+<span>Total</span>
+<span>$53.00</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant text-center bg-surface-container/50 p-3 rounded-lg">
+                        Unselected wishlist items will remain saved in your account for later booking.
+                    </p>
+<div class="flex flex-col gap-4 mt-4">
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-4 px-6 rounded-DEFAULT hover:scale-[1.02] transition-transform active:scale-95 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+                            Confirm &amp; Proceed to Payment ($53.00)
+                        </button>
+<button class="w-full border border-primary/50 text-primary font-label-md text-label-md py-4 px-6 rounded-DEFAULT hover:bg-primary/10 transition-colors active:scale-95">
+                            Add More Movies to Wishlist
+                        </button>
+</div>
+</div>
+</aside>
+</div>
+<!-- Informational Alert -->
+<div class="mt-12 glass-panel rounded-lg p-4 flex items-center gap-4 text-on-surface-variant font-label-sm text-label-sm max-w-3xl">
+<span class="material-symbols-outlined text-primary">info</span>
+<p>Upon booking, digital e-tickets and confirmation receipts will be emailed to your local web server account.</p>
+</div>
+</main>
+<!-- Footer (Shared Component JSON) -->
+<footer class="bg-surface-container-lowest text-primary font-body-md text-body-md w-full py-margin-desktop border-t border-white/5 mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto">
+<div class="font-headline-sm text-headline-sm text-primary mb-6 md:mb-0">
+                Silver Village Cinema
+            </div>
+<div class="flex flex-col gap-2 font-label-sm text-label-sm">
+<a class="text-on-surface-variant hover:text-on-surface hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-on-surface hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-on-surface hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Cookie Settings</a>
+<a class="text-on-surface-variant hover:text-on-surface hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">Accessibility</a>
+</div>
+<div class="md:col-span-2 flex items-end justify-start md:justify-end mt-8 md:mt-0">
+<p class="text-on-surface-variant font-label-sm text-label-sm">© 2024 Silver Village Cinema. The Gold Standard of Cinema.</p>
+</div>
+</div>
+</footer>
+</body></html>

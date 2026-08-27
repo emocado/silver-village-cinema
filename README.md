@@ -2,19 +2,21 @@
 
 > **Theme 5:** A web portal for booking cinema tickets  
 > **Tagline:** *"Your Seat, Your Show, Your Way."*  
-> **GitHub Repository:** [https://github.com/emocado/silver-village-cinema](https://github.com/emocado/silver-village-cinema)
+> **GitHub Repository:** [https://github.com/emocado/silver-village-cinema](https://github.com/emocado/silver-village-cinema)  
+> **Stitch UI Design Canvas:** [https://stitch.withgoogle.com/projects/7405104300656411061](https://stitch.withgoogle.com/projects/7405104300656411061)
 
 ---
 
 ## 📑 Table of Contents
 1. [Beginner Quickstart: How to Run This App on Your Computer](#1-beginner-quickstart-how-to-run-this-app-on-your-computer)
 2. [Project Overview & Core Problem Statement](#2-project-overview--core-problem-statement)
-3. [Architectural Design & System Engineering](#3-architectural-design--system-engineering)
-4. [Database Schema & Entity Relationship Diagram (ERD)](#4-database-schema--entity-relationship-diagram-erd)
-5. [Email System & XAMPP Mercury Mail Integration](#5-email-system--xampp-mercury-mail-integration)
-6. [Pre-configured Test Demo Accounts](#6-pre-configured-test-demo-accounts)
-7. [Step-by-Step Presentation User Flows & Demo Script](#7-step-by-step-presentation-user-flows--demo-script)
-8. [File & Directory Structure](#8-file--directory-structure)
+3. [Stitch UI/UX Design System & Interactive Prototypes](#3-stitch-uiux-design-system--interactive-prototypes)
+4. [Architectural Design & System Engineering](#4-architectural-design--system-engineering)
+5. [Database Schema & Entity Relationship Diagram (ERD)](#5-database-schema--entity-relationship-diagram-erd)
+6. [Email System & XAMPP Mercury Mail Integration](#6-email-system--xampp-mercury-mail-integration)
+7. [Pre-configured Test Demo Accounts](#7-pre-configured-test-demo-accounts)
+8. [Step-by-Step Presentation User Flows & Demo Script](#8-step-by-step-presentation-user-flows--demo-script)
+9. [File & Directory Structure](#9-file--directory-structure)
 
 ---
 
@@ -101,7 +103,26 @@ Silver Village Cinema is an end-to-end cinema ticket booking portal developed to
 
 ---
 
-## 3. Architectural Design & System Engineering
+## 3. 🎨 Stitch UI/UX Design System & Interactive Prototypes
+
+Before writing code, full high-fidelity visual prototypes and design systems were created using **Stitch**:
+
+* **Stitch Project ID:** `7405104300656411061`
+* **Public Stitch Studio URL:** [https://stitch.withgoogle.com/projects/7405104300656411061](https://stitch.withgoogle.com/projects/7405104300656411061)
+
+### 🖥️ Standalone Offline Prototypes Included in Repository:
+Anyone who downloads or clones this repository can open these interactive Stitch HTML prototypes directly in any web browser without needing a Google account:
+
+1. **Homepage:** [`stitch_prototypes/1_homepage.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/1_homepage.html)
+2. **Movie Details & Showtimes Schedule:** [`stitch_prototypes/2_movie_details.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/2_movie_details.html)
+3. **Seat Selection & Preference Ranking:** [`stitch_prototypes/3_seat_selection.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/3_seat_selection.html)
+4. **Booking Wishlist & Availability Management:** [`stitch_prototypes/4_wishlist_management.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/4_wishlist_management.html)
+5. **Confirmation & Boarding Pass E-Tickets:** [`stitch_prototypes/5_confirmation.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/5_confirmation.html)
+6. **User Registration Form:** [`stitch_prototypes/6_registration.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/6_registration.html)
+
+---
+
+## 4. Architectural Design & System Engineering
 
 ### 🏛️ 3-Tier Layered Architecture
 
@@ -145,7 +166,7 @@ graph TD
 
 ---
 
-## 4. Database Schema & Entity Relationship Diagram (ERD)
+## 5. Database Schema & Entity Relationship Diagram (ERD)
 
 ### 📊 Entity Relationship Diagram
 
@@ -247,7 +268,7 @@ erDiagram
 
 ---
 
-## 5. Email System & XAMPP Mercury Mail Integration
+## 6. Email System & XAMPP Mercury Mail Integration
 
 Per project guidelines, email notifications must remain confined to the local web server environment without communicating with external mail servers.
 
@@ -279,7 +300,7 @@ Per project guidelines, email notifications must remain confined to the local we
 
 ---
 
-## 6. Pre-configured Test Demo Accounts
+## 7. Pre-configured Test Demo Accounts
 
 | Role | Email Address | Password | Description |
 | :--- | :--- | :--- | :--- |
@@ -289,7 +310,7 @@ Per project guidelines, email notifications must remain confined to the local we
 
 ---
 
-## 7. Step-by-Step Presentation User Flows & Demo Script
+## 8. Step-by-Step Presentation User Flows & Demo Script
 
 Follow this structured workflow during your project presentation to demonstrate how every requirement is met:
 
@@ -380,7 +401,7 @@ Follow this structured workflow during your project presentation to demonstrate 
 
 ---
 
-## 8. File & Directory Structure
+## 9. File & Directory Structure
 
 ```
 silver-village-cinema/
@@ -401,6 +422,13 @@ silver-village-cinema/
 │   └── styles.css             # Master external stylesheet (50+ custom rules)
 ├── js/
 │   └── validation.js          # Client-side form validation script
+├── stitch_prototypes/         # 6 Standalone Stitch HTML Prototypes
+│   ├── 1_homepage.html
+│   ├── 2_movie_details.html
+│   ├── 3_seat_selection.html
+│   ├── 4_wishlist_management.html
+│   ├── 5_confirmation.html
+│   └── 6_registration.html
 ├── images/
 │   ├── hero_spiderman.jpg     # Spider-Man wide hero background image
 │   ├── logo.png               # Brand logo

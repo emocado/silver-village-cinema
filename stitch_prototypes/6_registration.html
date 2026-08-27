@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Silver Village Cinema - Premiere Club Registration</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#e9c349",
+                        "on-primary-fixed": "#241a00",
+                        "background": "#0f131c",
+                        "surface-tint": "#e9c349",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-container-lowest": "#0a0e17",
+                        "primary": "#f2ca50",
+                        "secondary": "#c2c6d5",
+                        "on-secondary-fixed-variant": "#424753",
+                        "surface-variant": "#31353f",
+                        "surface-dim": "#0f131c",
+                        "on-tertiary-container": "#434546",
+                        "secondary-fixed-dim": "#c2c6d5",
+                        "on-secondary": "#2b303c",
+                        "secondary-container": "#444955",
+                        "outline-variant": "#4d4635",
+                        "on-surface": "#dfe2ef",
+                        "inverse-on-surface": "#2c303a",
+                        "on-primary-container": "#554300",
+                        "on-surface-variant": "#d0c5af",
+                        "on-tertiary": "#2f3131",
+                        "inverse-primary": "#735c00",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "surface-container-low": "#181b25",
+                        "surface": "#0f131c",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#dfe2ef",
+                        "on-secondary-fixed": "#171c27",
+                        "on-error": "#690005",
+                        "surface-container-highest": "#31353f",
+                        "on-primary-fixed-variant": "#574500",
+                        "on-primary": "#3c2f00",
+                        "surface-bright": "#353943",
+                        "primary-fixed": "#ffe088",
+                        "tertiary-fixed": "#e2e2e2",
+                        "secondary-fixed": "#dee2f2",
+                        "surface-container": "#1c1f29",
+                        "inverse-surface": "#dfe2ef",
+                        "on-secondary-container": "#b4b8c7",
+                        "outline": "#99907c",
+                        "tertiary-container": "#b2b3b3",
+                        "tertiary": "#cecece",
+                        "surface-container-high": "#262a34",
+                        "primary-container": "#d4af37",
+                        "error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-max": "1440px",
+                        "margin-desktop": "80px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "headline-sm": ["Playfair Display"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Glassmorphism utility classes based on Brand Anchors */
+        .glass-surface {
+            background-color: rgba(10, 14, 23, 0.6); /* surface-container-lowest with opacity */
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-input {
+            background-color: rgba(15, 19, 28, 0.8); /* background */
+            border: 1px solid rgba(153, 144, 124, 0.4); /* outline variant */
+            transition: all 0.3s ease;
+        }
+        
+        .glass-input:focus-within {
+            border-color: #d4af37; /* primary-container */
+            box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col relative overflow-x-hidden">
+<!-- Cinematic Background (https://lh3.googleusercontent.com/aida/AEtjO1WmsBeCG3ZXrD78PIMrA0IvfDkkyni7onlonGhQGJyAyPXCmSjxnvrKpaVb2d38IHRxysd64B409S_b1RE2zkngOR2w1mpLfZb9EBHTnwK_fj2oL2RULfwfoOUwSQHES-w3D4upEkmT_1tG4TDBkxeGvkY1zhjLnOwsbe5vj-N7ZBXeUBXclgK1OLehq1RDDAs0NNE8GZqAzM9F-5UTLT3lnD1GDCOZt7iwTFrowhdnAQuAz7aHIS8voJM) -->
+<div class="fixed inset-0 z-[-1] before:content-[''] before:absolute before:inset-0 before:bg-background/80 before:z-[1]">
+<img alt="Cinematic background" class="w-full h-full object-cover opacity-40" src="https://lh3.googleusercontent.com/aida/AEtjO1WmsBeCG3ZXrD78PIMrA0IvfDkkyni7onlonGhQGJyAyPXCmSjxnvrKpaVb2d38IHRxysd64B409S_b1RE2zkngOR2w1mpLfZb9EBHTnwK_fj2oL2RULfwfoOUwSQHES-w3D4upEkmT_1tG4TDBkxeGvkY1zhjLnOwsbe5vj-N7ZBXeUBXclgK1OLehq1RDDAs0NNE8GZqAzM9F-5UTLT3lnD1GDCOZt7iwTFrowhdnAQuAz7aHIS8voJM"/>
+</div>
+<!-- Navigation Shell Suppressed: The User Registration flow is linear/transactional -->
+<!-- Applying "Automatic Suppression" rule from JSON mandate -->
+<!-- Minimal branding header for transactional flow -->
+<header class="w-full py-8 px-margin-mobile md:px-margin-desktop flex justify-center z-10 relative">
+<a class="font-headline-md text-headline-md font-bold text-primary tracking-tighter" href="#">
+            Silver Village Cinema
+        </a>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex items-center justify-center py-12 px-margin-mobile md:px-margin-desktop z-10 relative">
+<div class="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter relative">
+<!-- Registration Card (Bento/Glassmorphism) -->
+<section class="glass-surface rounded-xl p-8 md:p-12 lg:col-span-8 shadow-2xl relative overflow-hidden flex flex-col">
+<!-- Subtle Top Accent -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-container to-transparent opacity-50"></div>
+<div class="mb-10 text-center lg:text-left">
+<h1 class="font-headline-md text-headline-md text-primary-container mb-4">
+                        Join Silver Village Cinema Premiere Club
+                    </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        Create an account to book tickets, manage preference shortlists, and unlock exclusive screenings.
+                    </p>
+</div>
+<form class="space-y-6 flex-grow">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Full Name -->
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface uppercase block" for="fullName">Full Legal Name</label>
+<div class="glass-input rounded-lg flex items-center px-4 py-3 relative group">
+<span class="material-symbols-outlined text-outline mr-3 group-focus-within:text-primary transition-colors">person</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface font-body-md text-body-md placeholder:text-outline-variant p-0" id="fullName" placeholder="Johnathan Tan" type="text"/>
+</div>
+</div>
+<!-- Email -->
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface uppercase block" for="email">Email Address</label>
+<div class="glass-input rounded-lg flex items-center px-4 py-3 relative group">
+<span class="material-symbols-outlined text-outline mr-3 group-focus-within:text-primary transition-colors">mail</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface font-body-md text-body-md placeholder:text-outline-variant p-0" id="email" placeholder="user@silvervillage.local" type="email"/>
+</div>
+</div>
+<!-- Mobile Phone -->
+<div class="space-y-2">
+<label class="font-label-sm text-label-sm text-on-surface uppercase block" for="phone">Mobile Phone</label>
+<div class="glass-input rounded-lg flex items-center px-4 py-3 relative group">
+<span class="text-on-surface-variant font-label-md text-label-md mr-2 border-r border-outline-variant pr-2">🇸🇬 +65</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface font-body-md text-body-md placeholder:text-outline-variant p-0 ml-2" id="phone" placeholder="9123 4567" type="tel"/>
+</div>
+</div>
+<!-- Date of Birth -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<label class="font-label-sm text-label-sm text-on-surface uppercase block" for="dob">Date of Birth</label>
+</div>
+<div class="glass-input rounded-lg flex items-center px-4 py-3 relative group">
+<span class="material-symbols-outlined text-outline mr-3 group-focus-within:text-primary transition-colors">calendar_month</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface font-body-md text-body-md p-0 [color-scheme:dark]" id="dob" type="date"/>
+</div>
+<p class="font-label-sm text-[10px] text-outline-variant mt-1">Must be 13+ years of age for rating compliance</p>
+</div>
+<!-- Account Password -->
+<div class="space-y-2 col-span-1 md:col-span-2">
+<label class="font-label-sm text-label-sm text-on-surface uppercase block" for="password">Account Password</label>
+<div class="glass-input rounded-lg flex items-center px-4 py-3 relative group">
+<span class="material-symbols-outlined text-outline mr-3 group-focus-within:text-primary transition-colors">lock</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface font-body-md text-body-md placeholder:text-outline-variant p-0 tracking-widest" id="password" placeholder="••••••••" type="password"/>
+<button class="text-outline hover:text-primary-container transition-colors ml-2 focus:outline-none" type="button">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+</div>
+<!-- Strength Meter (Static for visual) -->
+<div class="flex items-center space-x-2 mt-2">
+<div class="h-1 flex-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full w-1/3 bg-outline rounded-full"></div>
+</div>
+<span class="font-label-sm text-[10px] text-outline">Strong - 8+ chars, 1 uppercase, 1 digit</span>
+</div>
+</div>
+</div>
+<!-- Terms -->
+<div class="pt-4">
+<label class="flex items-start space-x-3 cursor-pointer group">
+<div class="relative flex items-center justify-center mt-1">
+<input class="peer appearance-none w-5 h-5 border border-outline-variant rounded bg-surface-dim checked:bg-primary-container checked:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-on-primary-container text-sm opacity-0 peer-checked:opacity-100 pointer-events-none">check</span>
+</div>
+<span class="font-body-md text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">
+                                I agree to the <a class="text-primary-container underline hover:text-primary" href="#">Cinema Booking Terms of Service</a> and local server notification policies.
+                            </span>
+</label>
+</div>
+<!-- Actions -->
+<div class="pt-6 space-y-4">
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-4 rounded-lg shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform flex items-center justify-center uppercase" type="button">
+<span>Complete Registration &amp; Start Booking</span>
+<span class="material-symbols-outlined ml-2 text-xl">arrow_forward</span>
+</button>
+<div class="text-center">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary-container transition-colors uppercase tracking-wider" href="#">
+                                Already a Premiere Club member? Sign In Here
+                            </a>
+</div>
+</div>
+</form>
+</section>
+<!-- Sidebar Info Panel (Bento Sidebar) -->
+<aside class="lg:col-span-4 flex flex-col space-y-gutter">
+<!-- Perks Card -->
+<div class="glass-surface rounded-xl p-8 flex-grow shadow-xl border border-white/5 relative overflow-hidden">
+<div class="absolute -right-12 -top-12 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined" style="font-size: 160px;">stars</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-8 relative z-10">Premiere Perks</h3>
+<ul class="space-y-6 relative z-10">
+<li class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center border border-white/10 shrink-0">
+<span class="material-symbols-outlined text-primary-container">confirmation_number</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-1">Multi-Booking Wishlist</h4>
+<p class="font-body-md text-sm text-on-surface-variant">Priority seating selection for anticipated releases.</p>
+</div>
+</li>
+<li class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center border border-white/10 shrink-0">
+<span class="material-symbols-outlined text-primary-container">cake</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-1">Birthday Celebrations</h4>
+<p class="font-body-md text-sm text-on-surface-variant">Complimentary premium popcorn combo on your birthday month.</p>
+</div>
+</li>
+<li class="flex items-start space-x-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center border border-white/10 shrink-0">
+<span class="material-symbols-outlined text-primary-container">forward_to_inbox</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-1">Instant E-Tickets</h4>
+<p class="font-body-md text-sm text-on-surface-variant">Local mail instant e-ticket confirmation straight to device.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Security Notice Card -->
+<div class="glass-surface rounded-xl p-6 shadow-md border border-white/5 flex items-center space-x-4">
+<span class="material-symbols-outlined text-outline-variant text-3xl shrink-0">shield_locked</span>
+<p class="font-label-sm text-[11px] leading-relaxed text-outline">
+<span class="text-on-surface-variant font-medium">Security &amp; Compliance:</span> Password hashing (BCrypt), XSS protection, and SQL prepared statement sanitization guarantee a secure cinematic journey.
+                    </p>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer Component from JSON -->
+<footer class="bg-surface-container-lowest text-primary w-full py-margin-desktop border-t border-white/5 mt-auto z-10 relative">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto">
+<div class="md:col-span-1 mb-6 md:mb-0">
+<h4 class="font-headline-sm text-headline-sm text-primary mb-4">Silver Village Cinema</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-80">
+                    © 2024 Silver Village Cinema. The Gold Standard of Cinema.
+                </p>
+</div>
+<div class="md:col-span-3 flex flex-wrap gap-x-8 gap-y-4 md:justify-end items-center">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">
+                        Privacy Policy
+                    </a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">
+                        Terms of Service
+                    </a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">
+                        Cookie Settings
+                    </a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface hover:text-primary transition-colors opacity-80 hover:opacity-100" href="#">
+                        Accessibility
+                    </a>
+</div>
+</div>
+</footer>
+</body></html>
