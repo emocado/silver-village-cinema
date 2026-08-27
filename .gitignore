@@ -1,0 +1,12 @@
+# Environment & OS files
+.DS_Store
+Thumbs.db
+*.log
+
+# Temporary IDE / Agent scratch files
+scratch/
+hashes.txt
+test_auth.php
+generate_posters.py
+generate_hero.py
+update_passwords.php
