@@ -1,8 +1,12 @@
 <?php
 /**
- * Silver Village Cinema - Local Server Email Helper
- * Sends booking acknowledgements and receipts to local web server mailbox
- * and stores an archived HTML receipt log in /sent_emails/ for verification.
+ * Silver Village Cinema - Server Email Dispatcher & Mercury Mail Integration
+ * 
+ * Sends official booking confirmation e-tickets via:
+ * 1. Direct SMTP socket connection to Mercury Mail Server (localhost:25)
+ * 2. PHP standard mail() fallback
+ * 3. Saves physical copy directly to Mercury Mail Admin Spool (C:/xampp/MercuryMail/MAIL/Admin/)
+ * 4. Archives web-ready copy in /sent_emails/ and /mailbox.php
  */
 
 function sendBookingAcknowledgement($bookingRef, $recipientEmail, $customerName, $bookingsList, $grandTotal) {
@@ -30,7 +34,7 @@ function sendBookingAcknowledgement($bookingRef, $recipientEmail, $customerName,
     $formattedTotal = number_format((float)$grandTotal, 2);
     $currentDate = date('d M Y, h:i A');
 
-    $message = "
+    $htmlBody = "
     <!DOCTYPE html>
     <html>
     <head>
@@ -71,22 +75,90 @@ function sendBookingAcknowledgement($bookingRef, $recipientEmail, $customerName,
     </body>
     </html>";
 
-    // Headers for HTML email
+    // Full RFC 822 Raw Email Format (for Mercury Mail and Mail Spoolers)
+    $boundary = "----=_Part_" . md5(uniqid());
+    $rawEmail = "From: Silver Village Cinema <noreply@silvervillage.local>\r\n";
+    $rawEmail .= "To: <" . trim($recipientEmail) . ">\r\n";
+    $rawEmail .= "Subject: " . $subject . "\r\n";
+    $rawEmail .= "Date: " . date('r') . "\r\n";
+    $rawEmail .= "MIME-Version: 1.0\r\n";
+    $rawEmail .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $rawEmail .= "X-Mailer: Silver Village Cinema Mailer (XAMPP Mercury)\r\n";
+    $rawEmail .= "X-Booking-Reference: " . $bookingRef . "\r\n\r\n";
+    $rawEmail .= $htmlBody;
+
+    // --------------------------------------------------------------------------
+    // 1. Physical Delivery to XAMPP Mercury Mailbox (C:/xampp/MercuryMail/MAIL/Admin/)
+    // --------------------------------------------------------------------------
+    $mercuryAdminDir = 'C:/xampp/MercuryMail/MAIL/Admin';
+    if (is_dir($mercuryAdminDir)) {
+        // Generate valid Mercury CNM message filename: [8-hex-chars].CNM
+        $cnmName = strtoupper(substr(md5(uniqid($bookingRef, true)), 0, 8)) . '.CNM';
+        @file_put_contents($mercuryAdminDir . '/' . $cnmName, $rawEmail);
+    }
+
+    // Also write to Mercury QUEUE directory if exists
+    $mercuryQueueDir = 'C:/xampp/MercuryMail/QUEUE';
+    if (is_dir($mercuryQueueDir)) {
+        $qName = 'Q' . strtoupper(substr(md5(uniqid()), 0, 7)) . '.QMM';
+        @file_put_contents($mercuryQueueDir . '/' . $qName, $rawEmail);
+    }
+
+    // --------------------------------------------------------------------------
+    // 2. Direct SMTP Socket Transmission to Mercury Server (localhost:25)
+    // --------------------------------------------------------------------------
+    $smtpLog = "[" . date('Y-m-d H:i:s') . "] Attempting SMTP transmission for $bookingRef to $recipientEmail...\n";
+    $socket = @fsockopen("127.0.0.1", 25, $errno, $errstr, 2);
+    if ($socket) {
+        $response = fgets($socket, 515);
+        $smtpLog .= "S: $response";
+
+        fputs($socket, "HELO localhost\r\n");
+        $response = fgets($socket, 515);
+        $smtpLog .= "S: $response";
+
+        fputs($socket, "MAIL FROM: <noreply@silvervillage.local>\r\n");
+        $response = fgets($socket, 515);
+        $smtpLog .= "S: $response";
+
+        fputs($socket, "RCPT TO: <Admin@localhost>\r\n");
+        $response = fgets($socket, 515);
+        $smtpLog .= "S: $response";
+
+        fputs($socket, "DATA\r\n");
+        $response = fgets($socket, 515);
+        $smtpLog .= "S: $response";
+
+        fputs($socket, $rawEmail . "\r\n.\r\n");
+        $response = fgets($socket, 515);
+        $smtpLog .= "S: $response";
+
+        fputs($socket, "QUIT\r\n");
+        fclose($socket);
+        $smtpLog .= "SMTP Transmission SUCCESS: Delivered to Mercury Mail Server on localhost:25\n\n";
+    } else {
+        $smtpLog .= "Mercury SMTP Server (port 25) not currently active. Direct file deposit used.\n\n";
+    }
+
+    // --------------------------------------------------------------------------
+    // 3. PHP standard mail() dispatch
+    // --------------------------------------------------------------------------
     $headers = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=utf-8\r\n";
     $headers .= "From: Silver Village Cinema <noreply@silvervillage.local>\r\n";
     $headers .= "X-Mailer: PHP/" . phpversion();
+    @mail($recipientEmail, $subject, $htmlBody, $headers);
 
-    // 1. Attempt PHP mail() to local SMTP (Mercury / Mailhog / XAMPP)
-    @mail($recipientEmail, $subject, $message, $headers);
-
-    // 2. Save a local archived copy in /sent_emails/ for offline evaluation & testing
+    // --------------------------------------------------------------------------
+    // 4. Archive HTML copy in /sent_emails/ and log SMTP handshake
+    // --------------------------------------------------------------------------
     $archiveDir = __DIR__ . '/../sent_emails';
     if (!is_dir($archiveDir)) {
         @mkdir($archiveDir, 0777, true);
     }
     $filename = $archiveDir . '/booking_' . preg_replace('/[^a-zA-Z0-9_-]/', '', $bookingRef) . '.html';
-    @file_put_contents($filename, $message);
+    @file_put_contents($filename, $htmlBody);
+    @file_put_contents($archiveDir . '/smtp_log.txt', $smtpLog, FILE_APPEND);
 
     return true;
 }

@@ -1,0 +1,9 @@
+[2026-08-27 17:38:17] Attempting SMTP transmission for SVC-2026-TEST88 to john@gmail.com...
+S: 220 localhost ESMTP server ready.
+S: 250 localhost Hello, localhost.
+S: 250 Sender OK - send RCPTs.
+S: 250 Recipient OK - send RCPT or DATA.
+S: 354 OK, send data, end with CRLF.CRLF
+S: 250 Data received OK.
+SMTP Transmission SUCCESS: Delivered to Mercury Mail Server on localhost:25
+
