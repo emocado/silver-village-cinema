@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stitch UI/UX Design System Showcase — Silver Village Cinema</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0e17;
+            --card-bg: #121620;
+            --border: rgba(212, 175, 55, 0.25);
+            --gold: #d4af37;
+            --gold-light: #f2ca50;
+            --text-primary: #dfe2ef;
+            --text-muted: #99907c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(18, 22, 32, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, var(--gold), #8a6a10);
+            color: #0a0e17;
+            font-weight: bold;
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--gold-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--gold);
+            color: #0a0e17;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--gold-light);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--gold);
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 32px 24px;
+            flex: 1;
+        }
+
+        .hero-banner {
+            background: linear-gradient(135deg, #181b25 0%, #0f131c 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+        }
+
+        .hero-banner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .hero-banner p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 900px;
+        }
+
+        .tokens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .token-item {
+            background: #0a0e17;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 12px;
+        }
+
+        .token-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 10px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .token-val {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 28px;
+        }
+
+        .screen-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.25s ease;
+        }
+
+        .screen-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.15);
+        }
+
+        .screen-preview-frame {
+            width: 100%;
+            height: 380px;
+            border: none;
+            background: #0a0e17;
+            pointer-events: auto;
+        }
+
+        .screen-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            border-top: 1px solid var(--border);
+        }
+
+        .screen-title {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .screen-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .screen-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand">
+            <span class="brand-badge">STITCH</span>
+            <h1>Silver Village Cinema • UI/UX Design System</h1>
+        </div>
+        <div class="nav-links">
+            <a href="../index.php" class="btn btn-outline">🍿 Launch Web App</a>
+            <a href="https://github.com/emocado/silver-village-cinema" target="_blank" class="btn">View on GitHub &rarr;</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero & Design Tokens -->
+        <div class="hero-banner">
+            <h2>High-Fidelity Visual Prototypes & Design Tokens</h2>
+            <p>
+                Prior to code implementation, the Silver Village Cinema experience was conceptualized and prototyped in <strong>Stitch</strong> (Project ID: <code>7405104300656411061</code>). Below are the standalone interactive prototypes for all 6 major application screens.
+            </p>
+
+            <div class="tokens-grid">
+                <div class="token-item">
+                    <span class="token-label">Color Theme</span>
+                    <span class="token-val">Midnight (#0a0e17) & Gold (#d4af37)</span>
+                </div>
+                <div class="token-item">
+                    <span class="token-label">Typography Pairing</span>
+                    <span class="token-val">Playfair Display (Serif) + Inter (Sans)</span>
+                </div>
+                <div class="token-item">
+                    <span class="token-label">Visual Style</span>
+                    <span class="token-val">Dark Glassmorphism with Backdrop Blur</span>
+                </div>
+                <div class="token-item">
+                    <span class="token-label">Elevation & Depth</span>
+                    <span class="token-val">Translucent Surface Glow & Thin Borders</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6 Screen Interactive Cards -->
+        <div class="screens-grid">
+            <!-- Screen 1 -->
+            <div class="screen-card">
+                <iframe class="screen-preview-frame" src="1_homepage.html" title="Homepage Prototype"></iframe>
+                <div class="screen-info">
+                    <h3 class="screen-title">1. Homepage & Featured Premiere</h3>
+                    <p class="screen-desc">Cinematic hero banner with Spider-Man: Brand New Day, Now Showing grid, and experience highlights.</p>
+                    <div class="screen-actions">
+                        <a href="1_homepage.html" target="_blank" class="btn btn-outline" style="width: 100%; text-align: center; justify-content: center;">
+                            Open Fullscreen Prototype ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 2 -->
+            <div class="screen-card">
+                <iframe class="screen-preview-frame" src="2_movie_details.html" title="Movie Details Prototype"></iframe>
+                <div class="screen-info">
+                    <h3 class="screen-title">2. Movie Details & Showtimes Schedule</h3>
+                    <p class="screen-desc">Structured Showtimes Matrix table across Halls A, B, and C with live seat count indicators and verified reviews.</p>
+                    <div class="screen-actions">
+                        <a href="2_movie_details.html" target="_blank" class="btn btn-outline" style="width: 100%; text-align: center; justify-content: center;">
+                            Open Fullscreen Prototype ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 3 -->
+            <div class="screen-card">
+                <iframe class="screen-preview-frame" src="3_seat_selection.html" title="Seat Selection Prototype"></iframe>
+                <div class="screen-info">
+                    <h3 class="screen-title">3. Interactive Seat Map & Preference Ranking</h3>
+                    <p class="screen-desc">Interactive auditorium seat visualizer with Standard vs Premium tiers and Preference Rank selector (#1, #2, #3).</p>
+                    <div class="screen-actions">
+                        <a href="3_seat_selection.html" target="_blank" class="btn btn-outline" style="width: 100%; text-align: center; justify-content: center;">
+                            Open Fullscreen Prototype ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 4 -->
+            <div class="screen-card">
+                <iframe class="screen-preview-frame" src="4_wishlist_management.html" title="Wishlist Management Prototype"></iframe>
+                <div class="screen-info">
+                    <h3 class="screen-title">4. Booking Wishlist Management (Core Theme 5)</h3>
+                    <p class="screen-desc">Ranked preference list, real-time seat conflict detection (🟢 Available / 🔴 Taken), reorder controls, and multi-select checkout.</p>
+                    <div class="screen-actions">
+                        <a href="4_wishlist_management.html" target="_blank" class="btn btn-outline" style="width: 100%; text-align: center; justify-content: center;">
+                            Open Fullscreen Prototype ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 5 -->
+            <div class="screen-card">
+                <iframe class="screen-preview-frame" src="5_confirmation.html" title="Confirmation Prototype"></iframe>
+                <div class="screen-info">
+                    <h3 class="screen-title">5. Confirmation & Boarding Pass E-Tickets</h3>
+                    <p class="screen-desc">Digital admission tickets with scannable QR codes, booking references, and payment simulation controls.</p>
+                    <div class="screen-actions">
+                        <a href="5_confirmation.html" target="_blank" class="btn btn-outline" style="width: 100%; text-align: center; justify-content: center;">
+                            Open Fullscreen Prototype ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 6 -->
+            <div class="screen-card">
+                <iframe class="screen-preview-frame" src="6_registration.html" title="Registration Prototype"></iframe>
+                <div class="screen-info">
+                    <h3 class="screen-title">6. User Registration & Premiere Club</h3>
+                    <p class="screen-desc">6-field registration form with real-time password strength meter and age verification.</p>
+                    <div class="screen-actions">
+                        <a href="6_registration.html" target="_blank" class="btn btn-outline" style="width: 100%; text-align: center; justify-content: center;">
+                            Open Fullscreen Prototype ↗
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Silver Village Cinema • Stitch Design System & Interactive Prototypes • IE4727 Project
+    </footer>
+</body>
+</html>

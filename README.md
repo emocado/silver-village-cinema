@@ -105,20 +105,21 @@ Silver Village Cinema is an end-to-end cinema ticket booking portal developed to
 
 ## 3. 🎨 Stitch UI/UX Design System & Interactive Prototypes
 
-Before writing code, full high-fidelity visual prototypes and design systems were created using **Stitch**:
+Before writing code, full high-fidelity visual prototypes and design systems were created using **Stitch** (Project ID: `7405104300656411061`).
 
-* **Stitch Project ID:** `7405104300656411061`
-* **Public Stitch Studio URL:** [https://stitch.withgoogle.com/projects/7405104300656411061](https://stitch.withgoogle.com/projects/7405104300656411061)
+### 🖥️ Complete Stitch Design Showcase & Prototypes:
+To view the complete design system and test all 6 high-fidelity interactive screens, simply open the included **Stitch Showcase Gallery**:
 
-### 🖥️ Standalone Offline Prototypes Included in Repository:
-Anyone who downloads or clones this repository can open these interactive Stitch HTML prototypes directly in any web browser without needing a Google account:
+* **In Browser (Local XAMPP):** [`http://localhost/silver-village-cinema/stitch_prototypes/index.html`](http://localhost/silver-village-cinema/stitch_prototypes/index.html)
+* **Direct File:** Open `stitch_prototypes/index.html` in any web browser.
 
-1. **Homepage:** [`stitch_prototypes/1_homepage.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/1_homepage.html)
-2. **Movie Details & Showtimes Schedule:** [`stitch_prototypes/2_movie_details.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/2_movie_details.html)
-3. **Seat Selection & Preference Ranking:** [`stitch_prototypes/3_seat_selection.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/3_seat_selection.html)
-4. **Booking Wishlist & Availability Management:** [`stitch_prototypes/4_wishlist_management.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/4_wishlist_management.html)
-5. **Confirmation & Boarding Pass E-Tickets:** [`stitch_prototypes/5_confirmation.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/5_confirmation.html)
-6. **User Registration Form:** [`stitch_prototypes/6_registration.html`](file:///c:/Users/weikh/projects/silver-village-cinema/stitch_prototypes/6_registration.html)
+#### Individual Interactive Screen Prototypes:
+1. **Homepage:** [`stitch_prototypes/1_homepage.html`](stitch_prototypes/1_homepage.html)
+2. **Movie Details & Showtimes Schedule:** [`stitch_prototypes/2_movie_details.html`](stitch_prototypes/2_movie_details.html)
+3. **Seat Selection & Preference Ranking:** [`stitch_prototypes/3_seat_selection.html`](stitch_prototypes/3_seat_selection.html)
+4. **Booking Wishlist & Availability Management:** [`stitch_prototypes/4_wishlist_management.html`](stitch_prototypes/4_wishlist_management.html)
+5. **Confirmation & Boarding Pass E-Tickets:** [`stitch_prototypes/5_confirmation.html`](stitch_prototypes/5_confirmation.html)
+6. **User Registration Form:** [`stitch_prototypes/6_registration.html`](stitch_prototypes/6_registration.html)
 
 ---
 
