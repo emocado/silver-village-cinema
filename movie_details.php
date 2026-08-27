@@ -69,11 +69,21 @@ while ($fb = $feedbackResult->fetch_assoc()) {
 if ($totalReviews > 0) {
     $avgRating = round($ratingSum / $totalReviews, 1);
 }
+
+// Determine movie-specific dynamic backdrop
+$backdropImg = '';
+if ((int)$movieId === 1 && file_exists(__DIR__ . '/images/hero_spiderman.jpg')) {
+    $backdropImg = 'images/hero_spiderman.jpg';
+} elseif (!empty($movie['poster_image']) && file_exists(__DIR__ . '/images/posters/' . $movie['poster_image'])) {
+    $backdropImg = 'images/posters/' . $movie['poster_image'];
+}
 ?>
 
 <!-- Movie Hero & Synopsis Banner -->
 <div class="hero-section" style="margin-bottom: 36px;">
-    <div class="hero-backdrop" style="background-image: url('images/hero_spiderman.jpg');"></div>
+    <?php if (!empty($backdropImg)): ?>
+        <div class="hero-backdrop" style="background-image: url('<?php echo htmlspecialchars($backdropImg); ?>'); <?php echo ((int)$movieId !== 1) ? 'filter: blur(28px) brightness(0.22); transform: scale(1.15); opacity: 0.45;' : ''; ?>"></div>
+    <?php endif; ?>
     <div class="hero-overlay" style="max-width: 100%; display: grid; grid-template-columns: 240px 1fr; gap: 36px; align-items: center;">
         <div class="movie-poster-wrap" style="border-radius: var(--radius-md); box-shadow: 0 8px 24px rgba(0,0,0,0.8); border:1px solid var(--color-border-glass);">
             <?php if (!empty($movie['poster_image']) && file_exists(__DIR__ . '/images/posters/' . $movie['poster_image'])): ?>
