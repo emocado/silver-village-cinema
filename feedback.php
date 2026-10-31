@@ -14,11 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rating = (int)($_POST['rating'] ?? 0);
     $reviewText = trim($_POST['review_text'] ?? '');
 
-    if ($movieId <= 0) {
+    if ($movieId <= 0 || !$conn->query('SELECT movie_id FROM movies WHERE movie_id='.(int)$movieId)->num_rows) {
         $errorMsg = "Please select a valid movie to review.";
     } elseif ($rating < 1 || $rating > 5) {
         $errorMsg = "Please provide a star rating between 1 and 5 stars.";
-    } elseif (strlen($reviewText) < 10) {
+    } elseif (strlen($reviewText) < 10 || strlen($reviewText) > 5000) {
         $errorMsg = "Please write a review of at least 10 characters.";
     } else {
         $insStmt = $conn->prepare("INSERT INTO feedback (user_id, movie_id, rating, review_text) VALUES (?, ?, ?, ?)");
@@ -47,7 +47,7 @@ $reviewsSql = "
 ";
 $reviewsResult = $conn->query($reviewsSql);
 
-$pageTitle = "Audience Reviews & Feedback - Silver Village Cinema";
+$pageTitle = "Audience Reviews & Feedback - CinéPop";
 require_once __DIR__ . '/includes/header.php';
 ?>
 
@@ -86,7 +86,7 @@ require_once __DIR__ . '/includes/header.php';
             <?php endif; ?>
         </p>
 
-        <form id="feedbackForm" method="POST" action="feedback.php" novalidate>
+        <form id="feedbackForm" method="POST" action="feedback.php" novalidate><?= csrfField() ?>
             <!-- Movie Selection Dropdown -->
             <div class="form-group">
                 <label class="form-label" for="movie_id">Select Movie</label>
@@ -103,7 +103,7 @@ require_once __DIR__ . '/includes/header.php';
             <!-- Star Rating Selector -->
             <div class="form-group">
                 <label class="form-label">Your Rating (1 to 5 Stars)</label>
-                <div style="display: flex; gap: 16px; align-items: center; background: #0f131c; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                <div style="display: flex; gap: 16px; align-items: center; background: #0b203b; padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
                     <?php for ($i = 5; $i >= 1; $i--): ?>
                         <label style="display: inline-flex; align-items: center; gap: 4px; cursor: pointer; color: #ffffff; font-size: 14px;">
                             <input type="radio" name="rating" value="<?php echo $i; ?>" style="accent-color: var(--color-primary);" <?php echo !isLoggedIn() ? 'disabled' : ''; ?> required>

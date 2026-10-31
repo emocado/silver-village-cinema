@@ -6,19 +6,23 @@ requireLogin();
 $userId = getCurrentUserId();
 $msg = '';
 
-// Handle Booking Cancellation (Course Requirement: SQL UPDATE Transaction)
-if (isset($_GET['cancel_id'])) {
-    $cancelId = (int)$_GET['cancel_id'];
-    if ($cancelId > 0) {
-        $canStmt = $conn->prepare("UPDATE bookings SET status = 'cancelled' WHERE booking_id = ? AND user_id = ?");
-        $canStmt->bind_param("ii", $cancelId, $userId);
-        if ($canStmt->execute()) {
-            $msg = "Booking successfully cancelled. The reserved seats have been released.";
-        }
-        $canStmt->close();
-    }
+require_once __DIR__.'/includes/booking_service.php';
+require_once __DIR__.'/includes/email.php';
+$msgType='success';
+if($_SERVER['REQUEST_METHOD']==='POST') {
+    try {
+        $id=(int)($_POST['booking_id']??0);
+        if(($_POST['action']??'')==='cancel') { cancelBooking($conn,$userId,$id); $msg='Booking cancelled. The seats are available again.'; }
+        elseif(($_POST['action']??'')==='resend') {
+            $ticket=cinemaQuery($conn,"SELECT b.booking_reference AS booking_ref,b.total_price AS price,m.title,h.hall_name,s.screening_date,s.screening_time,GROUP_CONCAT(bs.seat_label ORDER BY bs.seat_label) AS seats FROM bookings b JOIN screenings s ON s.screening_id=b.screening_id JOIN movies m ON m.movie_id=s.movie_id JOIN halls h ON h.hall_id=s.hall_id JOIN booked_seats bs ON bs.booking_id=b.booking_id WHERE b.booking_id=? AND b.user_id=? AND b.status='confirmed' AND b.payment_status='success' GROUP BY b.booking_id",'ii',[$id,$userId])->get_result()->fetch_assoc();
+            if(!$ticket) throw new RuntimeException('No paid booking was found in your account.');
+            $mail=sendBookingAcknowledgement($ticket['booking_ref'],$_SESSION['user_email'],getCurrentUserName(),[$ticket],$ticket['price']);
+            $msg=$mail['message']; $msgType=$mail['accepted']?'success':'warning';
+        } else throw new RuntimeException('Choose a valid booking action.');
+    } catch(Throwable $e) { $msg=userError($e); $msgType='danger'; }
+    $_SESSION['booking_notice']=[$msg,$msgType]; header('Location: my_bookings.php',true,303); exit;
 }
-
+if(isset($_SESSION['booking_notice'])) { [$msg,$msgType]=$_SESSION['booking_notice']; unset($_SESSION['booking_notice']); }
 // Fetch all bookings for the logged-in user with seats list (SQL JOIN & GROUP_CONCAT)
 $sql = "
     SELECT b.booking_id, b.booking_reference, b.total_price, b.status, b.payment_status, b.booking_date,
@@ -40,7 +44,7 @@ $stmt->bind_param("i", $userId);
 $stmt->execute();
 $bookingsResult = $stmt->get_result();
 
-$pageTitle = "My Bookings - Silver Village Cinema";
+$pageTitle = "My Bookings - CinéPop";
 require_once __DIR__ . '/includes/header.php';
 ?>
 
@@ -55,7 +59,7 @@ require_once __DIR__ . '/includes/header.php';
 </div>
 
 <?php if (!empty($msg)): ?>
-    <div class="alert alert--success">
+    <div class="alert alert--<?= $msgType ?>" role="status">
         ✅ <?php echo htmlspecialchars($msg); ?>
     </div>
 <?php endif; ?>
@@ -103,34 +107,28 @@ require_once __DIR__ . '/includes/header.php';
                             </small>
                         </td>
                         <td>
-                            <span class="pill-tag" style="background:#262a34; color:var(--color-primary-light); font-weight:bold;">
+                            <span class="pill-tag" style="background:#173b61; color:var(--color-primary-light); font-weight:bold;">
                                 <?php echo htmlspecialchars($b['seats_list'] ?? 'N/A'); ?>
                             </span>
                         </td>
                         <td>
-                            <strong style="color: #ffffff;">\$<?php echo number_format($b['total_price'], 2); ?></strong>
+                            <strong style="color: #ffffff;">$<?php echo number_format($b['total_price'], 2); ?></strong>
                         </td>
                         <td>
                             <?php if ($isConfirmed): ?>
                                 <span class="status-badge status-badge--success">Confirmed</span>
                             <?php else: ?>
-                                <span class="status-badge status-badge--danger">Cancelled</span>
+                                <span class="status-badge status-badge--danger">Cancelled<?= $b['payment_status']==='failed' ? ' / Payment failed' : '' ?></span>
                             <?php endif; ?>
                         </td>
                         <td style="text-align: right; white-space: nowrap;">
-                            <a href="mailbox.php?ref=<?php echo urlencode($b['booking_reference']); ?>" class="btn btn--outline btn--sm" style="margin-right:4px;" title="View E-Ticket Email Receipt">
-                                ✉️ Email
-                            </a>
+                            <?php if($isConfirmed && $b['payment_status']==='success'): ?><form method="post" action="my_bookings.php" class="inline-action"><?= csrfField() ?><input type="hidden" name="booking_id" value="<?= (int)$b['booking_id'] ?>"><button name="action" value="resend" class="btn btn--outline btn--sm">Resend email</button></form><?php endif; ?>
                             <?php if ($isConfirmed && $isUpcoming): ?>
-                                <a href="my_bookings.php?cancel_id=<?php echo (int)$b['booking_id']; ?>" 
-                                   class="btn btn--danger btn--sm" 
-                                   onclick="return confirm('Are you sure you want to cancel this booking? Reserved seats will be released.');">
-                                    Cancel
-                                </a>
+                                <form method="post" action="my_bookings.php" class="inline-action"><?= csrfField() ?><input type="hidden" name="booking_id" value="<?= (int)$b['booking_id'] ?>"><button name="action" value="cancel" class="btn btn--danger btn--sm">Cancel booking</button></form>
                             <?php elseif ($isConfirmed): ?>
                                 <span style="font-size: 12px; color: var(--color-text-dim);">Completed</span>
                             <?php else: ?>
-                                <span style="font-size: 12px; color: var(--color-danger);">Cancelled</span>
+                                <span style="font-size: 12px; color: var(--color-danger);">Cancelled<?= $b['payment_status']==='failed' ? ' / Payment failed' : '' ?></span>
                             <?php endif; ?>
                         </td>
                     </tr>

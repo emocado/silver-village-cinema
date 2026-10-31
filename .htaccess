@@ -1,0 +1,4 @@
+Options -Indexes
+<FilesMatch "\.(md|sql|log|zip)$">
+Require all denied
+</FilesMatch>

@@ -7,50 +7,13 @@ $userId = getCurrentUserId();
 $msg = '';
 $msgType = 'info';
 
-// Handle Action Operations (Reorder, Remove, Clear)
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
-    $targetWishlistId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-
-    if ($action === 'remove' && $targetWishlistId > 0) {
-        $delStmt = $conn->prepare("DELETE FROM booking_wishlist WHERE wishlist_id = ? AND user_id = ?");
-        $delStmt->bind_param("ii", $targetWishlistId, $userId);
-        $delStmt->execute();
-        $delStmt->close();
-        $msg = "Item removed from your booking wishlist.";
-        $msgType = 'success';
-    } elseif ($action === 'clear') {
-        $clearStmt = $conn->prepare("DELETE FROM booking_wishlist WHERE user_id = ?");
-        $clearStmt->bind_param("i", $userId);
-        $clearStmt->execute();
-        $clearStmt->close();
-        $msg = "All shortlisted items have been cleared.";
-        $msgType = 'info';
-    } elseif (($action === 'move_up' || $action === 'move_down') && $targetWishlistId > 0) {
-        // Fetch current item's rank
-        $curStmt = $conn->prepare("SELECT preference_rank FROM booking_wishlist WHERE wishlist_id = ? AND user_id = ?");
-        $curStmt->bind_param("ii", $targetWishlistId, $userId);
-        $curStmt->execute();
-        $curRank = $curStmt->get_result()->fetch_assoc()['preference_rank'] ?? 1;
-        $curStmt->close();
-
-        $newRank = ($action === 'move_up') ? max(1, $curRank - 1) : ($curRank + 1);
-        if ($newRank !== $curRank) {
-            // Swap ranks with adjacent item if exists
-            $swapStmt = $conn->prepare("UPDATE booking_wishlist SET preference_rank = ? WHERE user_id = ? AND preference_rank = ?");
-            $swapStmt->bind_param("iii", $curRank, $userId, $newRank);
-            $swapStmt->execute();
-            $swapStmt->close();
-
-            // Set target item's new rank (SQL UPDATE Transaction)
-            $upStmt = $conn->prepare("UPDATE booking_wishlist SET preference_rank = ? WHERE wishlist_id = ? AND user_id = ?");
-            $upStmt->bind_param("iii", $newRank, $targetWishlistId, $userId);
-            $upStmt->execute();
-            $upStmt->close();
-        }
-    }
+require_once __DIR__.'/includes/booking_service.php';
+if($_SERVER['REQUEST_METHOD']==='POST') {
+    try {
+        changeWishlist($conn,$userId,(string)($_POST['action']??''),(int)($_POST['id']??0));
+        header('Location: wishlist.php',true,303); exit;
+    } catch(Throwable $e) { $msg=userError($e); $msgType='danger'; }
 }
-
 // Fetch all wishlist items for current user
 $wSql = "
     SELECT w.wishlist_id, w.selected_seats, w.preference_rank, w.estimated_total, w.added_at,
@@ -69,7 +32,7 @@ $wStmt->bind_param("i", $userId);
 $wStmt->execute();
 $wishlistItems = $wStmt->get_result();
 
-$pageTitle = "Booking Wishlist & Preferences - Silver Village Cinema";
+$pageTitle = "Booking Wishlist & Preferences - CinéPop";
 require_once __DIR__ . '/includes/header.php';
 ?>
 
@@ -102,7 +65,7 @@ require_once __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <?php if ($wishlistItems->num_rows > 0): ?>
-    <form method="POST" action="confirmation.php?mode=wishlist" id="wishlistConfirmForm">
+    <form method="POST" action="confirmation.php?mode=wishlist" id="wishlistConfirmForm"><?= csrfField() ?>
         <div class="booking-layout">
             <!-- Left Column: Wishlist Items Stacked by Preference -->
             <div class="wishlist-cards-list">
@@ -133,7 +96,8 @@ require_once __DIR__ . '/includes/header.php';
                     }
                     $cStmt->close();
 
-                    $isFullyAvailable = (count($takenSeats) === 0);
+                    $hasStarted = strtotime($item['screening_date'].' '.$item['screening_time']) <= time();
+                    $isFullyAvailable = !$hasStarted && (count($takenSeats) === 0);
                     $isPartiallyAvailable = (count($takenSeats) > 0 && count($takenSeats) < count($seatsArr));
                     $isSoldOut = (count($takenSeats) === count($seatsArr));
 
@@ -162,7 +126,7 @@ require_once __DIR__ . '/includes/header.php';
                                 <?php elseif ($isPartiallyAvailable): ?>
                                     <span class="status-badge status-badge--warning">🟡 Partially Available (<?php echo implode(', ', $takenSeats); ?> booked)</span>
                                 <?php else: ?>
-                                    <span class="status-badge status-badge--danger">🔴 Unavailable (Seats taken)</span>
+                                    <span class="status-badge status-badge--danger"><?= $hasStarted ? 'Screening has started' : 'Unavailable (Seats taken)' ?></span>
                                 <?php endif; ?>
                             </div>
 
@@ -179,7 +143,7 @@ require_once __DIR__ . '/includes/header.php';
                             <div style="font-size: 13px; color: var(--color-text-muted);">
                                 <span>Reserved Seats: </span>
                                 <?php foreach ($seatsArr as $s): ?>
-                                    <span class="pill-tag" style="background:#262a34; color:var(--color-primary-light); font-weight:bold;">
+                                    <span class="pill-tag" style="background:#173b61; color:var(--color-primary-light); font-weight:bold;">
                                         <?php echo htmlspecialchars($s); ?>
                                     </span>
                                 <?php endforeach; ?>
@@ -191,10 +155,10 @@ require_once __DIR__ . '/includes/header.php';
                             <span class="wishlist-price">$<?php echo number_format($item['estimated_total'], 2); ?></span>
                             
                             <div class="wishlist-btn-row">
-                                <a href="wishlist.php?action=move_up&id=<?php echo $wishlistId; ?>" class="btn btn--ghost btn--sm" title="Increase Preference Rank">▲</a>
-                                <a href="wishlist.php?action=move_down&id=<?php echo $wishlistId; ?>" class="btn btn--ghost btn--sm" title="Decrease Preference Rank">▼</a>
-                                <a href="booking.php?screening_id=<?php echo $screeningId; ?>" class="btn btn--outline btn--sm" title="Modify Seats">✏️ Edit</a>
-                                <a href="wishlist.php?action=remove&id=<?php echo $wishlistId; ?>" class="btn btn--danger btn--sm" onclick="return confirm('Remove this booking from your wishlist?');" title="Remove">🗑</a>
+                                <button type="submit" form="wishlistAction<?= $wishlistId ?>" name="action" value="move_up" class="btn btn--ghost btn--sm" title="Increase Preference Rank">▲</button>
+                                <button type="submit" form="wishlistAction<?= $wishlistId ?>" name="action" value="move_down" class="btn btn--ghost btn--sm" title="Decrease Preference Rank">▼</button>
+                                <a href="booking.php?screening_id=<?php echo $screeningId; ?>&wishlist_id=<?= $wishlistId ?>" class="btn btn--outline btn--sm" title="Modify Seats">✏️ Edit</a>
+                                <button type="submit" form="wishlistAction<?= $wishlistId ?>" name="action" value="remove" class="btn btn--danger btn--sm" title="Remove">Remove</button>
                             </div>
                         </div>
                     </div>
@@ -211,7 +175,7 @@ require_once __DIR__ . '/includes/header.php';
                     Select the preferred showtime(s) you wish to confirm. Unselected wishlist items will remain in your account.
                 </p>
 
-                <div style="background: #121620; border-radius: var(--radius-sm); padding: 14px; margin-bottom: 20px; font-size: 13px;">
+                <div style="background: #0b2544; border-radius: var(--radius-sm); padding: 14px; margin-bottom: 20px; font-size: 13px;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                         <span>Selected Bookings:</span>
                         <strong id="selectedCountDisplay">0</strong>
@@ -226,12 +190,14 @@ require_once __DIR__ . '/includes/header.php';
                     Confirm & Proceed to Payment &rarr;
                 </button>
 
-                <a href="wishlist.php?action=clear" class="btn btn--ghost btn--block btn--sm" onclick="return confirm('Are you sure you want to clear your entire wishlist?');">
-                    Clear Entire Wishlist
-                </a>
+                <button type="submit" form="wishlistClear" name="action" value="clear" class="btn btn--ghost btn--block btn--sm">Clear Entire Wishlist</button>
             </div>
         </div>
     </form>
+    <form method="post" action="wishlist.php" id="wishlistClear"><?= csrfField() ?></form>
+    <?php $actionRows=cinemaQuery($conn,'SELECT wishlist_id FROM booking_wishlist WHERE user_id=?','i',[$userId])->get_result(); while($actionItem=$actionRows->fetch_assoc()): ?>
+    <form method="post" action="wishlist.php" id="wishlistAction<?= (int)$actionItem['wishlist_id'] ?>"><?= csrfField() ?><input type="hidden" name="id" value="<?= (int)$actionItem['wishlist_id'] ?>"></form>
+    <?php endwhile; ?>
 <?php else: ?>
     <!-- Empty Wishlist State -->
     <div class="form-card" style="text-align: center; max-width: 540px; padding: 48px 24px;">

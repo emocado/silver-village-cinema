@@ -16,3 +16,6 @@ S: 354 OK, send data, end with CRLF.CRLF
 S: 250 Data received OK.
 SMTP Transmission SUCCESS: Delivered to Mercury Mail Server on localhost:25
 
+[2026-10-30 05:51:28] Attempting SMTP transmission for SVC-2026-5A8D1 to user@silvervillage.local...
+Mercury SMTP Server (port 25) not currently active. Direct file deposit used.
+

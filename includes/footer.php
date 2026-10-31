@@ -1,5 +1,18 @@
     </main>
 
+
+    <?php if(($currentPage??'')==='index.php'):
+        $quickFilms=$conn->query("SELECT movie_id,title FROM movies WHERE status='now_showing' ORDER BY title"); ?>
+    <aside class="quick-book" aria-label="Quick booking">
+        <form method="get" action="movie_details.php">
+            <h2>Book a film</h2>
+            <div><label for="quickFilm">Choose your film</label><select id="quickFilm" name="id" required><option value="">Select a film</option><?php while($quickFilm=$quickFilms->fetch_assoc()): ?><option value="<?= (int)$quickFilm['movie_id'] ?>"><?= htmlspecialchars($quickFilm['title']) ?></option><?php endwhile; ?></select></div>
+            <div class="quick-book-date"><label for="quickDate">Choose your date</label><input id="quickDate" name="date" type="date" min="<?= date('Y-m-d') ?>" aria-label="Screening date, optional"></div>
+            <button class="btn btn--primary">Find showtimes</button>
+        </form>
+    </aside>
+    <?php endif; ?>
+
     <!-- Site Footer -->
     <footer class="site-footer">
         <div class="footer-container">
@@ -7,7 +20,7 @@
                 <!-- Col 1: Cinema Identity -->
                 <div class="footer-col footer-about">
                     <div class="footer-logo">
-                        <span class="logo-title">SILVER VILLAGE</span>
+                        <span class="logo-title">CinéPop</span>
                         <span class="logo-sub">CINEMA</span>
                     </div>
                     <p class="footer-tagline">"Your Seat, Your Show, Your Way."</p>
@@ -44,13 +57,13 @@
                     <p class="footer-info">📍 50 Nanyang Avenue, Singapore 639798</p>
                     <p class="footer-info">📞 +65 6791 1744 (10:00 AM – 11:30 PM)</p>
                     <div class="footer-notice-box">
-                        <small>🎟️ <strong>Digital Admission:</strong> E-tickets and booking summaries are dispatched immediately to your registered email address upon checkout.</small>
+                        <small>🎟️ <strong>Digital Admission:</strong> Successful-booking acknowledgements are delivered to your local mailbox for viewing in Thunderbird.</small>
                     </div>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; <?php echo date('Y'); ?> Silver Village Cinema. All Rights Reserved.</p>
+                <p>&copy; <?php echo date('Y'); ?> CinéPop. All Rights Reserved.</p>
                 <div class="footer-tech-stack">
                     <span>Dolby Atmos • 4K Laser Projection • VIP Gold Class</span>
                 </div>
@@ -59,6 +72,6 @@
     </footer>
 
     <!-- Client-Side Form Validation JS (Project requirement) -->
-    <script src="js/validation.js"></script>
+    <script src="js/validation.js"></script><script src="js/site.js"></script>
 </body>
 </html>

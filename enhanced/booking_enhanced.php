@@ -3,6 +3,8 @@ require_once __DIR__ . '/../includes/db_connect.php';
 require_once __DIR__ . '/../includes/auth.php';
 
 requireLogin();
+require_once __DIR__.'/../includes/booking_service.php';
+try { screeningInfo($conn,(int)($_GET['screening_id']??1)); } catch(Throwable $error) { header('Location: ../movies.php'); exit; }
 
 $screeningId = isset($_GET['screening_id']) ? (int)$_GET['screening_id'] : 1;
 
@@ -76,7 +78,7 @@ for ($r = 1; $r <= $totalRows; $r++) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Vue.js Seat Selection - Silver Village Cinema</title>
+    <title>Enhanced Vue.js Seat Selection - CinéPop</title>
     <!-- Modern Enhancement 1: Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -86,20 +88,20 @@ for ($r = 1; $r <= $totalRows; $r++) {
                 extend: {
                     colors: {
                         gold: {
-                            400: '#f2ca50',
-                            500: '#d4af37',
-                            600: '#b89326',
+                            400: '#70c9ff',
+                            500: '#0068c8',
+                            600: '#0054a5',
                         },
                         midnight: {
-                            900: '#0a0e17',
-                            800: '#0f131c',
-                            700: '#181b25',
-                            600: '#262a34',
+                            900: '#06162b',
+                            800: '#0b203b',
+                            700: '#0d2543',
+                            600: '#173b61',
                         }
                     },
                     fontFamily: {
-                        serif: ['Playfair Display', 'Georgia', 'serif'],
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Nunito Sans', 'Arial', 'sans-serif'],
+                        sans: ['Nunito Sans', 'Arial', 'sans-serif'],
                     }
                 }
             }
@@ -107,25 +109,18 @@ for ($r = 1; $r <= $totalRows; $r++) {
     </script>
     <!-- Modern Enhancement 2: Vue.js 3 CDN -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3 { font-family: 'Playfair Display', serif; }
-    </style>
+    <link rel="stylesheet" href="../css/cinema-theme.css?v=20261030">
 </head>
-<body class="bg-midnight-900 text-slate-200 min-h-screen flex flex-col antialiased">
+<body class="enhanced-view bg-midnight-900 text-slate-200 min-h-screen flex flex-col antialiased">
     <!-- Header -->
     <header class="sticky top-0 z-50 bg-midnight-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-4">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <a href="../index.php" class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-gradient-to-br from-gold-500 to-amber-700 text-midnight-900 rounded flex items-center justify-center font-bold text-lg shadow-lg shadow-gold-500/20">
-                    SV
+                    CP
                 </div>
                 <div>
-                    <span class="font-serif font-bold text-gold-400 tracking-wider text-lg block leading-none">SILVER VILLAGE</span>
+                    <span class="font-serif font-bold text-gold-400 tracking-wider text-lg block leading-none">CinéPop</span>
                     <span class="text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Vue.js Enhanced Version</span>
                 </div>
             </a>
@@ -173,7 +168,7 @@ for ($r = 1; $r <= $totalRows; $r++) {
                 <div class="h-8 w-px bg-slate-800"></div>
                 <div>
                     <span class="text-xs text-slate-400 block uppercase font-medium">Running Total</span>
-                    <span class="text-2xl font-bold font-serif text-white">\${{ grandTotal.toFixed(2) }}</span>
+                    <span class="text-2xl font-bold font-serif text-white">${{ grandTotal.toFixed(2) }}</span>
                 </div>
             </div>
         </div>
@@ -184,7 +179,7 @@ for ($r = 1; $r <= $totalRows; $r++) {
             <div class="lg:col-span-8 bg-midnight-800/80 border border-slate-800 rounded-2xl p-6 lg:p-8 backdrop-blur shadow-2xl">
                 <!-- Curved Cinema Screen -->
                 <div class="relative w-4/5 mx-auto mb-10 text-center">
-                    <div class="h-4 border-t-4 border-gold-400 rounded-t-full shadow-[0_-8px_24px_rgba(212,175,55,0.35)]"></div>
+                    <div class="h-4 border-t-4 border-gold-400 rounded-t-full shadow-[0_-8px_24px_rgba(0,104,200,0.35)]"></div>
                     <span class="text-[10px] tracking-[0.3em] font-bold text-slate-400 uppercase mt-2 block">
                         CURVED CINEMA LASER SCREEN
                     </span>
@@ -217,11 +212,11 @@ for ($r = 1; $r <= $totalRows; $r++) {
                 <div class="flex flex-wrap items-center justify-center gap-6 pt-6 mt-6 border-t border-slate-800 text-xs">
                     <div class="flex items-center gap-2">
                         <span class="w-4 h-4 rounded-sm bg-slate-800 border border-slate-700 inline-block"></span>
-                        <span>Standard (\$<?php echo number_format($screening['standard_price'], 2); ?>)</span>
+                        <span>Standard ($<?php echo number_format($screening['standard_price'], 2); ?>)</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="w-4 h-4 rounded-sm bg-amber-950/40 border border-gold-500/60 inline-block"></span>
-                        <span>Premium Recliner (\$<?php echo number_format($screening['premium_price'], 2); ?>)</span>
+                        <span>Premium Recliner ($<?php echo number_format($screening['premium_price'], 2); ?>)</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="w-4 h-4 rounded-sm bg-gold-400 inline-block shadow-sm"></span>
@@ -259,11 +254,11 @@ for ($r = 1; $r <= $totalRows; $r++) {
                 <div class="bg-midnight-900/90 rounded-xl p-4 mb-6 text-sm space-y-2 border border-slate-800/80">
                     <div class="flex justify-between text-slate-400 text-xs">
                         <span>Standard Tickets:</span>
-                        <span class="text-slate-200">{{ standardCount }} &times; \$<?php echo number_format($screening['standard_price'], 2); ?></span>
+                        <span class="text-slate-200">{{ standardCount }} &times; $<?php echo number_format($screening['standard_price'], 2); ?></span>
                     </div>
                     <div class="flex justify-between text-slate-400 text-xs">
                         <span>Premium Recliners:</span>
-                        <span class="text-slate-200">{{ premiumCount }} &times; \$<?php echo number_format($screening['premium_price'], 2); ?></span>
+                        <span class="text-slate-200">{{ premiumCount }} &times; $<?php echo number_format($screening['premium_price'], 2); ?></span>
                     </div>
                     <div class="flex justify-between text-slate-400 text-xs">
                         <span>Hall Experience:</span>
@@ -271,12 +266,12 @@ for ($r = 1; $r <= $totalRows; $r++) {
                     </div>
                     <div class="pt-2 border-t border-slate-800 flex justify-between items-center text-base">
                         <span class="font-bold text-white">Total Payable:</span>
-                        <span class="font-serif font-bold text-xl text-gold-400">\${{ grandTotal.toFixed(2) }}</span>
+                        <span class="font-serif font-bold text-xl text-gold-400">${{ grandTotal.toFixed(2) }}</span>
                     </div>
                 </div>
 
                 <!-- Preference Rank Selector (Course Requirement Fulfillment) -->
-                <form method="POST" action="../booking.php?screening_id=<?php echo $screeningId; ?>" @submit="validateSubmit">
+                <form method="POST" action="../booking.php?screening_id=<?php echo $screeningId; ?>" @submit="validateSubmit"><?= csrfField() ?>
                     <input type="hidden" name="selected_seats" :value="selectedSeatsLabels">
 
                     <div class="mb-5">

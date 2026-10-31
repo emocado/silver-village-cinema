@@ -1,17 +1,15 @@
 <?php
-$pageTitle = "Silver Village Cinema - Your Seat, Your Show, Your Way";
+$pageTitle = "CinéPop - Your Seat, Your Show, Your Way";
 require_once __DIR__ . '/includes/header.php';
 
-// Fetch Featured Movie (Spider-Man: Brand New Day)
-$featuredStmt = $conn->prepare("SELECT * FROM movies WHERE status = 'now_showing' AND title LIKE '%Spider-Man%' LIMIT 1");
-$featuredStmt->execute();
-$featuredMovie = $featuredStmt->get_result()->fetch_assoc();
-$featuredStmt->close();
-
-if (!$featuredMovie) {
-    $fallbackStmt = $conn->query("SELECT * FROM movies WHERE status = 'now_showing' LIMIT 1");
-    $featuredMovie = $fallbackStmt->fetch_assoc();
+// Keep the original featured film first, then showcase other current releases.
+$featuredMovies = $conn->query("SELECT * FROM movies WHERE status = 'now_showing' ORDER BY (title LIKE '%Spider-Man%') DESC, release_date DESC, movie_id ASC LIMIT 4")->fetch_all(MYSQLI_ASSOC);
+foreach ($featuredMovies as &$feature) {
+    $feature['backdrop'] = stripos($feature['title'], 'Spider-Man') !== false
+        ? 'images/hero_spiderman.jpg' : 'images/posters/' . $feature['poster_image'];
 }
+unset($feature);
+$featuredMovie = $featuredMovies[0] ?? null;
 
 // Fetch Now Showing Movies
 $nowShowingResult = $conn->query("SELECT * FROM movies WHERE status = 'now_showing' ORDER BY release_date DESC LIMIT 6");
@@ -22,8 +20,8 @@ $comingSoonResult = $conn->query("SELECT * FROM movies WHERE status = 'coming_so
 
 <!-- Hero Banner -->
 <?php if ($featuredMovie): ?>
-<section class="hero-section">
-    <div class="hero-backdrop" style="background-image: url('images/hero_spiderman.jpg');"></div>
+<section class="hero-section movie-rotation" aria-label="Featured movies" aria-roledescription="carousel">
+    <div class="hero-backdrop" style="background-image: url('<?= htmlspecialchars($featuredMovie['backdrop'], ENT_QUOTES, 'UTF-8') ?>');"></div>
     <div class="hero-overlay">
         <span class="hero-badge">★ Featured Premiere of the Month</span>
         <h1 class="hero-title"><?php echo htmlspecialchars($featuredMovie['title']); ?></h1>
@@ -33,11 +31,8 @@ $comingSoonResult = $conn->query("SELECT * FROM movies WHERE status = 'coming_so
             <span class="pill-tag"><?php echo htmlspecialchars($featuredMovie['genre']); ?></span>
             <span class="pill-tag">Dolby Atmos 4K Laser</span>
         </div>
-        <p class="hero-synopsis">
-            <?php echo htmlspecialchars($featuredMovie['synopsis']); ?>
-        </p>
         <div class="hero-actions">
-            <a href="movie_details.php?id=<?php echo (int)$featuredMovie['movie_id']; ?>" class="btn btn--primary btn--lg">
+            <a href="movie_details.php?id=<?php echo (int)$featuredMovie['movie_id']; ?>" class="btn btn--primary btn--lg" data-feature-booking>
                 🎟️ Book Tickets & Choose Seats
             </a>
             <a href="movies.php" class="btn btn--outline btn--lg">
@@ -45,7 +40,19 @@ $comingSoonResult = $conn->query("SELECT * FROM movies WHERE status = 'coming_so
             </a>
         </div>
     </div>
+    <?php if (count($featuredMovies) > 1): ?>
+    <div class="movie-rotation-controls" hidden>
+        <button type="button" data-feature-prev aria-label="Previous featured movie">&#8592;</button>
+        <span data-feature-position>1 / <?= count($featuredMovies) ?></span>
+        <button type="button" data-feature-next aria-label="Next featured movie">&#8594;</button>
+        <button type="button" data-feature-pause>Pause rotation</button>
+    </div>
+    <?php endif; ?>
 </section>
+<p class="featured-synopsis"><?php echo htmlspecialchars($featuredMovie['synopsis']); ?></p>
+<p class="sr-only" id="featuredMovieAnnouncement" aria-live="polite" aria-atomic="true"></p>
+<script type="application/json" id="featuredMovieData"><?= json_encode($featuredMovies, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE) ?></script>
+<script src="js/movie-rotation.js?v=20261030" defer></script>
 <?php endif; ?>
 
 <!-- Quick Preference Highlight Callout -->
@@ -64,7 +71,7 @@ $comingSoonResult = $conn->query("SELECT * FROM movies WHERE status = 'coming_so
 <section class="movies-section">
     <div class="section-header">
         <h2 class="section-title">Now Showing in Theatres</h2>
-        <a href="movies.php?filter=now_showing" class="btn btn--ghost btn--sm">View All Now Showing &rarr;</a>
+        <a href="movies.php?status=now_showing" class="btn btn--ghost btn--sm">View All Now Showing &rarr;</a>
     </div>
 
     <div class="movie-grid">
@@ -107,8 +114,8 @@ $comingSoonResult = $conn->query("SELECT * FROM movies WHERE status = 'coming_so
 <!-- Coming Soon Section -->
 <section class="movies-section">
     <div class="section-header">
-        <h2 class="section-title">Coming Soon to Silver Village</h2>
-        <a href="movies.php?filter=coming_soon" class="btn btn--ghost btn--sm">View All Coming Soon &rarr;</a>
+        <h2 class="section-title">Coming Soon to CinéPop</h2>
+        <a href="movies.php?status=coming_soon" class="btn btn--ghost btn--sm">View All Coming Soon &rarr;</a>
     </div>
 
     <div class="movie-grid">
@@ -119,7 +126,7 @@ $comingSoonResult = $conn->query("SELECT * FROM movies WHERE status = 'coming_so
                     <?php if (!empty($movie['poster_image']) && file_exists(__DIR__ . '/images/posters/' . $movie['poster_image'])): ?>
                         <img src="images/posters/<?php echo htmlspecialchars($movie['poster_image']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?> Poster" loading="lazy">
                     <?php else: ?>
-                        <div class="poster-fallback" style="background: linear-gradient(135deg, #1e1b4b, #0a0e17);">
+                        <div class="poster-fallback" style="background: linear-gradient(135deg, #1e1b4b, #06162b);">
                             <span class="poster-fallback-icon">⏳</span>
                             <strong class="poster-fallback-title"><?php echo htmlspecialchars($movie['title']); ?></strong>
                             <small style="color:var(--color-primary-light); margin-top:8px;">Releasing <?php echo date('d M Y', strtotime($movie['release_date'])); ?></small>
@@ -152,7 +159,7 @@ $comingSoonResult = $conn->query("SELECT * FROM movies WHERE status = 'coming_so
 <!-- Cinema Perks & Experience Highlights -->
 <section class="perks-section">
     <div class="section-header">
-        <h2 class="section-title">The Silver Village Experience</h2>
+        <h2 class="section-title">The CinéPop Experience</h2>
     </div>
     <div class="perks-grid">
         <div class="perk-card">

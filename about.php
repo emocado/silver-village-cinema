@@ -1,23 +1,27 @@
 <?php
-$pageTitle = "About Us & Contact - Silver Village Cinema";
-require_once __DIR__ . '/includes/header.php';
-
-$contactSuccess = false;
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $cName = trim($_POST['contact_name'] ?? '');
-    $cEmail = trim($_POST['contact_email'] ?? '');
-    $cSubject = trim($_POST['contact_subject'] ?? '');
-    $cMessage = trim($_POST['contact_message'] ?? '');
-
-    if (!empty($cName) && !empty($cEmail) && !empty($cMessage)) {
-        $contactSuccess = true;
+require_once __DIR__.'/includes/db_connect.php';
+require_once __DIR__.'/includes/auth.php';
+$contactSuccess=false; $contactError=''; $cName=''; $cEmail=''; $cSubject=''; $cMessage='';
+if($_SERVER['REQUEST_METHOD']==='POST') {
+    $cName=trim($_POST['contact_name']??''); $cEmail=trim($_POST['contact_email']??''); $cSubject=trim($_POST['contact_subject']??''); $cMessage=trim($_POST['contact_message']??'');
+    if(strlen($cName)<2 || strlen($cName)>100) $contactError='Enter a name between 2 and 100 characters.';
+    elseif(!filter_var($cEmail,FILTER_VALIDATE_EMAIL) || strlen($cEmail)>120) $contactError='Enter a valid email address.';
+    elseif(strlen($cSubject)>150) $contactError='Keep the subject within 150 characters.';
+    elseif(strlen($cMessage)<10 || strlen($cMessage)>5000) $contactError='Enter a message between 10 and 5,000 characters.';
+    else {
+        $stmt=$conn->prepare('INSERT INTO enquiries(full_name,email,subject,message) VALUES(?,?,?,?)'); $stmt->bind_param('ssss',$cName,$cEmail,$cSubject,$cMessage); $stmt->execute();
+        $_SESSION['contact_success']=$cName; header('Location: about.php?sent=1',true,303); exit;
     }
 }
+if(isset($_SESSION['contact_success'])) { $contactSuccess=true; $cName=$_SESSION['contact_success']; unset($_SESSION['contact_success']); }
+$pageTitle='About Us & Contact - CinéPop'; require __DIR__.'/includes/header.php';
 ?>
+<?php if($contactError): ?><div class="alert alert--danger" role="alert"><?= htmlspecialchars($contactError) ?></div><?php endif; ?>
+
 
 <div class="section-header" style="margin-bottom: 32px;">
     <div>
-        <h1 class="section-title">About Silver Village Cinema</h1>
+        <h1 class="section-title">About CinéPop</h1>
         <p style="color: var(--color-text-muted); font-size: 14px; margin-top: 4px;">
             Crafting world-class cinematic experiences with state-of-the-art projection, audio, and customer convenience.
         </p>
@@ -26,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php if ($contactSuccess): ?>
     <div class="alert alert--success">
-        ✅ Thank you, <strong><?php echo htmlspecialchars($cName); ?></strong>! Your enquiry has been received by our cinema concierge desk.
+        ✅ Thank you, <strong><?php echo htmlspecialchars($cName); ?></strong>! Your enquiry has been saved for our cinema team.
     </div>
 <?php endif; ?>
 
@@ -35,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h2 style="font-size: 22px; margin-bottom: 20px; color: var(--color-primary-light);">Our Screening Auditoriums</h2>
     
     <div class="perks-grid">
-        <div class="perk-card" style="flex-direction: column; background:#121620;">
+        <div class="perk-card" style="flex-direction: column; background:#0b2544;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
                 <span style="font-size: 28px;">🎭</span>
                 <h3 class="perk-title" style="margin:0;">Hall A: Dolby Atmos</h3>
@@ -44,11 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <strong>Capacity:</strong> 60 Seats (Rows A–F)<br>
                 <strong>Projection:</strong> Christie 4K Dual Laser<br>
                 <strong>Sound:</strong> 64-channel Dolby Atmos Overhead Array<br>
-                <strong>Tiers:</strong> Standard (\$10.50) / Premium Recliner (\$14.50)
+                <strong>Tiers:</strong> Standard ($10.50) / Premium Recliner ($14.50)
             </p>
         </div>
 
-        <div class="perk-card" style="flex-direction: column; background:#121620;">
+        <div class="perk-card" style="flex-direction: column; background:#0b2544;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
                 <span style="font-size: 28px;">👑</span>
                 <h3 class="perk-title" style="margin:0;">Hall B: VIP Premiere</h3>
@@ -57,11 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <strong>Capacity:</strong> 80 Seats (Rows A–H)<br>
                 <strong>Projection:</strong> Laser Ultra-High Definition<br>
                 <strong>Seating:</strong> Motorized Italian Leather Recliners<br>
-                <strong>Tiers:</strong> Standard (\$12.50) / Premium VIP (\$16.50)
+                <strong>Tiers:</strong> Standard ($12.50) / Premium VIP ($16.50)
             </p>
         </div>
 
-        <div class="perk-card" style="flex-direction: column; background:#121620;">
+        <div class="perk-card" style="flex-direction: column; background:#0b2544;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
                 <span style="font-size: 28px;">🎬</span>
                 <h3 class="perk-title" style="margin:0;">Hall C: Digital Cinema</h3>
@@ -70,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <strong>Capacity:</strong> 100 Seats (Rows A–J)<br>
                 <strong>Projection:</strong> Barco Laser 2K High Brightness<br>
                 <strong>Sound:</strong> 7.1 Surround Sound<br>
-                <strong>Tiers:</strong> Standard (\$10.50) / Premium (\$14.50)
+                <strong>Tiers:</strong> Standard ($10.50) / Premium ($14.50)
             </p>
         </div>
     </div>
@@ -85,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div style="background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px;">
             <p style="font-size: 15px; margin-bottom: 12px;">
                 📍 <strong>Address:</strong><br>
-                Silver Village Cinema Multiplex<br>
+                CinéPop Multiplex<br>
                 50 Nanyang Avenue, Academic Complex #02-18<br>
                 Singapore 639798
             </p>
@@ -98,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Friday – Sunday & Public Holidays: 09:30 AM – 01:00 AM
             </p>
             <div class="footer-notice-box">
-                <small>🎟️ <strong>Digital Admission:</strong> E-tickets and booking summaries are dispatched immediately to your registered email address upon checkout.</small>
+                <small>🎟️ <strong>Digital Admission:</strong> Successful-booking acknowledgements are delivered to your local mailbox for viewing in Thunderbird.</small>
             </div>
         </div>
     </div>
@@ -112,25 +116,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Have questions regarding private hall bookings, concession menus, or your tickets?
         </p>
 
-        <form id="contactForm" method="POST" action="about.php" novalidate>
+        <form id="contactForm" method="POST" action="about.php" novalidate><?= csrfField() ?>
             <div class="form-group">
                 <label class="form-label" for="contact_name">Your Full Name</label>
-                <input type="text" id="contact_name" name="contact_name" class="form-control" placeholder="e.g. Johnathan Tan" required>
+                <input type="text" id="contact_name" name="contact_name" class="form-control" placeholder="e.g. Johnathan Tan" required value="<?= htmlspecialchars($cName) ?>">
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="contact_email">Email Address</label>
-                <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="user@silvervillage.local" required>
+                <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="user@silvervillage.local" required value="<?= htmlspecialchars($cEmail) ?>">
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="contact_subject">Subject</label>
-                <input type="text" id="contact_subject" name="contact_subject" class="form-control" placeholder="e.g. Corporate Hall Booking Enquiry">
+                <input type="text" id="contact_subject" name="contact_subject" class="form-control" placeholder="e.g. Corporate Hall Booking Enquiry" value="<?= htmlspecialchars($cSubject) ?>">
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="contact_message">Your Message</label>
-                <textarea id="contact_message" name="contact_message" class="form-control" rows="4" placeholder="How can we assist you?" required></textarea>
+                <textarea id="contact_message" name="contact_message" class="form-control" rows="4" placeholder="How can we assist you?" required><?= htmlspecialchars($cMessage) ?></textarea>
             </div>
 
             <button type="submit" class="btn btn--primary btn--block">

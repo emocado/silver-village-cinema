@@ -1,11 +1,13 @@
 <?php
 /**
- * Silver Village Cinema - Authentication & Session Helper
+ * CinéPop - Authentication & Session Helper
  */
 
 if (session_status() === PHP_SESSION_NONE) {
+    session_set_cookie_params(['httponly'=>true,'samesite'=>'Lax','secure'=>!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS']!=='off']);
     session_start();
 }
+date_default_timezone_set('Asia/Singapore');
 
 /**
  * Check if the user is currently logged in
@@ -27,7 +29,7 @@ function isAdmin() {
 function requireLogin($redirectUrl = '') {
     if (!isLoggedIn()) {
         $target = !empty($redirectUrl) ? urlencode($redirectUrl) : urlencode($_SERVER['REQUEST_URI']);
-        header("Location: login.php?redirect=" . $target);
+        header('Location: '.cinemaUrl('account.php').'?redirect='.$target);
         exit;
     }
 }
@@ -37,7 +39,7 @@ function requireLogin($redirectUrl = '') {
  */
 function requireAdmin() {
     if (!isAdmin()) {
-        header("Location: index.php?msg=unauthorized");
+        header('Location: '.cinemaUrl('index.php').'?msg=unauthorized');
         exit;
     }
 }
@@ -70,7 +72,41 @@ function generateCsrfToken() {
  * Verify submitted CSRF token
  */
 function verifyCsrfToken($token) {
-    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+    return is_string($token) && isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
+
+function cinemaUrl(string $path): string {
+    $base=rtrim(str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME']??$_SERVER['PHP_SELF']??'/index.php')),'/');
+    if(substr($base,-6)==='/admin') $base=substr($base,0,-6);
+    return ($base==='.'?'':$base).'/'.$path;
+}
+function csrfField(): string { return '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(generateCsrfToken(),ENT_QUOTES,'UTF-8').'">'; }
+function requireCsrf(): void {
+    if(!verifyCsrfToken($_POST['csrf_token']??'')) throw new RuntimeException('Your form expired. Reload the page and try again.');
+}
+function safeLocalRedirect($target): string {
+    $fallback=cinemaUrl('index.php');
+    if(!is_string($target) || preg_match('/[\x00-\x20\\\\]/',$target) || strpos($target,'//')===0 || preg_match('/^[a-z][a-z0-9+.-]*:/i',$target)) return $fallback;
+    $base=dirname($fallback).'/';
+    if(strpos($target,'/')===0 && strpos($target,$base)!==0) return $fallback;
+    if(strpos($target,'..')!==false) return $fallback;
+    return $target?:$fallback;
+}
+function userError(Throwable $error): string {
+    return $error instanceof mysqli_sql_exception?'The database could not complete this request. Please try again.':$error->getMessage();
+}
+
+// Enforce the same request protection for every included form handler.
+if(($_SERVER['REQUEST_METHOD']??'GET')==='POST' && !verifyCsrfToken($_POST['csrf_token']??'')) {
+    http_response_code(403);
+    exit('<!doctype html><html lang="en"><meta charset="utf-8"><title>Form expired</title><h1>Your form expired</h1><p>Go back, reload the page and submit again.</p></html>');
+}
+if(($_SERVER['REQUEST_METHOD']??'GET')==='POST') {
+    foreach($_POST as $field=>$value) {
+        if(!is_string($value) && !($field==='selected_wishlist_ids' && is_array($value) && !array_filter($value,fn($id)=>!is_string($id)))) {
+            http_response_code(400); exit('Invalid form input. Reload the page and try again.');
+        }
+    }
 }
 
 /**

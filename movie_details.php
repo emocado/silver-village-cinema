@@ -20,9 +20,11 @@ if (!$movie) {
     exit;
 }
 
-$pageTitle = htmlspecialchars($movie['title']) . " - Silver Village Cinema";
+$pageTitle = htmlspecialchars($movie['title']) . " - CinéPop";
 require_once __DIR__ . '/includes/header.php';
 
+$screeningDate=trim((string)($_GET['date']??''));
+if($screeningDate!=='' && (!preg_match('/^\d{4}-\d{2}-\d{2}$/D',$screeningDate) || date('Y-m-d',strtotime($screeningDate))!==$screeningDate)) $screeningDate='';
 // Fetch Screenings for this movie with Hall details & booked seats count
 $screeningsSql = "
     SELECT s.screening_id, s.screening_date, s.screening_time, 
@@ -37,11 +39,11 @@ $screeningsSql = "
            ) AS booked_count
     FROM screenings s
     JOIN halls h ON s.hall_id = h.hall_id
-    WHERE s.movie_id = ? AND s.screening_date >= CURDATE()
+    WHERE s.movie_id = ? AND TIMESTAMP(s.screening_date,s.screening_time) > NOW() AND (? = '' OR s.screening_date = ?)
     ORDER BY s.screening_date ASC, s.screening_time ASC
 ";
 $sStmt = $conn->prepare($screeningsSql);
-$sStmt->bind_param("i", $movieId);
+$sStmt->bind_param("iss", $movieId, $screeningDate, $screeningDate);
 $sStmt->execute();
 $screeningsResult = $sStmt->get_result();
 
@@ -101,13 +103,13 @@ if ((int)$movieId === 1 && file_exists(__DIR__ . '/images/hero_spiderman.jpg')) 
                 <span class="pill-tag"><?php echo (int)$movie['duration_minutes']; ?> Minutes</span>
                 <span class="pill-tag"><?php echo htmlspecialchars($movie['genre']); ?></span>
                 <?php if ($totalReviews > 0): ?>
-                    <span class="pill-tag" style="background: rgba(242, 202, 80, 0.2); color: var(--color-primary-light); font-weight: bold;">
+                    <span class="pill-tag" style="background: rgba(112, 201, 255, 0.2); color: var(--color-primary-light); font-weight: bold;">
                         ★ <?php echo $avgRating; ?> / 5.0 (<?php echo $totalReviews; ?> Reviews)
                     </span>
                 <?php endif; ?>
             </div>
             <h1 style="font-size: 36px; margin-bottom: 14px;"><?php echo htmlspecialchars($movie['title']); ?></h1>
-            <p style="color: #d0c5af; margin-bottom: 16px; line-height: 1.7; font-size: 15px;">
+            <p style="color: #c2d3e7; margin-bottom: 16px; line-height: 1.7; font-size: 15px;">
                 <?php echo nl2br(htmlspecialchars($movie['synopsis'])); ?>
             </p>
             <div style="font-size: 13px; color: var(--color-text-muted); display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -120,6 +122,7 @@ if ((int)$movieId === 1 && file_exists(__DIR__ . '/images/hero_spiderman.jpg')) 
     </div>
 </div>
 
+<?php if($screeningDate!==''): ?><p class="alert alert--info">Showing screenings for <?= htmlspecialchars(date('D, j M Y',strtotime($screeningDate))) ?>. <a href="movie_details.php?id=<?= (int)$movieId ?>">View all dates</a></p><?php endif; ?>
 <!-- Structured Showtimes Table (IE4727 Core Requirement: 1 table displaying content effectively) -->
 <section style="margin-bottom: 48px;">
     <div class="section-header">
@@ -167,7 +170,7 @@ if ((int)$movieId === 1 && file_exists(__DIR__ . '/images/hero_spiderman.jpg')) 
                                 <strong><?php echo htmlspecialchars($s['hall_name']); ?></strong>
                             </td>
                             <td>
-                                <span class="pill-tag" style="background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3);">
+                                <span class="pill-tag" style="background: rgba(0, 104, 200, 0.1); border: 1px solid rgba(0, 104, 200, 0.3);">
                                     <?php echo htmlspecialchars($s['experience_type']); ?>
                                 </span>
                             </td>
@@ -215,7 +218,7 @@ if ((int)$movieId === 1 && file_exists(__DIR__ . '/images/hero_spiderman.jpg')) 
         <div>
             <h2 class="section-title">Audience Reviews & Ratings</h2>
             <p style="color: var(--color-text-muted); font-size: 13px; margin-top: 4px;">
-                Verified thoughts from Silver Village Cinema patrons.
+                Verified thoughts from CinéPop patrons.
             </p>
         </div>
         <a href="feedback.php?movie_id=<?php echo (int)$movieId; ?>" class="btn btn--outline btn--sm">
@@ -233,7 +236,7 @@ if ((int)$movieId === 1 && file_exists(__DIR__ . '/images/hero_spiderman.jpg')) 
                             <?php echo str_repeat('★', (int)$fb['rating']) . str_repeat('☆', 5 - (int)$fb['rating']); ?>
                         </span>
                     </div>
-                    <p style="color: #d0c5af; font-size: 14px; margin-bottom: 10px; line-height: 1.6;">
+                    <p style="color: #c2d3e7; font-size: 14px; margin-bottom: 10px; line-height: 1.6;">
                         "<?php echo htmlspecialchars($fb['review_text']); ?>"
                     </p>
                     <small style="color: var(--color-text-dim);">

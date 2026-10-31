@@ -14,7 +14,7 @@ if ($screeningId <= 0) {
 // Fetch Screening, Movie and Hall information
 $sql = "
     SELECT s.screening_id, s.screening_date, s.screening_time,
-           m.movie_id, m.title AS movie_title, m.rating, m.duration_minutes, m.genre, m.poster_image,
+           m.movie_id, m.title AS movie_title, m.rating, m.duration_minutes, m.genre, m.poster_image, m.synopsis,
            h.hall_id, h.hall_name, h.experience_type, h.total_rows, h.seats_per_row, 
            h.premium_row_start, h.standard_price, h.premium_price
     FROM screenings s
@@ -50,84 +50,63 @@ while ($row = $bResult->fetch_assoc()) {
 }
 $bStmt->close();
 
-// Handle POST: Add to Wishlist OR Direct Checkout
-$errorMsg = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $selectedSeatsStr = trim($_POST['selected_seats'] ?? '');
-    $bookingAction = $_POST['booking_action'] ?? 'add_wishlist';
-    $prefRank = (int)($_POST['preference_rank'] ?? 1);
-
-    if (empty($selectedSeatsStr)) {
-        $errorMsg = "Please select at least one seat on the seat map before proceeding.";
-    } else {
-        $selectedSeatsArr = explode(',', $selectedSeatsStr);
-        // Calculate total price based on seat tiers
-        $calculatedTotal = 0;
-        foreach ($selectedSeatsArr as $seat) {
-            $seat = trim($seat);
-            $rowChar = substr($seat, 0, 1);
-            $rowIndex = ord(strtoupper($rowChar)) - ord('A') + 1;
-            if ($rowIndex >= $screening['premium_row_start']) {
-                $calculatedTotal += (float)$screening['premium_price'];
-            } else {
-                $calculatedTotal += (float)$screening['standard_price'];
-            }
-        }
-
-        if ($bookingAction === 'add_wishlist') {
-            // Insert into booking_wishlist table (SQL INSERT Transaction)
-            $userId = getCurrentUserId();
-            $wStmt = $conn->prepare("
-                INSERT INTO booking_wishlist (user_id, screening_id, selected_seats, preference_rank, estimated_total) 
-                VALUES (?, ?, ?, ?, ?)
-            ");
-            $wStmt->bind_param("iisid", $userId, $screeningId, $selectedSeatsStr, $prefRank, $calculatedTotal);
-            
-            if ($wStmt->execute()) {
-                $wStmt->close();
-                header("Location: wishlist.php?added=1");
-                exit;
-            } else {
-                $errorMsg = "Failed to add booking to wishlist. Please try again.";
-                $wStmt->close();
-            }
-        } elseif ($bookingAction === 'direct_checkout') {
-            // Store selected seats in session and forward to confirmation.php
-            $_SESSION['direct_booking'] = [
-                'screening_id' => $screeningId,
-                'seats' => $selectedSeatsArr,
-                'total_price' => $calculatedTotal
-            ];
-            header("Location: confirmation.php?mode=direct");
-            exit;
-        }
-    }
+// Validate seat selections again on the server, including edits.
+require_once __DIR__.'/includes/booking_service.php';
+$editId=(int)($_POST['wishlist_id']??$_GET['wishlist_id']??0);
+$editing=null; $initialSeats=[]; $errorMsg='';
+if($editId) {
+    $editing=cinemaQuery($conn,'SELECT * FROM booking_wishlist WHERE wishlist_id=? AND user_id=?','ii',[$editId,getCurrentUserId()])->get_result()->fetch_assoc();
+    if(!$editing || (int)$editing['screening_id']!==$screeningId) { http_response_code(404); exit('Wishlist item not found in your account.'); }
+    $initialSeats=explode(',',$editing['selected_seats']);
 }
+if($_SERVER['REQUEST_METHOD']==='POST') {
+    try {
+        $text=trim($_POST['selected_seats']??'');
+        $action=$_POST['booking_action']??'';
+        $info=screeningInfo($conn,$screeningId);
+        $seats=validateSeats($text,$info);
+        ensureSeatsAvailable($conn,$screeningId,$seats);
+        if($action==='add_wishlist') {
+            $rank=filter_var($_POST['preference_rank']??'',FILTER_VALIDATE_INT);
+            if($rank===false) throw new RuntimeException('Choose a valid preference.');
+            saveWishlist($conn,getCurrentUserId(),$screeningId,$text,$rank,$editId);
+            header('Location: wishlist.php?added=1',true,303); exit;
+        } elseif($action==='direct_checkout') {
+            $token=bin2hex(random_bytes(20));
+            $_SESSION['pending_checkouts'][$token]=['selection'=>['mode'=>'direct','screening_id'=>$screeningId,'seats'=>implode(',',$seats)],'expires'=>time()+1200];
+            $_SESSION['pending_checkouts']=array_slice($_SESSION['pending_checkouts'],-10,null,true);
+            header('Location: confirmation.php?checkout='.$token,true,303); exit;
+        } else throw new RuntimeException('Choose a valid booking action.');
+    } catch(Throwable $e) { $errorMsg=userError($e); }
+}
+if($_SERVER['REQUEST_METHOD']==='POST') $initialSeats=explode(',',(string)($_POST['selected_seats']??''));
+try { screeningInfo($conn,$screeningId); } catch(Throwable $e) { $errorMsg=userError($e); }
 
-$pageTitle = "Select Seats: " . htmlspecialchars($screening['movie_title']) . " - Silver Village Cinema";
+$pageTitle = "Select Seats: " . htmlspecialchars($screening['movie_title']) . " - CinéPop";
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<div class="section-header" style="margin-bottom: 24px;">
-    <div>
-        <h1 class="section-title">Select Seats & Booking Options</h1>
-        <p style="color: var(--color-text-muted); font-size: 14px; margin-top: 4px;">
-            🎬 <strong><?php echo htmlspecialchars($screening['movie_title']); ?></strong> &nbsp;|&nbsp; 
-            🎭 <?php echo htmlspecialchars($screening['hall_name']); ?> (<?php echo htmlspecialchars($screening['experience_type']); ?>) &nbsp;|&nbsp; 
-            📅 <?php echo date('D, d M Y', strtotime($screening['screening_date'])); ?> @ <?php echo date('h:i A', strtotime($screening['screening_time'])); ?>
-        </p>
-    </div>
-</div>
-
-<?php if (!empty($errorMsg)): ?>
-    <div class="alert alert--danger">
-        ⚠️ <?php echo htmlspecialchars($errorMsg); ?>
-    </div>
-<?php endif; ?>
-
-<div class="booking-layout">
-    <!-- Left Column: Cinema Stage & Interactive Seat Grid -->
-    <div class="screen-stage-wrap">
+<?php
+$bookingPoster='images/posters/'.$screening['poster_image'];
+$bookingBackdrop=((int)$screening['movie_id']===1 && is_file(__DIR__.'/images/hero_spiderman.jpg'))?'images/hero_spiderman.jpg':$bookingPoster;
+?>
+<section class="seat-booking-scene" style="--booking-backdrop:url('<?= htmlspecialchars(cinemaUrl($bookingBackdrop),ENT_QUOTES,'UTF-8') ?>')">
+    <div class="booking-layout cinema-seat-layout">
+        <div class="seat-booking-main">
+            <a class="seat-back-link" href="movie_details.php?id=<?= (int)$screening['movie_id'] ?>">← Back to movie details</a>
+            <header class="seat-film-header">
+                <h1><?= htmlspecialchars($screening['movie_title']) ?></h1>
+                <div class="seat-film-meta"><span class="pill-rating"><?= htmlspecialchars($screening['rating']) ?></span><span><?= (int)$screening['duration_minutes'] ?> Mins</span><span><?= htmlspecialchars($screening['genre']) ?></span><span><?= htmlspecialchars($screening['experience_type']) ?></span></div>
+                <p class="seat-film-synopsis"><?= htmlspecialchars($screening['synopsis']) ?></p>
+                <h2 class="seat-step-title">Select Seats & Booking Options</h2>
+            </header>
+            <dl class="seat-screening-details">
+                <div><dt>Cinema hall</dt><dd><?= htmlspecialchars($screening['hall_name']) ?></dd></div>
+                <div><dt>Date</dt><dd><?= date('D, d M Y',strtotime($screening['screening_date'])) ?></dd></div>
+                <div><dt>Showtime</dt><dd><?= date('h:i A',strtotime($screening['screening_time'])) ?></dd></div>
+            </dl>
+            <?php if($errorMsg): ?><div class="alert alert--danger" role="alert"><?= htmlspecialchars($errorMsg) ?></div><?php endif; ?>
+            <div class="screen-stage-wrap cinematic-seat-map">
         <!-- Curved Cinema Screen Visualizer -->
         <div class="curved-screen">
             <span class="screen-label">CURVED CINEMA SCREEN</span>
@@ -150,6 +129,7 @@ require_once __DIR__ . '/includes/header.php';
                     $seatLabel = $rowLetter . $c;
                     $isBooked = in_array($seatLabel, $bookedSeats);
                     $seatClass = 'seat-btn';
+                    if ($c === (int)ceil($seatsPerRow/2)) $seatClass .= ' seat-aisle-end';
                     
                     if ($isBooked) {
                         $seatClass .= ' seat-booked';
@@ -161,7 +141,7 @@ require_once __DIR__ . '/includes/header.php';
                     $seatType = $isPremiumRow ? 'premium' : 'standard';
 
                     echo '<button type="button" class="' . $seatClass . '" ' . 
-                         ($isBooked ? 'disabled title="Seat ' . $seatLabel . ' (Booked)"' : '') . 
+                         ($isBooked ? 'disabled' : '') . ' aria-pressed="false" aria-label="Seat ' . $seatLabel . ', ' . ucfirst($seatType) . ', $' . number_format($seatPrice, 2) . ($isBooked ? ', booked' : ', available') . '"' . 
                          ' data-seat="' . $seatLabel . '" ' .
                          ' data-type="' . $seatType . '" ' .
                          ' data-price="' . $seatPrice . '" ' .
@@ -180,14 +160,14 @@ require_once __DIR__ . '/includes/header.php';
         <div class="seat-legend">
             <div class="legend-item">
                 <span class="legend-sample" style="background:#1e293b; border:1px solid #475569;"></span>
-                <span>Standard (\$<?php echo number_format($screening['standard_price'], 2); ?>)</span>
+                <span>Standard ($<?php echo number_format($screening['standard_price'], 2); ?>)</span>
             </div>
             <div class="legend-item">
-                <span class="legend-sample" style="background:#2a2414; border:1px solid #d4af37;"></span>
-                <span>Premium Recliner (\$<?php echo number_format($screening['premium_price'], 2); ?>)</span>
+                <span class="legend-sample" style="background:#103b68; border:1px solid #0068c8;"></span>
+                <span>Premium Recliner ($<?php echo number_format($screening['premium_price'], 2); ?>)</span>
             </div>
             <div class="legend-item">
-                <span class="legend-sample" style="background:#f2ca50; border:1px solid #f2ca50;"></span>
+                <span class="legend-sample" style="background:#70c9ff; border:1px solid #70c9ff;"></span>
                 <span>Selected</span>
             </div>
             <div class="legend-item">
@@ -197,22 +177,24 @@ require_once __DIR__ . '/includes/header.php';
         </div>
     </div>
 
-    <!-- Right Column: Glassmorphic Booking Summary & Preference Form -->
-    <div class="form-card" style="max-width: 100%; margin: 0; padding: 24px; position: sticky; top: 90px;">
+        </div>
+    <!-- Poster, selected seats, pricing and original booking actions. -->
+    <aside class="form-card seat-booking-sidebar">
+        <a class="seat-poster-link" href="movie_details.php?id=<?= (int)$screening['movie_id'] ?>"><img src="<?= htmlspecialchars($bookingPoster) ?>" alt="<?= htmlspecialchars($screening['movie_title']) ?> poster" class="seat-film-poster"></a>
         <h3 style="font-size: 20px; color: var(--color-primary-light); margin-bottom: 16px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px;">
             Booking Summary
         </h3>
 
         <div style="margin-bottom: 16px;">
             <p style="font-size: 13px; color: var(--color-text-muted); margin-bottom: 4px;">Selected Seats:</p>
-            <div id="selectedSeatsBadgeWrap" style="min-height: 36px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+            <div id="selectedSeatsBadgeWrap" class="seat-selection-list" aria-live="polite">
                 <span style="font-size: 13px; color: var(--color-text-dim); font-style: italic;" id="noSeatsPlaceholder">
                     No seats selected yet. Click on the map to pick your seats.
                 </span>
             </div>
         </div>
 
-        <div style="background: #121620; border-radius: var(--radius-sm); padding: 14px; margin-bottom: 20px; font-size: 13px;">
+        <div style="background: #0b2544; border-radius: var(--radius-sm); padding: 14px; margin-bottom: 20px; font-size: 13px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
                 <span>Tickets Subtotal:</span>
                 <strong id="ticketsSubtotal">$0.00</strong>
@@ -228,7 +210,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <!-- Preference Ranking & Multi-Booking Form -->
-        <form method="POST" action="booking.php?screening_id=<?php echo (int)$screeningId; ?>" id="bookingSubmitForm">
+        <form method="POST" action="booking.php?screening_id=<?php echo (int)$screeningId; ?>" id="bookingSubmitForm"><?= csrfField() ?><input type="hidden" name="wishlist_id" value="<?= $editId ?>">
             <input type="hidden" name="selected_seats" id="selectedSeatsInput" value="">
 
             <div class="form-group" style="margin-bottom: 20px;">
@@ -236,9 +218,9 @@ require_once __DIR__ . '/includes/header.php';
                     <span>Preference Ranking <small style="color:var(--color-primary-light); font-weight:normal;">(For Wishlist)</small></span>
                 </label>
                 <select name="preference_rank" id="preference_rank" class="form-control" style="font-size: 13px;">
-                    <option value="1">Preference #1 (Top Choice)</option>
-                    <option value="2">Preference #2 (Alternative Option)</option>
-                    <option value="3">Preference #3 (Backup Option)</option>
+                    <option value="1" <?= $editing && (int)$editing['preference_rank']===1 ? 'selected' : '' ?>>Preference #1 (Top Choice)</option>
+                    <option value="2" <?= $editing && (int)$editing['preference_rank']===2 ? 'selected' : '' ?>>Preference #2 (Alternative Option)</option>
+                    <option value="3" <?= $editing && (int)$editing['preference_rank']>=3 ? 'selected' : '' ?>>Preference #3 (Backup Option)</option>
                 </select>
                 <small class="form-help-text">
                     Shortlisting allows you to compare multiple showtimes and confirm all your preferences together.
@@ -247,14 +229,15 @@ require_once __DIR__ . '/includes/header.php';
 
             <!-- Action Buttons: Add to Wishlist VS Direct Checkout -->
             <button type="submit" name="booking_action" value="add_wishlist" class="btn btn--outline btn--block" style="margin-bottom: 10px;">
-                📋 Add to Booking Wishlist
+                <?= $editing ? 'Save wishlist changes' : 'Add to Booking Wishlist' ?>
             </button>
             <button type="submit" name="booking_action" value="direct_checkout" class="btn btn--primary btn--block btn--lg">
                 Proceed to Checkout &rarr;
             </button>
         </form>
-    </div>
+    </aside>
 </div>
+</section>
 
 <!-- Interactive Seat Selection Script -->
 <script>
@@ -280,10 +263,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Deselect seat
                 selectedSeats.splice(index, 1);
                 this.classList.remove('seat-selected');
+                this.setAttribute('aria-pressed', 'false');
             } else {
                 // Select seat
                 selectedSeats.push({ label: seatLabel, price: seatPrice, type: seatType });
                 this.classList.add('seat-selected');
+                this.setAttribute('aria-pressed', 'true');
             }
 
             updateSummaryUI();
@@ -310,19 +295,32 @@ document.addEventListener('DOMContentLoaded', function () {
             total += s.price;
             seatLabelsArr.push(s.label);
 
-            const badge = document.createElement('span');
-            badge.className = 'pill-tag';
-            badge.style.background = s.type === 'premium' ? '#d4af37' : '#334155';
-            badge.style.color = s.type === 'premium' ? '#0a0e17' : '#ffffff';
-            badge.style.fontWeight = 'bold';
-            badge.textContent = s.label + ' ($' + s.price.toFixed(2) + ')';
-            badgeWrap.appendChild(badge);
+            const row = document.createElement('div');
+            row.className = 'seat-selection-row';
+            const description = document.createElement('span');
+            description.textContent = s.label + ' · ' + (s.type === 'premium' ? 'Premium Recliner' : 'Standard');
+            const price = document.createElement('strong');
+            price.textContent = '$' + s.price.toFixed(2);
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'seat-remove';
+            remove.textContent = '×';
+            remove.setAttribute('aria-label', 'Remove seat ' + s.label);
+            remove.addEventListener('click', function () {
+                const seatButton = [...seatButtons].find(button => button.getAttribute('data-seat') === s.label);
+                if (seatButton) seatButton.click();
+            });
+            row.append(description, price, remove);
+            badgeWrap.appendChild(row);
         });
 
         subtotalDisplay.textContent = '$' + total.toFixed(2);
         grandTotalDisplay.textContent = '$' + total.toFixed(2);
         selectedSeatsInput.value = seatLabelsArr.join(',');
     }
+
+    const initialLabels = [<?php echo implode(',', array_map(fn($seat) => "'" . htmlspecialchars($seat, ENT_QUOTES, 'UTF-8') . "'", array_filter($initialSeats, fn($s) => preg_match('/^[A-Z][1-9][0-9]?$/D', $s)))); ?>];
+    seatButtons.forEach(btn => { if (initialLabels.includes(btn.getAttribute('data-seat'))) btn.click(); });
 
     form.addEventListener('submit', function (e) {
         if (selectedSeats.length === 0) {

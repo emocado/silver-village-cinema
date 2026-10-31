@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-30T10:15:18.100980+00:00",
+  "title": "Design System: CinéPop",
+  "extensions": {
+    "source": "css/cinema-theme.css; css/styles.css; css/fonts.css; includes/header.php; admin/index.php; index.php; css/booking-seats.css; design/seat-selection.md; js/movie-rotation.js",
+    "typographyMeta": {
+      "display": {
+        "displayName": "Film feature",
+        "purpose": "Desktop hero and condensed display identity; responsive overrides are documented in DESIGN.md."
+      },
+      "headline": {
+        "displayName": "Page heading",
+        "purpose": "CSS requests 800; only local Nunito Sans 400 and 700 faces are installed."
+      },
+      "body": {
+        "displayName": "UI and body",
+        "purpose": "Local Nunito Sans regular; bold UI uses the installed 700 face."
+      }
+    },
+    "shadows": [
+      {
+        "name": "field-focus",
+        "value": "0 0 0 2px #008bdf",
+        "purpose": "Focused form fields."
+      },
+      {
+        "name": "screen",
+        "value": "0 -6px 20px rgba(0,104,200,.18)",
+        "purpose": "Seat screen highlight; cards have no shadow."
+      },
+      {
+        "name": "booking-screen",
+        "value": "0 -7px 22px rgba(135,148,166,.1)",
+        "purpose": "Scoped booking-screen highlight; replaces global blue screen shadow on this page."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-state",
+        "value": "background .18s, color .18s, border-color .18s",
+        "purpose": "Color transitions without lift."
+      },
+      {
+        "name": "poster-hover",
+        "value": "filter .2s",
+        "purpose": "Brightness response without scaling."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "600px"
+      },
+      {
+        "name": "tablet",
+        "value": "850px"
+      },
+      {
+        "name": "homepage-six-columns",
+        "value": "1100px"
+      },
+      {
+        "name": "header-wrap",
+        "value": "1150px"
+      },
+      {
+        "name": "wide-header-gap",
+        "value": "1500px"
+      }
+    ],
+    "accessibility": {
+      "focus": "3px solid #70c9ff with 4px outline offset",
+      "reducedMotion": "Base duration reduction plus theme smooth-scroll disable.",
+      "bookingSeatFocus": "2px solid white with 3px offset; scoped base booking chairs."
+    },
+    "assets": {
+      "existingFilmArtwork": "Retained original project artwork; no new raster images sourced or generated.",
+      "fonts": "Local Nunito Sans 400/700 and Barlow Condensed 700 with OFL licenses."
+    },
+    "scope": "Representative component snippets, not a complete inventory of legacy contextual styles. No synthetic tonal ramps are presented as installed tokens.",
+    "colorMeta": {
+      "booking-canvas": {
+        "role": "neutral",
+        "displayName": "Booking Canvas",
+        "purpose": "Scoped to base booking page; not a replacement for global tokens."
+      },
+      "booking-scene": {
+        "role": "neutral",
+        "displayName": "Booking Scene",
+        "purpose": "Scoped to base booking page; not a replacement for global tokens."
+      },
+      "booking-seat-standard": {
+        "role": "neutral",
+        "displayName": "Booking Seat Standard",
+        "purpose": "Scoped to base booking page; not a replacement for global tokens."
+      },
+      "booking-seat-premium": {
+        "role": "secondary",
+        "displayName": "Booking Seat Premium",
+        "purpose": "Scoped to base booking page; not a replacement for global tokens."
+      },
+      "booking-seat-selected": {
+        "role": "secondary",
+        "displayName": "Booking Seat Selected",
+        "purpose": "Scoped to base booking page; not a replacement for global tokens."
+      },
+      "booking-seat-booked": {
+        "role": "neutral",
+        "displayName": "Booking Seat Booked",
+        "purpose": "Scoped to base booking page; not a replacement for global tokens."
+      },
+      "booking-action": {
+        "role": "primary",
+        "displayName": "Booking Action",
+        "purpose": "Scoped to base booking page; not a replacement for global tokens."
+      },
+      "booking-action-hover": {
+        "role": "primary",
+        "displayName": "Booking Action Hover",
+        "purpose": "Scoped to base booking page; not a replacement for global tokens."
+      }
+    },
+    "bookingSurface": {
+      "source": "css/booking-seats.css",
+      "scope": "Base booking page only; enhanced picker retains its existing theme.",
+      "layout": "1440px outer main; flexible map +270px summary with 58px gap. At <=1100px: 240px summary, 30px gap. At <=850px: summary follows map. At <=600px: 12px main side padding, 14px scene side padding.",
+      "inventory": "Real rectangular rows and aisles retained; horizontal overflow does not add or hide inventory.",
+      "seatGeometry": "38x36px desktop; 31px wide at <=1100px; 38px wide at <=850px; 24x32px at <=600px. Two pseudo-elements form each chair.",
+      "selectionException": "Red selected chair fill from booking-seat-selected; no global selected-seat palette change.",
+      "fields": "Dark 40px-minimum preference field, 12px text; 16px text at <=600px.",
+      "backdrop": "Existing artwork under dark gradients, opacity .8; no new raster assets.",
+      "verification": "Parent reports ship disposition after scoped source and desktop/mobile render review; 37 backend tests pass; desktop selection/removal and mobile 390px plus documentation 375px verified."
+    },
+    "homepageRotation": {
+      "source": "index.php; js/movie-rotation.js; css/cinema-theme.css",
+      "scope": "Ordinary homepage feature extension using existing palette, typography and components; no new design tokens.",
+      "selection": "Up to four now_showing films, Spider-Man first when present, then release_date descending and movie_id ascending.",
+      "updates": "Title, rating, duration, genre, complete below-hero synopsis, retained artwork and booking URL update together.",
+      "artwork": "Spider-Man wide backdrop; other films use retained poster artwork against navy, with background-size:auto 100%.",
+      "controls": "Previous/next, position and pause/resume under the feature content. Navy controls with elevated hover; 40px minimum dimensions; white 2px keyboard outline with 3px offset.",
+      "automaticAdvance": "7000ms; suspended during feature hover or contained focus and while document.hidden.",
+      "reducedMotion": "Starts paused when prefers-reduced-motion matches; preference changes update pause state.",
+      "announcements": "Manual previous/next changes announce film title politely; automatic changes do not announce.",
+      "progressiveEnhancement": "Server-rendered first film and booking URL remain usable without JavaScript. Controls are hidden until initialization and omitted with fewer than two films.",
+      "verification": "Parent reports scoped ship disposition without material findings, automatic advance from film 1 to 2, manual next to film 3 Dog Stars with booking ID 6, pause/resume, and mobile capture without document overflow. Captures: output/home-rotation-review/. Viewport set to 390px; effective CSS width differed because of user zoom."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Clipped blue booking and confirmation action.",
+      "html": "<button class=\"ds-primary\">Book now</button>",
+      "css": ".ds-primary{font-family:var(--font-body,\"Nunito Sans\",Arial,sans-serif);font-size:15px;font-weight:700;min-height:44px;padding:11px 23px;border:1px solid;border-radius:0;cursor:pointer;transition:background .18s,color .18s,border-color .18s;background:var(--color-primary,#0068c8);color:#fff;border-color:var(--color-primary,#0068c8);clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)}.ds-primary:hover{background:var(--color-primary-dark,#0054a5);border-color:var(--color-primary-dark,#0054a5)}.ds-primary:focus-visible{outline:3px solid var(--color-primary-light,#70c9ff);outline-offset:4px}"
+    },
+    {
+      "name": "Outline action",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary navigation action.",
+      "html": "<button class=\"ds-outline\">View details</button>",
+      "css": ".ds-outline{font-family:var(--font-body,\"Nunito Sans\",Arial,sans-serif);font-size:15px;font-weight:700;min-height:44px;padding:11px 23px;border:1px solid;border-radius:0;cursor:pointer;transition:background .18s,color .18s,border-color .18s;background:transparent;color:#fff;border-color:#b7d0ea}.ds-outline:hover{background:var(--color-bg-elevated,#173b61);border-color:#fff}.ds-outline:focus-visible{outline:3px solid var(--color-primary-light,#70c9ff);outline-offset:4px}"
+    },
+    {
+      "name": "Text field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "White editable field on navy surfaces.",
+      "html": "<label class=\"ds-field\">Email<input class=\"ds-input\" type=\"email\" placeholder=\"Your email\"></label>",
+      "css": ".ds-field{display:grid;gap:6px;color:var(--color-text-body,#edf3fb);font:14px var(--font-body,\"Nunito Sans\",Arial,sans-serif)}.ds-input{background:#fff;color:var(--color-bg-surface,#0b203b);border:1px solid #a9bdd2;border-radius:0;min-height:48px;padding:12px 14px;font:16px var(--font-body,\"Nunito Sans\",Arial,sans-serif)}.ds-input::placeholder{color:#596d81;opacity:1}.ds-input:focus{border-color:#008bdf;box-shadow:0 0 0 2px #008bdf}.ds-input:focus-visible{outline:3px solid var(--color-primary-light,#70c9ff);outline-offset:4px}"
+    },
+    {
+      "name": "Customer links",
+      "kind": "nav",
+      "description": "Customer navigation link states; mobile expansion is handled by the site script.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-link ds-active\" href=\"#movies\">Movies</a><a class=\"ds-link\" href=\"#wishlist\">Wishlist</a></nav>",
+      "css": ".ds-nav{display:flex;gap:26px}.ds-link{position:relative;color:#fff;font:16px var(--font-body,\"Nunito Sans\",Arial,sans-serif);padding:12px 0;text-decoration:none}.ds-link:hover,.ds-active{color:var(--color-primary-light,#70c9ff)}.ds-active:after{content:\"\";position:absolute;left:0;right:0;bottom:3px;height:2px;background:#0093e9}.ds-link:focus-visible{outline:3px solid var(--color-primary-light,#70c9ff);outline-offset:4px}"
+    },
+    {
+      "name": "Film tag",
+      "kind": "chip",
+      "description": "Compact supporting film metadata.",
+      "html": "<span class=\"ds-tag\">Action</span>",
+      "css": ".ds-tag{display:inline-block;background:var(--color-bg-elevated,#173b61);color:var(--color-text-body,#edf3fb);border-radius:2px;padding:2px 10px;font:12px var(--font-body,\"Nunito Sans\",Arial,sans-serif)}"
+    },
+    {
+      "name": "Form container",
+      "kind": "card",
+      "description": "Flat supporting container for forms.",
+      "html": "<section class=\"ds-card\"><h2 class=\"ds-card-title\">Your details</h2><p class=\"ds-card-copy\">Enter your booking information.</p></section>",
+      "css": ".ds-card{background:var(--color-bg-card,#0d2543);border:1px solid var(--color-border,#304865);border-radius:3px;padding:36px 32px;color:var(--color-text-body,#edf3fb);font-family:var(--font-body,\"Nunito Sans\",Arial,sans-serif)}.ds-card-title{color:#fff;font-size:28px;font-weight:800;margin:0 0 12px;line-height:1.2}.ds-card-copy{color:#c2d0e0;margin:0;line-height:1.65}@media(max-width:600px){.ds-card{padding:24px 20px}}"
+    },
+    {
+      "name": "Booking chair states",
+      "kind": "custom",
+      "refersTo": "booking-seat-selected",
+      "description": "Scoped screenshot-led chair states: standard, premium, red selected and disabled booked. Static preview; booking behavior remains in the site.",
+      "html": "<div class=\"ds-chairs\"><button class=\"ds-chair\" aria-label=\"Seat A1 available\" aria-pressed=\"false\">A1</button><button class=\"ds-chair ds-chair-premium\" aria-label=\"Seat A2 premium available\" aria-pressed=\"false\">A2</button><button class=\"ds-chair ds-chair-selected\" aria-label=\"Seat A3 selected\" aria-pressed=\"true\">A3</button><button class=\"ds-chair ds-chair-booked\" aria-label=\"Seat A4 booked\" disabled>A4</button></div>",
+      "css": ".ds-chair{--seat-fill:#edf2f8;--seat-line:#c5d0dd;position:relative;isolation:isolate;width:38px;height:36px;padding:0 0 7px;border:0;background:transparent;color:#15253b;font:700 10px var(--font-body,\"Nunito Sans\",Arial,sans-serif);cursor:pointer}.ds-chair:before{content:\"\";position:absolute;inset:2px 4px 10px;z-index:-1;background:var(--seat-fill);border:1px solid var(--seat-line);border-radius:4px 4px 2px 2px}.ds-chair:after{content:\"\";position:absolute;inset:auto 1px 2px;height:10px;z-index:-2;background:var(--seat-fill);border:1px solid var(--seat-line);border-radius:2px 2px 4px 4px}.ds-chair-premium{--seat-fill:#bdd8f1;--seat-line:#87b9e4}.ds-chair-selected{--seat-fill:#ee4658;--seat-line:#ff7180;color:#fff}.ds-chair-booked{--seat-fill:#173c66;--seat-line:#3a608a;color:#a9bdd5;opacity:.75;cursor:default}.ds-chair:hover:not(:disabled){--seat-line:#ee4658}.ds-chair:focus-visible{outline:2px solid white;outline-offset:3px}.ds-chairs{display:flex;gap:8px}"
+    },
+    {
+      "name": "Booking checkout action",
+      "kind": "button",
+      "refersTo": "booking-action",
+      "description": "Brighter blue, unclipped base-booking sidebar action.",
+      "html": "<button class=\"ds-booking-action\">Proceed to Checkout</button>",
+      "css": ".ds-booking-action{background:#3879ef;color:#fff;border:1px solid #3879ef;border-radius:1px;min-height:43px;padding:10px 12px;font:700 12px var(--font-body,\"Nunito Sans\",Arial,sans-serif);cursor:pointer;transition:background .18s,color .18s,border-color .18s}.ds-booking-action:hover{background:#2768db}.ds-booking-action:focus-visible{outline:3px solid var(--color-primary-light,#70c9ff);outline-offset:4px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Navy Cinema",
+    "overview": "Preserve CinéPop's content and booking features while following the user's ODEON visual reference. The layout is cinematic, legible and oriented around finding and booking a film. This is original project code, not an imported ODEON template.",
+    "keyCharacteristics": [
+      "Navy surfaces and electric-blue actions.",
+      "Film imagery, square posters and condensed feature lettering.",
+      "Readable forms and task-focused navigation."
+    ],
+    "rules": [
+      {
+        "name": "The Blue Action Rule",
+        "body": "Blue identifies primary actions and default seat selection; the user-pinned base booking surface uses red selected chairs as a scoped exception. Status colors retain their existing meaning.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do keep every current movie description, showtime, price, field and feature.",
+      "Do use labels, visible focus, validation errors and reduced-motion support.",
+      "Do retain a clear payment test-mode notice and never imply real charges are collected."
+    ],
+    "donts": [
+      "Don't copy ODEON's logo, offers or commercial claims.",
+      "Don't add dead selectors, decorative booking controls or new external links.",
+      "Don't restore the previous gold, black-glass and glowing visual treatments."
+    ]
+  }
+}

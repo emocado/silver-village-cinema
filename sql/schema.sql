@@ -1,4 +1,4 @@
--- Silver Village Cinema Database Schema & Seed Data
+-- CinéPop Database Schema & Seed Data
 -- Database: silver_village_cinema
 
 CREATE DATABASE IF NOT EXISTS `silver_village_cinema` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -226,3 +226,12 @@ INSERT INTO `feedback` (`feedback_id`, `user_id`, `movie_id`, `rating`, `review_
 (2, 3, 1, 5, 'Easily the best superhero film of the year. Tom Holland delivers his finest performance yet. Highly recommend the premium recliner seats!', DATE_SUB(NOW(), INTERVAL 2 DAY)),
 (3, 2, 2, 5, 'Christopher Nolan does it again. The cinematic scale of The Odyssey is mind-bending and demands the largest screen possible.', DATE_SUB(NOW(), INTERVAL 1 DAY)),
 (4, 3, 3, 4, 'Genuine chills and suspense throughout. Sound design was terrifying in the best way possible.', DATE_SUB(NOW(), INTERVAL 12 HOUR));
+
+CREATE TABLE IF NOT EXISTS enquiries (
+enquiry_id INT AUTO_INCREMENT PRIMARY KEY,
+full_name VARCHAR(100) NOT NULL,
+email VARCHAR(120) NOT NULL,
+subject VARCHAR(150) NOT NULL,
+message TEXT NOT NULL,
+created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

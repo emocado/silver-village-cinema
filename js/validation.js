@@ -1,5 +1,5 @@
 /**
- * Silver Village Cinema - Client-Side Form & Interaction Validation
+ * CinéPop - Client-Side Form & Interaction Validation
  * Fulfills IE4727 Project Requirement: Vanilla JS Form Validation
  */
 

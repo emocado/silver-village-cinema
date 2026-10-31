@@ -1,11 +1,11 @@
 <?php
 /**
- * Silver Village Cinema - Shared Header Component
+ * CinéPop - Shared Header Component
  * Expects $pageTitle variable for dynamic <title> tag.
  */
 
 if (!isset($pageTitle)) {
-    $pageTitle = 'Silver Village Cinema - Your Seat, Your Show, Your Way';
+    $pageTitle = 'CinéPop - Your Seat, Your Show, Your Way';
 }
 
 require_once __DIR__ . '/db_connect.php';
@@ -20,14 +20,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
-    <!-- Google Fonts: Playfair Display (Luxury serif) & Inter (Clean UI sans) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- External Custom CSS (Project Requirement: external stylesheet with min 4 styles) -->
-    <link rel="stylesheet" href="css/styles.css">
+<!-- External Custom CSS (Project Requirement: external stylesheet with min 4 styles) -->
+    <link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/cinema-theme.css?v=20261030">
+    <?php if($currentPage==='booking.php'): ?><link rel="stylesheet" href="css/booking-seats.css?v=20261030"><?php endif; ?>
 </head>
-<body>
+<body class="page-<?= htmlspecialchars(str_replace('_','-',pathinfo($currentPage,PATHINFO_FILENAME))) ?> <?= $currentPage==='index.php'?'has-quickbook':'' ?>">
     <!-- Top Navigation Bar -->
     <header class="site-header">
         <div class="header-container">
@@ -39,13 +36,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     </svg>
                 </div>
                 <div class="logo-text">
-                    <span class="logo-title">SILVER VILLAGE</span>
+                    <span class="logo-title">CinéPop</span>
                     <span class="logo-sub">CINEMA</span>
                 </div>
             </a>
 
             <!-- Navigation Links -->
-            <nav class="main-nav">
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="customerNavigation" aria-label="Toggle navigation"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button><nav class="main-nav" id="customerNavigation">
                 <ul class="nav-list">
                     <li>
                         <a href="index.php" class="nav-link <?php echo ($currentPage == 'index.php') ? 'active' : ''; ?>">Home</a>
@@ -83,11 +80,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <?php endif; ?>
                     <div class="user-profile-menu">
                         <span class="user-greeting">Hi, <strong><?php echo htmlspecialchars(explode(' ', getCurrentUserName())[0]); ?></strong></span>
-                        <a href="logout.php" class="btn btn--ghost btn--sm" title="Sign Out">Logout</a>
+                        <form method="post" action="logout.php" class="inline-action"><?= csrfField() ?><button class="btn btn--ghost btn--sm">Logout</button></form>
                     </div>
                 <?php else: ?>
-                    <a href="login.php" class="btn btn--ghost btn--sm <?php echo ($currentPage == 'login.php') ? 'active' : ''; ?>">Login</a>
-                    <a href="register.php" class="btn btn--primary btn--sm <?php echo ($currentPage == 'register.php') ? 'active' : ''; ?>">Register</a>
+                    <a href="account.php#sign-in" class="btn btn--ghost btn--sm <?php echo ($currentPage == 'login.php') ? 'active' : ''; ?>">Login</a>
+                    <a href="account.php#register" class="btn btn--primary btn--sm <?php echo ($currentPage == 'register.php') ? 'active' : ''; ?>">Register</a>
                 <?php endif; ?>
             </div>
         </div>

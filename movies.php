@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Movie Directory - Silver Village Cinema";
+$pageTitle = "Movie Directory - CinéPop";
 require_once __DIR__ . '/includes/header.php';
 
 // Filter parameters from GET
@@ -67,8 +67,8 @@ sort($allGenres);
 </div>
 
 <!-- Filter & Search Bar (Server-Side Form Processing) -->
-<div class="form-card" style="max-width: 100%; padding: 20px 24px; margin-bottom: 36px; background: #121620;">
-    <form method="GET" action="movies.php" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr auto auto; gap: 16px; align-items: end;">
+<div class="form-card" style="max-width: 100%; padding: 20px 24px; margin-bottom: 36px; background: #0b2544;">
+    <form id="movieFilterForm" method="GET" action="movies.php" style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr auto auto; gap: 16px; align-items: end;">
         <!-- Search Keyword -->
         <div class="form-group" style="margin-bottom: 0;">
             <label class="form-label" for="search_q">Search Movie / Cast</label>
@@ -122,7 +122,7 @@ sort($allGenres);
                     <?php if (!empty($movie['poster_image']) && file_exists(__DIR__ . '/images/posters/' . $movie['poster_image'])): ?>
                         <img src="images/posters/<?php echo htmlspecialchars($movie['poster_image']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?> Poster" loading="lazy">
                     <?php else: ?>
-                        <div class="poster-fallback" style="<?php echo ($movie['status'] === 'coming_soon') ? 'background: linear-gradient(135deg, #1e1b4b, #0a0e17);' : ''; ?>">
+                        <div class="poster-fallback" style="<?php echo ($movie['status'] === 'coming_soon') ? 'background: linear-gradient(135deg, #1e1b4b, #06162b);' : ''; ?>">
                             <span class="poster-fallback-icon"><?php echo ($movie['status'] === 'coming_soon') ? '⏳' : '🎬'; ?></span>
                             <strong class="poster-fallback-title"><?php echo htmlspecialchars($movie['title']); ?></strong>
                             <?php if ($movie['status'] === 'coming_soon'): ?>

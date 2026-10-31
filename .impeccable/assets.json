@@ -1,0 +1,80 @@
+[
+  {
+    "file": "images/hero_spiderman.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "03770611ae7c3e0b304fc059506ba35a32802b145c93b335ce3096ab808c1177",
+    "unchanged": true
+  },
+  {
+    "file": "images/logo.png",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "445c44fcce3d60ffa6f84a5e7ef2d5fa67ac6f7205e769fa6a2b6f80ed77ac1b",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/coyote.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "65520e567faa7bc9e81052af7c227e8f63a928489400be73627a913a8d122493",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/dog_stars.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "1c39c39fdfc7f8c21a6b56a82189d8823ae5b6b2678f8ec046b4fd9e14528a8a",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/insidious.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "7596c1cf7186e1ace0d2f0a5d24830243b376fac3e4cbc22d47f558520cd5ca7",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/minions.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "1078a974e22465e251b4cf672a1af93fd4a5d90ee05e859dc28f737965efdde1",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/oak_street.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "6768123f52b872c7ce75d8364969988d92258a3faac8d7cce57388d1fe603108",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/odyssey.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "c7dbfa11461d7257e50e66c0986c1597f6f6041744871358c1158c577f5d46c4",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/practical_magic.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "e7b3b7c31c9f30f53380ea6a05a5b8245d3d27c373c2710b97e1e8b3a0a7c774",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/resident_evil.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "23c152f6e00066e9f5553453d5a093db490fe5675f6cb974b1998d00afc03756",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/spiderman.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "6c5d36259bd4511c916e75a86580716252198f65fdaea43629502d98ab056c45",
+    "unchanged": true
+  },
+  {
+    "file": "images/posters/toystory5.jpg",
+    "origin": "Existing user-provided Silver Village Cinema installation, retained from before-odeon-redesign.zip",
+    "sha256": "19d6415ce676655c09a0f63bbfb6717bfe3973d405837d21a319eb9e45b257ec",
+    "unchanged": true
+  },
+  {
+    "file": "images/cinepop-mark.svg",
+    "origin": "Original code-authored SVG monogram for the user-requested CinéPop rename",
+    "sha256": "42250ebc1021db0a1a559c0ba6700678180dff648f546730c3a69274fe3f366e",
+    "unchanged": false
+  }
+]
