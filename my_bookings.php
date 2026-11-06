@@ -36,6 +36,8 @@ $sql = "
     JOIN halls h ON s.hall_id = h.hall_id
     LEFT JOIN booked_seats bs ON b.booking_id = bs.booking_id
     WHERE b.user_id = ?
+    AND b.status = 'confirmed'
+    AND b.payment_status = 'success'
     GROUP BY b.booking_id
     ORDER BY b.booking_date DESC
 ";

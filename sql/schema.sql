@@ -1,8 +1,8 @@
 -- CinéPop Database Schema & Seed Data
--- Database: silver_village_cinema
+-- Database: cinepop
 
-CREATE DATABASE IF NOT EXISTS `silver_village_cinema` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `silver_village_cinema`;
+CREATE DATABASE IF NOT EXISTS `cinepop` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `cinepop`;
 
 -- 1. Users Table
 DROP TABLE IF EXISTS `feedback`;
@@ -123,9 +123,9 @@ CREATE TABLE `feedback` (
 -- Users: Admin (password: Admin123!) and Customers (password: Pass1234!)
 -- Password hashes generated via PHP password_hash(..., PASSWORD_DEFAULT)
 INSERT INTO `users` (`user_id`, `full_name`, `email`, `phone`, `date_of_birth`, `password_hash`, `role`) VALUES
-(1, 'Administrator', 'admin@silvervillage.local', '68881234', '1985-05-15', '$2y$10$ZiagQOVNRfqUuRwCvEYPsO7bRraBJCTiQ0BkULAQFCy/RY.5vRJ4u', 'admin'),
-(2, 'Johnathan Tan', 'user@silvervillage.local', '91234567', '1998-08-20', '$2y$10$HbZeZ2/iqkToP0fsEh80I.BllcvX6pGsHc8SfPdRgYIkdPpDG743C', 'customer'),
-(3, 'Sarah Lim', 'sarah@silvervillage.local', '98765432', '2001-11-04', '$2y$10$HbZeZ2/iqkToP0fsEh80I.BllcvX6pGsHc8SfPdRgYIkdPpDG743C', 'customer');
+(1, 'Administrator', 'admin@cinepop.local', '68881234', '1985-05-15', '$2y$10$ZiagQOVNRfqUuRwCvEYPsO7bRraBJCTiQ0BkULAQFCy/RY.5vRJ4u', 'admin'),
+(2, 'Johnathan Tan', 'user@cinepop.local', '91234567', '1998-08-20', '$2y$10$HbZeZ2/iqkToP0fsEh80I.BllcvX6pGsHc8SfPdRgYIkdPpDG743C', 'customer'),
+(3, 'Sarah Lim', 'sarah@cinepop.local', '98765432', '2001-11-04', '$2y$10$HbZeZ2/iqkToP0fsEh80I.BllcvX6pGsHc8SfPdRgYIkdPpDG743C', 'customer');
 
 -- Halls
 INSERT INTO `halls` (`hall_id`, `hall_name`, `experience_type`, `total_rows`, `seats_per_row`, `premium_row_start`, `standard_price`, `premium_price`) VALUES

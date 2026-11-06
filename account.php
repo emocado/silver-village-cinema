@@ -169,7 +169,7 @@ require __DIR__.'/includes/header.php';
         <!-- Email Field -->
         <div class="form-group">
             <label class="form-label" for="login_email">Email Address</label>
-            <input type="email" id="login_email" name="email" class="form-control" placeholder="user@silvervillage.local" required autofocus>
+            <input type="email" id="login_email" name="email" class="form-control" placeholder="user@cinepop.local" required autofocus>
         </div>
 
         <!-- Password Field -->
@@ -225,7 +225,7 @@ require __DIR__.'/includes/header.php';
             <label class="form-label" for="email">
                 <span>Email Address <span style="color:var(--color-primary-light);">*</span></span>
             </label>
-            <input type="email" id="email" name="email" class="form-control <?php echo isset($errors['email']) ? 'is-invalid' : ''; ?>" placeholder="e.g. user@silvervillage.local" value="<?php echo htmlspecialchars($email); ?>" required>
+            <input type="email" id="email" name="email" class="form-control <?php echo isset($errors['email']) ? 'is-invalid' : ''; ?>" placeholder="e.g. user@cinepop.local" value="<?php echo htmlspecialchars($email); ?>" required>
             <small class="form-help-text">For this course demo, receipts go to your local Mercury mailbox in Thunderbird.</small>
             <?php if (isset($errors['email'])): ?>
                 <div class="form-error-msg" style="display:block;"><?php echo htmlspecialchars($errors['email']); ?></div>

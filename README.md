@@ -11,7 +11,27 @@ Cinema booking project using HTML, external CSS, vanilla JavaScript, PHP and MyS
 5. This computer's Apache uses port 8000: open http://localhost:8000/silver-village-cinema/ . If your Apache uses port 80, omit :8000.
 6. Follow THUNDERBIRD_SETUP.md to receive the local acknowledgements in Thunderbird.
 
-The original customer demo credentials are user@silvervillage.local / Pass1234! and sarah@silvervillage.local / Pass1234!. The administrator demo is admin@silvervillage.local / Admin123!. Existing installations keep their current user records and passwords; the update does not reset them.
+The original customer demo credentials are user@cinepop.local / Pass1234! and sarah@cinepop.local / Pass1234!. The administrator demo is admin@cinepop.local / Admin123!. Existing installations keep their current user records and passwords; the update does not reset them.
+
+### Changed Demo Login Credentials
+
+The following accounts are provided for testing and demonstrating
+the CinéPop booking system.
+
+Customer Account 1:
+- Email: user@cinepop.local
+- Password: Pass1234!
+
+Customer Account 2:
+- Email: sarah@cinepop.local
+- Password: Pass1234!
+
+Administrator Account:
+- Email: admin@cinepop.local
+- Password: Admin123!
+
+Existing installations retain their user records and password
+hashes unless manually updated.
 
 ## Booking flow
 
