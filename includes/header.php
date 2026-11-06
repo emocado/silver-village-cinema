@@ -83,8 +83,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         <form method="post" action="logout.php" class="inline-action"><?= csrfField() ?><button class="btn btn--ghost btn--sm">Logout</button></form>
                     </div>
                 <?php else: ?>
-                    <a href="account.php#sign-in" class="btn btn--ghost btn--sm <?php echo ($currentPage == 'login.php') ? 'active' : ''; ?>">Login</a>
-                    <a href="account.php#register" class="btn btn--primary btn--sm <?php echo ($currentPage == 'register.php') ? 'active' : ''; ?>">Register</a>
+                    <a href="account.php" class="btn btn--primary btn--sm <?php echo ($currentPage == 'account.php') ? 'active' : ''; ?>">Login / Register</a>
                 <?php endif; ?>
             </div>
         </div>
