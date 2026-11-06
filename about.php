@@ -124,7 +124,7 @@ $pageTitle='About Us & Contact - CinéPop'; require __DIR__.'/includes/header.ph
 
             <div class="form-group">
                 <label class="form-label" for="contact_email">Email Address</label>
-                <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="user@silvervillage.local" required value="<?= htmlspecialchars($cEmail) ?>">
+                <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="user@cinepop.local" required value="<?= htmlspecialchars($cEmail) ?>">
             </div>
 
             <div class="form-group">

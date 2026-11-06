@@ -10,7 +10,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $db_host = 'localhost';
 $db_user = 'root';
 $db_pass = '';
-$db_name = 'silver_village_cinema';
+$db_name = 'cinepop';
 
 // Create connection
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);

@@ -126,7 +126,7 @@ function completeCheckout(mysqli $db,int $uid,array $selection,string $outcome):
         foreach($screenings as $sid) screeningInfo($db,$sid,true);
         $items=checkoutItems($db,$uid,$selection); $bookings=[]; $total=0;
         foreach($items as $item) {
-            $ref='SVC-'.date('Y').'-'.strtoupper(bin2hex(random_bytes(6))); $status=$outcome==='success'?'confirmed':'cancelled'; $payment=$outcome==='success'?'success':'failed';
+            $ref='CP-'.date('Y').'-'.strtoupper(bin2hex(random_bytes(6))); $status=$outcome==='success'?'confirmed':'cancelled'; $payment=$outcome==='success'?'success':'failed';
             $stmt=cinemaQuery($db,'INSERT INTO bookings(booking_reference,user_id,screening_id,total_price,status,payment_status) VALUES(?,?,?,?,?,?)','siidss',[$ref,$uid,$item['screening_id'],$item['price'],$status,$payment]); $bid=(int)$stmt->insert_id;
             if($outcome==='success') {
                 foreach($item['seats_array'] as $seat) {
