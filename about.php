@@ -41,7 +41,6 @@ $pageTitle='About Us & Contact - CinéPop'; require __DIR__.'/includes/header.ph
     <div class="perks-grid">
         <div class="perk-card" style="flex-direction: column; background:#0b2544;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                <span style="font-size: 28px;">🎭</span>
                 <h3 class="perk-title" style="margin:0;">Hall A: Dolby Atmos</h3>
             </div>
             <p class="perk-desc">
@@ -54,7 +53,6 @@ $pageTitle='About Us & Contact - CinéPop'; require __DIR__.'/includes/header.ph
 
         <div class="perk-card" style="flex-direction: column; background:#0b2544;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                <span style="font-size: 28px;">👑</span>
                 <h3 class="perk-title" style="margin:0;">Hall B: VIP Premiere</h3>
             </div>
             <p class="perk-desc">
@@ -67,7 +65,6 @@ $pageTitle='About Us & Contact - CinéPop'; require __DIR__.'/includes/header.ph
 
         <div class="perk-card" style="flex-direction: column; background:#0b2544;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                <span style="font-size: 28px;">🎬</span>
                 <h3 class="perk-title" style="margin:0;">Hall C: Digital Cinema</h3>
             </div>
             <p class="perk-desc">
@@ -88,21 +85,36 @@ $pageTitle='About Us & Contact - CinéPop'; require __DIR__.'/includes/header.ph
         
         <div style="background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px;">
             <p style="font-size: 15px; margin-bottom: 12px;">
-                📍 <strong>Address:</strong><br>
+            <svg width="18" height="18" viewBox="0 0 24 24"
+     fill="none" stroke="white" stroke-width="2"
+     stroke-linecap="round" stroke-linejoin="round"
+     style="width:18px; height:18px; display:inline-block; vertical-align:middle; margin-right:6px; flex-shrink:0;"
+     aria-hidden="true">
+    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+    <circle cx="12" cy="10" r="3"/>
+</svg>
+            <strong>Address:</strong><br>
                 CinéPop Multiplex<br>
                 50 Nanyang Avenue, Academic Complex #02-18<br>
                 Singapore 639798
             </p>
             <p style="font-size: 14px; margin-bottom: 12px;">
-                📞 <strong>Box Office Hotline:</strong> +65 6791 1744
+            <svg width="18" height="18" viewBox="0 0 24 24"
+     fill="none" stroke="white" stroke-width="2"
+     stroke-linecap="round" stroke-linejoin="round"
+     style="width:18px; height:18px; display:inline-block; vertical-align:middle; margin-right:6px; flex-shrink:0;"
+     aria-hidden="true">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.12.96.34 1.91.65 2.81a2 2 0 0 1-.45 2.11L9.09 10.91a16 16 0 0 0 4 4l1.27-1.19a2 2 0 0 1 2.11-.45c.9.31 1.85.53 2.81.65A2 2 0 0 1 22 16.92Z"/>
+</svg>
+            <strong>Box Office Hotline:</strong> +65 6791 1744
             </p>
             <p style="font-size: 14px; margin-bottom: 12px;">
-                ⏰ <strong>Operating Hours:</strong><br>
+                <strong>Operating Hours:</strong><br>
                 Monday – Thursday: 10:30 AM – 11:30 PM<br>
                 Friday – Sunday & Public Holidays: 09:30 AM – 01:00 AM
             </p>
             <div class="footer-notice-box">
-                <small>🎟️ <strong>Digital Admission:</strong> Successful-booking acknowledgements are delivered to your local mailbox for viewing in Thunderbird.</small>
+                <small><strong>Digital Admission:</strong> Successful-booking acknowledgements are delivered to your local mailbox for viewing in Thunderbird.</small>
             </div>
         </div>
     </div>

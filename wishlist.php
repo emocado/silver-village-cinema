@@ -40,7 +40,7 @@ require_once __DIR__ . '/includes/header.php';
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
             <h1 style="font-size: 32px; margin-bottom: 6px; color: var(--color-primary-light);">
-                📋 Your Booking Wishlist & Preferences
+                Your Booking Wishlist & Preferences
             </h1>
             <p style="color: var(--color-text-muted); font-size: 14px; margin: 0;">
                 Review your shortlisted showtimes ranked in order of preference. Check live seat availability and select one or more bookings to confirm together.
@@ -135,9 +135,9 @@ require_once __DIR__ . '/includes/header.php';
                             </h3>
 
                             <div class="wishlist-meta">
-                                <span>📅 <?php echo date('D, d M Y', strtotime($item['screening_date'])); ?></span>
-                                <span>⏰ <?php echo date('h:i A', strtotime($item['screening_time'])); ?></span>
-                                <span>🎭 <?php echo htmlspecialchars($item['hall_name']); ?> (<?php echo htmlspecialchars($item['experience_type']); ?>)</span>
+                                <span>Date: <?php echo date('D, d M Y', strtotime($item['screening_date'])); ?></span>
+                                <span>Time: <?php echo date('h:i A', strtotime($item['screening_time'])); ?></span>
+                                <span><?php echo htmlspecialchars($item['hall_name']); ?> (<?php echo htmlspecialchars($item['experience_type']); ?>)</span>
                             </div>
 
                             <div style="font-size: 13px; color: var(--color-text-muted);">
@@ -187,7 +187,7 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
                 <button type="submit" id="confirmWishlistBtn" class="btn btn--primary btn--block btn--lg" style="margin-bottom: 12px;">
-                    Confirm & Proceed to Payment &rarr;
+                    Confirm & Proceed to Payment
                 </button>
 
                 <button type="submit" form="wishlistClear" name="action" value="clear" class="btn btn--ghost btn--block btn--sm">Clear Entire Wishlist</button>
@@ -201,7 +201,6 @@ require_once __DIR__ . '/includes/header.php';
 <?php else: ?>
     <!-- Empty Wishlist State -->
     <div class="form-card" style="text-align: center; max-width: 540px; padding: 48px 24px;">
-        <span style="font-size: 48px; display: block; margin-bottom: 16px;">📋</span>
         <h2 style="font-size: 24px; color: #ffffff; margin-bottom: 8px;">Your Wishlist is Empty</h2>
         <p style="color: var(--color-text-muted); margin-bottom: 24px; line-height: 1.6;">
             You have not shortlisted any movie showtimes yet. Explore our Now Showing titles, pick your preferred seats, and add them to your wishlist to compare and confirm!

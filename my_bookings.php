@@ -140,7 +140,7 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 <?php else: ?>
     <div class="form-card" style="text-align: center; max-width: 500px; padding: 48px 24px;">
-        <span style="font-size: 48px; display: block; margin-bottom: 16px;">🎟️</span>
+        <span style="font-size: 48px; display: block; margin-bottom: 16px;"></span>
         <h2 style="color: #ffffff; margin-bottom: 8px;">No Bookings Found</h2>
         <p style="color: var(--color-text-muted); margin-bottom: 24px;">
             You have not placed any ticket bookings yet. Check out our Now Showing directory and book your seats!

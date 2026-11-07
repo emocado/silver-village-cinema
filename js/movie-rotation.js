@@ -28,7 +28,10 @@
         metadata[2].textContent = movie.genre;
         hero.querySelector('[data-feature-booking]').href = 'movie_details.php?id=' + Number(movie.movie_id);
         hero.querySelector('.hero-backdrop').style.backgroundImage = `url(${JSON.stringify(movie.backdrop)})`;
-        hero.querySelector('.hero-backdrop').classList.toggle('is-poster', !movie.backdrop.includes('hero_spiderman'));
+        hero.querySelector('.hero-backdrop').classList.toggle(
+            'is-poster',
+            movie.is_poster
+        );
         document.querySelector('.featured-synopsis').textContent = movie.synopsis;
         hero.querySelector('[data-feature-position]').textContent = `${current + 1} / ${movies.length}`;
         if (announce) document.getElementById('featuredMovieAnnouncement').textContent = movie.title;
