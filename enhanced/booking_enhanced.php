@@ -153,9 +153,9 @@ for ($r = 1; $r <= $totalRows; $r++) {
                     <?php echo htmlspecialchars($screening['movie_title']); ?>
                 </h1>
                 <p class="text-slate-400 text-sm mt-1">
-                    🎭 <?php echo htmlspecialchars($screening['hall_name']); ?> • 
-                    📅 <?php echo date('D, d M Y', strtotime($screening['screening_date'])); ?> • 
-                    ⏰ <?php echo date('h:i A', strtotime($screening['screening_time'])); ?>
+                    <?php echo htmlspecialchars($screening['hall_name']); ?> • 
+                    <?php echo date('D, d M Y', strtotime($screening['screening_date'])); ?> • 
+                    <?php echo date('h:i A', strtotime($screening['screening_time'])); ?>
                 </p>
             </div>
 

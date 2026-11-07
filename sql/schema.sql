@@ -133,18 +133,127 @@ INSERT INTO `halls` (`hall_id`, `hall_name`, `experience_type`, `total_rows`, `s
 (2, 'Hall B', 'VIP Premiere Recliner', 8, 10, 5, 12.50, 16.50), -- 80 seats (Rows A-D standard, E-H premium)
 (3, 'Hall C', 'Standard Digital Cinema', 10, 10, 7, 10.50, 14.50); -- 100 seats (Rows A-F standard, G-J premium)
 
--- Movies (Real Currently-Screening & Upcoming blockbusters)
-INSERT INTO `movies` (`movie_id`, `title`, `synopsis`, `genre`, `duration_minutes`, `rating`, `director`, `cast`, `poster_image`, `backdrop_image`, `status`, `release_date`) VALUES
-(1, 'Spider-Man: Brand New Day', 'Peter Parker navigates life after the world forgot his identity. As a sinister underground crime syndicate emerges with dangerous high-tech weapons, Spider-Man must forge unexpected alliances to protect the city he loves.', 'Action, Sci-Fi, Adventure', 148, 'PG13', 'Destin Daniel Cretton', 'Tom Holland, Zendaya, Mark Ruffalo, Sadie Sink', 'spiderman.jpg', 'hero_spiderman.jpg', 'now_showing', '2026-07-30'),
-(2, 'The Odyssey', 'An epic cinematic retelling of Homer\'s ancient legend. King Odysseus of Ithaca embarks on a perilous ten-year journey across treacherous seas, mythical beasts, and vengeful gods to return home to his kingdom and beloved Penelope.', 'Adventure, Drama, Mythological', 163, 'PG', 'Christopher Nolan', 'Christian Bale, Cillian Murphy, Florence Pugh', 'odyssey.jpg', 'hero_odyssey.jpg', 'now_showing', '2026-08-06'),
-(3, 'Insidious: Out of the Further', 'The Lambert family thought they had sealed the dark realm forever. When paranormal anomalies resurface in a quiet coastal town, psychic investigators must venture deeper into the uncharted corners of The Further than ever before.', 'Horror, Mystery, Thriller', 105, 'NC16', 'Patrick Wilson', 'Patrick Wilson, Rose Byrne, Ty Simpkins, Lin Shaye', 'insidious.jpg', 'hero_insidious.jpg', 'now_showing', '2026-08-13'),
-(4, 'The End of Oak Street', 'A quiet suburban neighborhood wakes up to discover that their entire street has been mysteriously transported into an uncharted, alien ecosystem surrounded by impenetrable mist. Survival forces neighbors to confront hidden secrets.', 'Sci-Fi, Mystery, Thriller', 120, 'PG13', 'David Robert Mitchell', 'Anne Hathaway, Ewan McGregor, Stanley Tucci', 'oak_street.jpg', 'hero_oak_street.jpg', 'now_showing', '2026-08-14'),
-(5, 'Minions & Monsters', 'Gru and his mischievous yellow Minions discover a hidden world of ancient underground creatures. When a rogue monster escapes into the city, the Minions embark on a chaotic and heartwarming mission to save the day.', 'Animation, Comedy, Family', 95, 'PG', 'Pierre Coffin', 'Steve Carell, Pierre Coffin, Sandra Bullock', 'minions.jpg', 'hero_minions.jpg', 'now_showing', '2026-08-01'),
-(6, 'The Dog Stars', 'In a post-apocalyptic world following a devastating global pandemic, a solitary pilot lives with his loyal dog at an abandoned airstrip. A faint radio signal offers a beacon of hope and leads him on a dangerous expedition across the continent.', 'Drama, Sci-Fi, Post-Apocalyptic', 132, 'M18', 'Ridley Scott', 'Jacob Elordi, Josh Brolin, Margaret Qualley', 'dog_stars.jpg', 'hero_dog_stars.jpg', 'now_showing', '2026-08-20'),
-(7, 'Toy Story 5', 'Woody, Buzz, and the beloved toy gang face a modern dilemma when high-tech interactive smart gadgets capture children\'s attention. Together, they embark on a grand adventure to prove the enduring power of heartfelt friendship.', 'Animation, Adventure, Family', 100, 'PG', 'Andrew Stanton', 'Tom Hanks, Tim Allen, Joan Cusack', 'toystory5.jpg', 'hero_toystory5.jpg', 'now_showing', '2026-08-10'),
-(8, 'Coyote vs. Acme', 'Wile E. Coyote takes the Acme Corporation to court after their defective products repeatedly fail to catch the Road Runner. A determined down-on-his-luck human lawyer takes on the corporate giant in a riotous legal showdown.', 'Comedy, Animation, Family', 98, 'PG', 'Dave Green', 'Will Forte, John Cena, Lana Condor', 'coyote.jpg', 'hero_coyote.jpg', 'now_showing', '2026-08-25'),
-(9, 'Practical Magic 2', 'Decades after breaking the family curse, the Owens sisters reunite with a new generation of witches when a mysterious ancestral artifact resurfaces, unleashing a whimsical yet potent ancient magic.', 'Fantasy, Comedy, Romance', 115, 'PG13', 'Akiva Goldsman', 'Sandra Bullock, Nicole Kidman, Evan Rachel Wood', 'practical_magic.jpg', 'hero_magic.jpg', 'coming_soon', '2026-09-11'),
-(10, 'Resident Evil: Biohazard Redux', 'A covert special operations unit is dispatched to a quarantined subterranean biotech facility after communication goes dark, uncovering terrifying bio-organic weapons and an impending global outbreak.', 'Action, Horror, Sci-Fi', 110, 'M18', 'Johannes Roberts', 'Kaya Scodelario, Robbie Amell, Hannah John-Kamen', 'resident_evil.jpg', 'hero_resident.jpg', 'coming_soon', '2026-09-18');
+
+-- CinéPop Movie Catalogue
+-- Movie details use verified cast and director information.
+-- Release dates are demo dates for the CinéPop booking system.
+
+INSERT INTO `movies`
+(`movie_id`, `title`, `synopsis`, `genre`, `duration_minutes`,
+ `rating`, `director`, `cast`, `poster_image`, `backdrop_image`,
+ `status`, `release_date`)
+VALUES
+
+-- 1. Spider-Man: Brand New Day
+(1,
+ 'Spider-Man: Brand New Day',
+ 'Peter Parker navigates life after the world forgot his identity. As a sinister underground crime syndicate emerges with dangerous high-tech weapons, Spider-Man must forge unexpected alliances to protect the city he loves.',
+ 'Action, Sci-Fi, Adventure',
+ 148, 'PG13',
+ 'Destin Daniel Cretton',
+ 'Tom Holland, Zendaya, Mark Ruffalo, Sadie Sink',
+ 'spiderman.jpg', 'hero_spiderman.jpg',
+ 'now_showing', '2026-07-30'),
+
+-- 2. The Odyssey
+(2,
+ 'The Odyssey',
+ 'An epic cinematic retelling of Homer''s ancient legend. King Odysseus of Ithaca embarks on a perilous ten-year journey across treacherous seas, mythical beasts, and vengeful gods to return home to his kingdom and beloved Penelope.',
+ 'Adventure, Drama, Mythological',
+ 163, 'PG',
+ 'Christopher Nolan',
+ 'Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, Zendaya, Charlize Theron',
+ 'odyssey.jpg', 'hero_odyssey.jpg',
+ 'now_showing', '2026-08-06'),
+
+-- 3. Insidious: Out of the Further
+(3,
+ 'Insidious: Out of the Further',
+ 'A young mother named Gemma discovers she can enter The Further and bring supernatural entities into the world of the living. When evil forces discover her abilities, the boundary between the living world and The Further begins to collapse.',
+ 'Horror, Mystery, Thriller',
+ 105, 'NC16',
+ 'Jacob Chase',
+ 'Amelia Eve, Brandon Perea, Lin Shaye',
+ 'insidious.jpg', 'hero_insidious.jpg',
+ 'now_showing', '2026-08-13'),
+
+-- 4. The End of Oak Street
+(4,
+ 'The End of Oak Street',
+ 'A quiet suburban neighborhood wakes up to discover that their entire street has been mysteriously transported into an uncharted, alien ecosystem surrounded by impenetrable mist. Survival forces neighbors to confront hidden secrets.',
+ 'Sci-Fi, Mystery, Thriller',
+ 120, 'PG13',
+ 'David Robert Mitchell',
+ 'Anne Hathaway, Ewan McGregor, Maisy Stella, Christian Convery',
+ 'oak_street.jpg', 'hero_oak_street.jpg',
+ 'now_showing', '2026-08-14'),
+
+-- 5. Minions & Monsters
+(5,
+ 'Minions & Monsters',
+ 'The Minions pursue movie stardom in Hollywood, but accidentally unleash monsters upon the world. They must work together to save the planet from the chaos they created.',
+ 'Animation, Comedy, Family',
+ 95, 'PG',
+ 'Pierre Coffin',
+ 'Pierre Coffin, Allison Janney, Christoph Waltz, Jesse Eisenberg',
+ 'minions.jpg', 'hero_minions.jpg',
+ 'now_showing', '2026-08-01'),
+
+-- 6. The Dog Stars
+(6,
+ 'The Dog Stars',
+ 'In a post-apocalyptic world following a devastating global pandemic, a solitary pilot lives with his loyal dog at an abandoned airstrip. A faint radio signal offers a beacon of hope and leads him on a dangerous expedition across the continent.',
+ 'Drama, Sci-Fi, Post-Apocalyptic',
+ 132, 'M18',
+ 'Ridley Scott',
+ 'Jacob Elordi, Josh Brolin, Margaret Qualley',
+ 'dog_stars.jpg', 'hero_dog_stars.jpg',
+ 'now_showing', '2026-08-20'),
+
+-- 7. Toy Story 5
+(7,
+ 'Toy Story 5',
+ 'Woody, Buzz, and the beloved toy gang face a modern dilemma when high-tech interactive smart gadgets capture children''s attention. Together, they embark on a grand adventure to prove the enduring power of heartfelt friendship.',
+ 'Animation, Adventure, Family',
+ 100, 'PG',
+ 'Andrew Stanton',
+ 'Tom Hanks, Tim Allen, Joan Cusack',
+ 'toystory5.jpg', 'hero_toystory5.jpg',
+ 'now_showing', '2026-08-10'),
+
+-- 8. Coyote vs. Acme
+(8,
+ 'Coyote vs. Acme',
+ 'Wile E. Coyote takes the Acme Corporation to court after their defective products repeatedly fail to catch the Road Runner. A determined down-on-his-luck human lawyer takes on the corporate giant in a riotous legal showdown.',
+ 'Comedy, Animation, Family',
+ 98, 'PG',
+ 'Dave Green',
+ 'Will Forte, John Cena, Lana Condor',
+ 'coyote.jpg', 'hero_coyote.jpg',
+ 'now_showing', '2026-08-25'),
+
+-- 9. Practical Magic 2 (Coming Soon)
+(9,
+ 'Practical Magic 2',
+ 'Decades after breaking the family curse, the Owens sisters reunite with a new generation of witches when a mysterious ancestral artifact resurfaces, unleashing a whimsical yet potent ancient magic.',
+ 'Fantasy, Comedy, Romance',
+ 115, 'PG13',
+ 'Susanne Bier',
+ 'Sandra Bullock, Nicole Kidman, Joey King, Lee Pace',
+ 'practical_magic.jpg', 'hero_magic.jpg',
+ 'coming_soon', '2026-11-27'),
+
+-- 10. Resident Evil (Coming Soon)
+(10,
+ 'Resident Evil',
+ 'A medical courier named Bryan finds himself fighting for survival as a terrifying outbreak plunges an ordinary night into chaos.',
+ 'Action, Horror, Sci-Fi',
+ 110, 'M18',
+ 'Zach Cregger',
+ 'Austin Abrams, Zach Cherry, Kali Reis, Paul Walter Hauser',
+ 'resident_evil.jpg', 'hero_resident.jpg',
+ 'coming_soon', '2026-12-11');
+
 
 -- Demo screening schedule begins 13 November 2026
 SET @screening_start_date = '2026-11-13';
