@@ -146,19 +146,20 @@ INSERT INTO `movies` (`movie_id`, `title`, `synopsis`, `genre`, `duration_minute
 (9, 'Practical Magic 2', 'Decades after breaking the family curse, the Owens sisters reunite with a new generation of witches when a mysterious ancestral artifact resurfaces, unleashing a whimsical yet potent ancient magic.', 'Fantasy, Comedy, Romance', 115, 'PG13', 'Akiva Goldsman', 'Sandra Bullock, Nicole Kidman, Evan Rachel Wood', 'practical_magic.jpg', 'hero_magic.jpg', 'coming_soon', '2026-09-11'),
 (10, 'Resident Evil: Biohazard Redux', 'A covert special operations unit is dispatched to a quarantined subterranean biotech facility after communication goes dark, uncovering terrifying bio-organic weapons and an impending global outbreak.', 'Action, Horror, Sci-Fi', 110, 'M18', 'Johannes Roberts', 'Kaya Scodelario, Robbie Amell, Hannah John-Kamen', 'resident_evil.jpg', 'hero_resident.jpg', 'coming_soon', '2026-09-18');
 
--- Screenings (Dynamic schedule for current dates)
+-- Demo screening schedule begins 13 November 2026
+SET @screening_start_date = '2026-11-13';
 INSERT INTO `screenings` (`screening_id`, `movie_id`, `hall_id`, `screening_date`, `screening_time`) VALUES
 -- Spider-Man: Brand New Day (Hall A & B)
-(1, 1, 1, CURDATE(), '14:00:00'),
-(2, 1, 1, CURDATE(), '17:15:00'),
-(3, 1, 1, CURDATE(), '20:30:00'),
-(4, 1, 1, DATE_ADD(CURDATE(), INTERVAL 1 DAY), '14:00:00'),
-(5, 1, 1, DATE_ADD(CURDATE(), INTERVAL 1 DAY), '17:30:00'),
-(6, 1, 1, DATE_ADD(CURDATE(), INTERVAL 1 DAY), '20:45:00'),
-(7, 1, 1, DATE_ADD(CURDATE(), INTERVAL 2 DAY), '14:30:00'),
-(8, 1, 1, DATE_ADD(CURDATE(), INTERVAL 2 DAY), '17:45:00'),
-(9, 1, 1, DATE_ADD(CURDATE(), INTERVAL 2 DAY), '21:00:00'),
-(10, 1, 2, DATE_ADD(CURDATE(), INTERVAL 3 DAY), '19:30:00'),
+(1, 1, 1, @screening_start_date, '14:00:00'),
+(2, 1, 1, @screening_start_date, '17:15:00'),
+(3, 1, 1, @screening_start_date, '20:30:00'),
+(4, 1, 1, DATE_ADD(@screening_start_date, INTERVAL 1 DAY), '14:00:00'),
+(5, 1, 1, DATE_ADD(@screening_start_date, INTERVAL 1 DAY), '17:30:00'),
+(6, 1, 1, DATE_ADD(@screening_start_date, INTERVAL 1 DAY), '20:45:00'),
+(7, 1, 1, DATE_ADD(@screening_start_date, INTERVAL 2 DAY), '14:30:00'),
+(8, 1, 1, DATE_ADD(@screening_start_date, INTERVAL 2 DAY), '17:45:00'),
+(9, 1, 1, DATE_ADD(@screening_start_date, INTERVAL 2 DAY), '21:00:00'),
+(10, 1, 2, DATE_ADD(@screening_start_date, INTERVAL 3 DAY), '19:30:00'),
 
 -- The Odyssey (Hall B)
 (11, 2, 2, CURDATE(), '13:30:00'),
