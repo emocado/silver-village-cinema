@@ -45,19 +45,32 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Our Screening Halls</h4>
                     <ul class="footer-links">
-                        <li><span>🎭 <strong>Hall A:</strong> Dolby Atmos 4K Laser (60 Seats)</span></li>
-                        <li><span>👑 <strong>Hall B:</strong> VIP Premiere Recliners (80 Seats)</span></li>
-                        <li><span>🎬 <strong>Hall C:</strong> Standard Digital Cinema (100 Seats)</span></li>
+                        <li><span><strong>Hall A:</strong> Dolby Atmos 4K Laser (60 Seats)</span></li>
+                        <li><span><strong>Hall B:</strong> VIP Premiere Recliners (80 Seats)</span></li>
+                        <li><span><strong>Hall C:</strong> Standard Digital Cinema (100 Seats)</span></li>
                     </ul>
                 </div>
 
                 <!-- Col 4: Location & Local Mail Notice -->
                 <div class="footer-col">
                     <h4 class="footer-heading">Cinema Information</h4>
-                    <p class="footer-info">📍 50 Nanyang Avenue, Singapore 639798</p>
-                    <p class="footer-info">📞 +65 6791 1744 (10:00 AM – 11:30 PM)</p>
+                    <p class="footer-info"><svg width="18" height="18" viewBox="0 0 24 24"
+     fill="none" stroke="white" stroke-width="2"
+     stroke-linecap="round" stroke-linejoin="round"
+     style="width:18px; height:18px; display:inline-block; vertical-align:middle; margin-right:6px; flex-shrink:0;"
+     aria-hidden="true">
+    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+    <circle cx="12" cy="10" r="3"/>
+</svg>50 Nanyang Avenue, Singapore 639798</p>
+                    <p class="footer-info"><svg width="18" height="18" viewBox="0 0 24 24"
+     fill="none" stroke="white" stroke-width="2"
+     stroke-linecap="round" stroke-linejoin="round"
+     style="width:18px; height:18px; display:inline-block; vertical-align:middle; margin-right:6px; flex-shrink:0;"
+     aria-hidden="true">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.08 3h3a2 2 0 0 1 2 1.72c.12.96.34 1.91.65 2.81a2 2 0 0 1-.45 2.11L9.09 10.91a16 16 0 0 0 4 4l1.27-1.19a2 2 0 0 1 2.11-.45c.9.31 1.85.53 2.81.65A2 2 0 0 1 22 16.92Z"/>
+</svg>+65 6791 1744 (10:00 AM – 11:30 PM)</p>
                     <div class="footer-notice-box">
-                        <small>🎟️ <strong>Digital Admission:</strong> Successful-booking acknowledgements are delivered to your local mailbox for viewing in Thunderbird.</small>
+                        <small><strong>Digital Admission:</strong> Successful-booking acknowledgements are delivered to your local mailbox for viewing in Thunderbird.</small>
                     </div>
                 </div>
             </div>

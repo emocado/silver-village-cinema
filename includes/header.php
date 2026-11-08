@@ -71,7 +71,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <div class="user-actions">
                 <?php if (isLoggedIn()): ?>
                     <a href="my_bookings.php" class="btn btn--outline btn--sm <?php echo ($currentPage == 'my_bookings.php') ? 'active' : ''; ?>">
-                        <span class="btn-icon">🎟️</span> My Bookings
+                        My Bookings
                     </a>
                     <?php if (isAdmin()): ?>
                         <a href="admin/index.php" class="btn btn--admin btn--sm">

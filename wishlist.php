@@ -136,11 +136,14 @@ require_once __DIR__ . '/includes/header.php';
 
                             <div class="wishlist-meta" style="display:grid; gap:4px;">
                                 <span style="color:var(--color-text-main); font-weight:700;">
-                                    <?= date('D, j M Y', strtotime($item['screening_date'])) ?> · <?= date('g:i A', strtotime($item['screening_time'])) ?>
+                                    Date: <?= date('D, j M Y', strtotime($item['screening_date'])) ?>
+                                    · Time: <?= date('g:i A', strtotime($item['screening_time'])) ?>
                                 </span>
                                 <span>
-                                    <strong><?= htmlspecialchars($item['hall_name']) ?></strong> · <?= htmlspecialchars($item['experience_type']) ?>
+                                    <strong><?= htmlspecialchars($item['hall_name']) ?></strong>
+                                    · <?= htmlspecialchars($item['experience_type']) ?>
                                 </span>
+
                             </div>
 
                             <div style="font-size: 13px; color: var(--color-text-muted);">
@@ -195,7 +198,7 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
                 <button type="submit" id="confirmWishlistBtn" class="btn btn--primary btn--block btn--lg" style="margin-bottom: 12px;">
-                    Confirm & Proceed to Payment &rarr;
+                    Confirm & Proceed to Payment
                 </button>
 
                 <button type="submit" form="wishlistClear" name="action" value="clear" class="btn btn--ghost btn--block btn--sm">Clear Entire Wishlist</button>

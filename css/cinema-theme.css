@@ -54,7 +54,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .page-index .main-content { padding-top:18px; }
 .hero-section { border:0; border-radius:0; background:#06162b; overflow:hidden; min-height:460px; margin-bottom:24px; }
 .hero-backdrop { opacity:1; filter:none; background-position:center right; background-size:cover; }
-.hero-overlay { max-width:760px; min-height:460px; padding:46px 36px 38px; justify-content:flex-start; background:linear-gradient(90deg,#06162b 0%,rgba(6,22,43,.92) 28%,rgba(6,22,43,.65) 65%,rgba(6,22,43,0) 100%); }
+.hero-overlay { max-width:760px; min-height:500px; padding:46px 36px 38px; justify-content:flex-start; background:linear-gradient(90deg,#06162b 0%,rgba(6,22,43,.92) 28%,rgba(6,22,43,.65) 65%,rgba(6,22,43,0) 100%); }
 .hero-badge { border:0; border-radius:0; background:none; color:#b9d6ef; padding:0; font-size:11px; letter-spacing:1px; margin-bottom:14px; }
 .hero-title { font-family:'Barlow Condensed',Arial,sans-serif; font-size:clamp(52px,5.6vw,80px); font-weight:700; text-transform:uppercase; line-height:.98; letter-spacing:.005em; max-width:660px; margin-bottom:24px; }
 .hero-meta { color:#d7e6f4; gap:8px; margin-bottom:18px; }
@@ -95,6 +95,22 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .perk-card { background:none; border:0; border-top:1px solid #304865; border-radius:0; padding:26px 0; }
 .perk-title { font-size:20px; }
 .perk-desc { font-size:14px; color:#bdcbdc; }
+/* About page - Screening hall cards */
+.page-about .perks-grid .perk-card {
+  border: 1px solid #304865;
+  padding: 24px;
+  align-items: stretch;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+/* Keep descriptions aligned with hall headings */
+.page-about .perks-grid .perk-desc {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
 .perk-icon { color:#70c9ff; }
 .alert { border-radius:2px; box-shadow:none; }
 .page-index .alert--info { background:#0b2544; border:1px solid #294d72; padding:24px; }
@@ -261,3 +277,68 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* Current CinéPop identity; retain the original logo only as a source asset. */
 .ticket-mark[src$="cinepop-mark.svg"] { filter:none; }
+/* White contact icons */
+.contact-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -3px;
+  margin-right: 6px;
+}
+
+/* Fade across the entire featured backdrop */
+.page-index .movie-rotation {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Gradient covers the full image, including the bottom edge */
+.page-index .movie-rotation::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+
+  background:
+      linear-gradient(
+          to bottom,
+          transparent 82%,
+          rgba(6, 22, 43, 0.75) 100%
+      ),
+      linear-gradient(
+          90deg,
+          rgba(6, 22, 43, 0.85) 0%,
+          rgba(6, 22, 43, 0.65) 28%,
+          rgba(6, 22, 43, 0.30) 65%,
+          transparent 100%
+      );
+}
+
+/* Remove the gradient limited to the text area */
+.page-index .movie-rotation .hero-overlay {
+  background: transparent;
+  position: relative;
+  z-index: 3;
+}
+
+/* Keep carousel controls visible above the gradient */
+.page-index .movie-rotation .movie-rotation-controls {
+  position: relative;
+  z-index: 3;
+}
+/* Darken backdrop on Movie Details pages only */
+.page-movie-details .hero-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 22, 43, 0.35);
+  pointer-events: none;
+}
+
+

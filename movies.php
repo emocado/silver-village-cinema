@@ -120,7 +120,11 @@ sort($allGenres);
                         <?php echo htmlspecialchars($movie['rating']); ?>
                     </span>
                     <?php if (!empty($movie['poster_image']) && file_exists(__DIR__ . '/images/posters/' . $movie['poster_image'])): ?>
-                        <img src="images/posters/<?php echo htmlspecialchars($movie['poster_image']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?> Poster" loading="lazy">
+                        <img
+                        src="images/posters/<?php echo rawurlencode($movie['poster_image']); ?>?v=<?php echo filemtime(__DIR__ . '/images/posters/' . $movie['poster_image']); ?>"
+                        alt="<?php echo htmlspecialchars($movie['title']); ?> Poster"
+                        loading="lazy"
+                        >
                     <?php else: ?>
                         <div class="poster-fallback" style="<?php echo ($movie['status'] === 'coming_soon') ? 'background: linear-gradient(135deg, #1e1b4b, #06162b);' : ''; ?>">
                             <span class="poster-fallback-icon"><?php echo ($movie['status'] === 'coming_soon') ? '⏳' : '🎬'; ?></span>
