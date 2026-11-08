@@ -81,7 +81,14 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!val) {
                 return showError(emailInput, 'Email address is required.');
             }
-            if (!emailRegex.test(val)) {
+            const domain = val.slice(val.lastIndexOf('@') + 1).toLowerCase();
+            const domainLabelCount = domain.split('.').length;
+            const invalidDomain =
+                (domain.endsWith('.com') && domainLabelCount !== 2) ||
+                (domain.endsWith('.sg') && domainLabelCount > 4) ||
+                domain.startsWith('gmail.com.') ||
+                domain.endsWith('.sg.sg');
+            if (!emailRegex.test(val) || invalidDomain) {
                 return showError(emailInput, 'Please enter a valid email address (e.g. user@domain.com).');
             }
             return showSuccess(emailInput);

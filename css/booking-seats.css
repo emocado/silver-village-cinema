@@ -18,8 +18,25 @@
 .seat-screening-details dt { color:#aebdcc; font-size:11px; margin-bottom:7px; }
 .seat-screening-details dd { color:#fff; font-size:13px; margin:0; font-weight:700; }
 .page-booking .cinematic-seat-map { background:none; border:0; border-radius:0; padding:20px 0 0; }
-.page-booking .curved-screen { width:76%; height:18px; border-top:2px solid #8794a6; border-radius:50%; margin:0 auto 36px; box-shadow:0 -7px 22px rgba(135,148,166,.1); }
-.page-booking .screen-label { top:12px; font-size:8px; letter-spacing:3px; color:#9aaec4; white-space:nowrap; }
+.page-booking .curved-screen {
+    width: 76%;
+    height: 18px;
+    margin: 0 auto 36px;
+    border-top: 2px solid var(--color-primary-light);
+    border-radius: 50%;
+    box-shadow: none;
+}
+.page-booking .curved-screen::before {
+    content: "";
+    position: absolute;
+    inset: -2px 0 0;
+    border-radius: inherit;
+    box-shadow: 0 -3px 10px rgba(112, 201, 255, .65),
+                0 -8px 28px rgba(0, 104, 200, .45);
+    clip-path: inset(-40px -40px 50%);
+    pointer-events: none;
+}
+.page-booking .screen-label { top:12px; font-size:8px; letter-spacing:3px; color:#c8e7ff; white-space:nowrap; }
 .page-booking .seat-grid-container { overflow-x:auto; align-items:center; gap:10px; padding:10px 4px 20px; margin-bottom:20px; }
 .page-booking .seat-row { gap:8px; flex-shrink:0; }
 .page-booking .seat-row-label { width:20px; font-size:10px; color:#a7b8cc; }

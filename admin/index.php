@@ -9,10 +9,16 @@ function adminText(string $key,int $max,bool $required=true): string {
     if(($required && $value==='') || strlen($value)>$max) throw new RuntimeException('Enter a valid '.str_replace('_',' ',$key).' (maximum '.$max.' characters).');
     return $value;
 }
+$tabs = ['movies' => 'Movies', 'screenings' => 'Screenings', 'bookings' => 'Bookings', 'enquiries' => 'Enquiries'];
+$activeTab = $_GET['tab'] ?? (isset($_GET['status']) || isset($_GET['date']) ? 'bookings' : 'movies');
+if (!is_string($activeTab) || !isset($tabs[$activeTab])) {
+    $activeTab = 'movies';
+}
 $notice=''; $error='';
 if($_SERVER['REQUEST_METHOD']==='POST') {
     try {
         $action=$_POST['action']??''; $id=(int)($_POST['id']??0);
+        $activeTab = in_array($action, ['add_screening', 'delete_screening'], true) ? 'screenings' : 'movies';
         if($action==='save_movie') {
             $title=adminText('title',150); $synopsis=adminText('synopsis',10000); $genre=adminText('genre',100); $director=adminText('director',150); $cast=adminText('cast',500);
             $duration=filter_var($_POST['duration_minutes']??'',FILTER_VALIDATE_INT);
@@ -52,7 +58,7 @@ if($_SERVER['REQUEST_METHOD']==='POST') {
             if($counts['total']) throw new RuntimeException('This screening has booking history or wishlist choices and cannot be deleted.');
             cinemaQuery($conn,'DELETE FROM screenings WHERE screening_id=?','i',[$id]); $conn->commit(); $notice='Screening removed.';
         } else throw new RuntimeException('Choose a valid admin action.');
-        $_SESSION['admin_notice']=$notice; header('Location: index.php',true,303); exit;
+        $_SESSION['admin_notice']=$notice; header('Location: index.php?tab='.$activeTab,true,303); exit;
     } catch(Throwable $e) { $conn->rollback(); $error=userError($e); }
 }
 if(isset($_SESSION['admin_notice'])) { $notice=$_SESSION['admin_notice']; unset($_SESSION['admin_notice']); }
@@ -70,13 +76,61 @@ $stats=$conn->query("SELECT COUNT(*) AS total,COALESCE(SUM(total_price),0) AS re
 $escape=fn($v)=>htmlspecialchars((string)$v,ENT_QUOTES,'UTF-8');
 $value=fn($key,$default='')=>$escape($edit[$key]??$default);
 ?>
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cinema Administration - CinéPop</title><link rel="stylesheet" href="../css/styles.css"><link rel="stylesheet" href="../css/cinema-theme.css?v=20261030"></head><body class="page-admin">
-<header class="site-header"><div class="header-container"><a class="brand-logo" href="../index.php"><img class="ticket-mark" src="../images/cinepop-mark.svg" alt="CinéPop"></a><nav class="main-nav"><a class="nav-link" href="#movies">Movies</a> <a class="nav-link" href="#screenings">Screenings</a> <a class="nav-link" href="#bookings">Bookings</a> <a class="nav-link" href="#enquiries">Enquiries</a></nav><a class="btn btn--outline" href="../index.php">Public site</a><form method="post" action="../logout.php" class="inline-action"><?= csrfField() ?><button class="btn btn--ghost">Logout</button></form></div></header>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cinema Administration - CinéPop</title><link rel="stylesheet" href="../css/styles.css"><link rel="stylesheet" href="../css/cinema-theme.css?v=20261030">
+<style>
+.admin-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 760px;
+    margin: 24px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+.admin-tabs a {
+    display: grid;
+    place-items: center;
+    min-height: 44px;
+    padding: 8px;
+    border-bottom: 2px solid transparent;
+    color: var(--color-text-muted);
+    font-weight: 700;
+    text-decoration: none;
+}
+.admin-tabs a:hover { background: var(--color-bg-elevated); }
+.admin-tabs a[aria-current="page"] {
+    border-bottom-color: var(--color-primary-light);
+    color: var(--color-primary-light);
+}
+.admin-tabs a:focus-visible {
+    outline: 2px solid var(--color-primary-light);
+    outline-offset: -4px;
+}
+.page-admin .header-container { justify-content: space-between; }
+@media (max-width: 480px) {
+    .admin-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+</style>
+</head><body class="page-admin">
+<header class="site-header"><div class="header-container"><a href="index.php" class="brand-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                        <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-8v-2h8v2zm0-4h-8v-2h8v2zm0-4h-8V7h8v2z"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">CinéPop</span>
+                    <span class="logo-sub">CINEMA</span>
+                </div>
+            </a><form method="post" action="../logout.php" class="inline-action"><?= csrfField() ?><button class="btn btn--ghost">Logout</button></form></div></header>
 <main class="main-content"><h1>Cinema administration</h1><p><?= (int)$stats['total'] ?> confirmed bookings · $<?= number_format($stats['revenue'],2) ?> ticket revenue</p>
+<nav class="admin-tabs" aria-label="Cinema administration sections">
+    <?php foreach ($tabs as $tab => $label): ?>
+        <a href="?tab=<?= $tab ?>"<?= $activeTab === $tab ? ' aria-current="page"' : '' ?>><?= $label ?></a>
+    <?php endforeach; ?>
+</nav>
 <?php if($notice): ?><div class="alert alert--success" role="status"><?= $escape($notice) ?></div><?php endif; ?>
 <?php if($error): ?><div class="alert alert--danger" role="alert"><?= $escape($error) ?></div><?php endif; ?>
-<section id="movies"><h2>Movies</h2><div class="table-responsive"><table class="custom-table"><thead><tr><th>Title</th><th>Status</th><th>Duration</th><th>Actions</th></tr></thead><tbody>
-<?php foreach($movies as $m): ?><tr><td><?= $escape($m['title']) ?></td><td><?= $escape(str_replace('_',' ',$m['status'])) ?></td><td><?= (int)$m['duration_minutes'] ?> min</td><td><a class="btn btn--outline btn--sm" href="?edit_movie=<?= (int)$m['movie_id'] ?>#movie-form">Edit</a> <form method="post" class="inline-action"><?= csrfField() ?><input type="hidden" name="id" value="<?= (int)$m['movie_id'] ?>"><button name="action" value="delete_movie" class="btn btn--danger btn--sm">Delete</button></form></td></tr><?php endforeach; ?>
+<section id="movies"<?= $activeTab === 'movies' ? '' : ' hidden' ?>><h2>Movies</h2><div class="table-responsive"><table class="custom-table"><thead><tr><th>Title</th><th>Status</th><th>Duration</th><th>Actions</th></tr></thead><tbody>
+<?php foreach($movies as $m): ?><tr><td><?= $escape($m['title']) ?></td><td><?= $escape(str_replace('_',' ',$m['status'])) ?></td><td><?= (int)$m['duration_minutes'] ?> min</td><td><a class="btn btn--outline btn--sm" href="?tab=movies&amp;edit_movie=<?= (int)$m['movie_id'] ?>#movie-form">Edit</a> <form method="post" class="inline-action"><?= csrfField() ?><input type="hidden" name="id" value="<?= (int)$m['movie_id'] ?>"><button name="action" value="delete_movie" class="btn btn--danger btn--sm">Delete</button></form></td></tr><?php endforeach; ?>
 </tbody></table></div>
 <form method="post" id="movie-form" class="form-card admin-form"><?= csrfField() ?><h3><?= $edit?'Edit movie':'Add a movie' ?></h3><input type="hidden" name="action" value="save_movie"><input type="hidden" name="id" value="<?= (int)($edit['movie_id']??0) ?>">
 <?php foreach(['title'=>'Title','genre'=>'Genre','director'=>'Director','cast'=>'Cast','poster_image'=>'Poster filename'] as $key=>$label): ?><div class="form-group"><label for="movie_<?= $key ?>"><?= $label ?></label><input class="form-control" id="movie_<?= $key ?>" name="<?= $key ?>" value="<?= $value($key) ?>" maxlength="<?= ['title'=>150,'genre'=>100,'director'=>150,'cast'=>500,'poster_image'=>255][$key] ?>" required></div><?php endforeach; ?>
@@ -84,13 +138,13 @@ $value=fn($key,$default='')=>$escape($edit[$key]??$default);
 <div class="form-group"><label for="movie_duration">Duration (minutes)</label><input class="form-control" id="movie_duration" name="duration_minutes" type="number" min="1" max="600" value="<?= $value('duration_minutes',120) ?>" required></div>
 <div class="form-group"><label for="movie_rating">Rating</label><select class="form-control" name="rating" id="movie_rating"><?php foreach(['G','PG','PG13','NC16','M18','R21'] as $r): ?><option <?= ($edit['rating']??'PG13')===$r?'selected':'' ?>><?= $r ?></option><?php endforeach; ?></select></div>
 <div class="form-group"><label for="movie_status">Release status</label><select class="form-control" name="status" id="movie_status"><?php foreach(['now_showing'=>'Now showing','coming_soon'=>'Coming soon'] as $key=>$label): ?><option value="<?= $key ?>" <?= ($edit['status']??'now_showing')===$key?'selected':'' ?>><?= $label ?></option><?php endforeach; ?></select></div>
-<div class="form-group"><label for="movie_release">Release date</label><input class="form-control" id="movie_release" name="release_date" type="date" value="<?= $value('release_date',date('Y-m-d')) ?>" required></div><button class="btn btn--primary">Save movie</button> <a href="index.php#movie-form" class="btn btn--ghost">New movie</a></form></section>
-<section id="screenings"><h2>Screenings</h2><form method="post" class="form-card admin-form" id="screening-form"><?= csrfField() ?><input type="hidden" name="action" value="add_screening"><h3>Schedule a showtime</h3>
+<div class="form-group"><label for="movie_release">Release date</label><input class="form-control" id="movie_release" name="release_date" type="date" value="<?= $value('release_date',date('Y-m-d')) ?>" required></div><button class="btn btn--primary">Save movie</button> <a href="?tab=movies#movie-form" class="btn btn--ghost">New movie</a></form></section>
+<section id="screenings"<?= $activeTab === 'screenings' ? '' : ' hidden' ?>><h2>Screenings</h2><form method="post" class="form-card admin-form" id="screening-form"><?= csrfField() ?><input type="hidden" name="action" value="add_screening"><h3>Schedule a showtime</h3>
 <div class="form-group"><label for="screen_movie">Movie</label><select class="form-control" name="movie_id" id="screen_movie" required><option value="">Choose a movie</option><?php foreach($movies as $m): if($m['status']!=='now_showing') continue; ?><option value="<?= (int)$m['movie_id'] ?>"><?= $escape($m['title']) ?></option><?php endforeach; ?></select></div>
 <div class="form-group"><label for="screen_hall">Hall</label><select class="form-control" name="hall_id" id="screen_hall" required><option value="">Choose a hall</option><?php foreach($halls as $h): ?><option value="<?= (int)$h['hall_id'] ?>"><?= $escape($h['hall_name']) ?></option><?php endforeach; ?></select></div>
 <div class="form-group"><label for="screen_date">Date</label><input class="form-control" id="screen_date" name="screening_date" type="date" min="<?= date('Y-m-d') ?>" required></div><div class="form-group"><label for="screen_time">Time</label><input class="form-control" id="screen_time" name="screening_time" type="time" required></div><button class="btn btn--primary">Schedule screening</button></form>
 <div class="table-responsive"><table class="custom-table"><thead><tr><th>Movie</th><th>Showtime</th><th>Hall</th><th>Action</th></tr></thead><tbody><?php foreach($screenings as $s): ?><tr><td><?= $escape($s['title']) ?></td><td><?= $escape($s['screening_date'].' '.$s['screening_time']) ?></td><td><?= $escape($s['hall_name']) ?></td><td><form method="post"><?= csrfField() ?><input type="hidden" name="id" value="<?= (int)$s['screening_id'] ?>"><button name="action" value="delete_screening" class="btn btn--danger btn--sm">Delete</button></form></td></tr><?php endforeach; ?></tbody></table></div></section>
-<section id="bookings"><h2>Booking report</h2><form method="get" class="action-row"><label>Status <select name="status" class="form-control"><option value="">All</option><?php foreach(['confirmed','cancelled'] as $s): ?><option <?= $filter===$s?'selected':'' ?>><?= $s ?></option><?php endforeach; ?></select></label><label>Booking date <input type="date" name="date" value="<?= $escape($filterDate) ?>" class="form-control"></label><button class="btn btn--outline">Filter bookings</button></form>
+<section id="bookings"<?= $activeTab === 'bookings' ? '' : ' hidden' ?>><h2>Booking report</h2><form method="get" class="action-row"><input type="hidden" name="tab" value="bookings"><label>Status <select name="status" class="form-control"><option value="">All</option><?php foreach(['confirmed','cancelled'] as $s): ?><option <?= $filter===$s?'selected':'' ?>><?= $s ?></option><?php endforeach; ?></select></label><label>Booking date <input type="date" name="date" value="<?= $escape($filterDate) ?>" class="form-control"></label><button class="btn btn--outline">Filter bookings</button></form>
 <div class="table-responsive"><table class="custom-table"><thead><tr><th>Reference</th><th>Customer / Movie</th><th>Showtime</th><th>Amount</th><th>Status / Payment</th></tr></thead><tbody><?php foreach($bookings as $b): ?><tr><td><?= $escape($b['booking_reference']) ?></td><td><?= $escape($b['full_name'].' / '.$b['title']) ?></td><td><?= $escape($b['screening_date'].' '.$b['screening_time']) ?></td><td>$<?= number_format($b['total_price'],2) ?></td><td><?= $escape($b['status'].' / '.$b['payment_status']) ?></td></tr><?php endforeach; ?></tbody></table></div></section>
-<section id="enquiries"><h2>Contact enquiries</h2><?php if(!$enquiries): ?><p>No enquiries yet.</p><?php endif; ?><?php foreach($enquiries as $e): ?><article class="enquiry"><h3><?= $escape($e['subject']?:'General enquiry') ?></h3><p><?= $escape($e['full_name'].' · '.$e['email'].' · '.$e['created_at']) ?></p><p><?= nl2br($escape($e['message'])) ?></p></article><?php endforeach; ?></section>
+<section id="enquiries"<?= $activeTab === 'enquiries' ? '' : ' hidden' ?>><h2>Contact enquiries</h2><?php if(!$enquiries): ?><p>No enquiries yet.</p><?php endif; ?><?php foreach($enquiries as $e): ?><article class="enquiry"><h3><?= $escape($e['subject']?:'General enquiry') ?></h3><p><?= $escape($e['full_name'].' · '.$e['email'].' · '.$e['created_at']) ?></p><p><?= nl2br($escape($e['message'])) ?></p></article><?php endforeach; ?></section>
 </main></body></html>

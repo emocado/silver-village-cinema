@@ -77,7 +77,7 @@ function verifyCsrfToken($token) {
 
 function cinemaUrl(string $path): string {
     $base=rtrim(str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME']??$_SERVER['PHP_SELF']??'/index.php')),'/');
-    if(substr($base,-6)==='/admin') $base=substr($base,0,-6);
+    $base=preg_replace('~/(?:admin|enhanced)$~', '', $base);
     return ($base==='.'?'':$base).'/'.$path;
 }
 function csrfField(): string { return '<input type="hidden" name="csrf_token" value="'.htmlspecialchars(generateCsrfToken(),ENT_QUOTES,'UTF-8').'">'; }
@@ -94,6 +94,13 @@ function safeLocalRedirect($target): string {
 }
 function userError(Throwable $error): string {
     return $error instanceof mysqli_sql_exception?'The database could not complete this request. Please try again.':$error->getMessage();
+}
+
+// Keep admin sessions on staff routes, while allowing logout.
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+if (isAdmin() && basename(dirname($scriptName)) !== 'admin' && basename($scriptName) !== 'logout.php') {
+    header('Location: '.cinemaUrl('admin/index.php'), true, 303);
+    exit;
 }
 
 // Enforce the same request protection for every included form handler.

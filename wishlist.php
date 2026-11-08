@@ -40,7 +40,7 @@ require_once __DIR__ . '/includes/header.php';
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
         <div>
             <h1 style="font-size: 32px; margin-bottom: 6px; color: var(--color-primary-light);">
-                📋 Your Booking Wishlist & Preferences
+                Your Booking Wishlist & Preferences
             </h1>
             <p style="color: var(--color-text-muted); font-size: 14px; margin: 0;">
                 Review your shortlisted showtimes ranked in order of preference. Check live seat availability and select one or more bookings to confirm together.
@@ -134,10 +134,13 @@ require_once __DIR__ . '/includes/header.php';
                                 <?php echo htmlspecialchars($item['movie_title']); ?>
                             </h3>
 
-                            <div class="wishlist-meta">
-                                <span>📅 <?php echo date('D, d M Y', strtotime($item['screening_date'])); ?></span>
-                                <span>⏰ <?php echo date('h:i A', strtotime($item['screening_time'])); ?></span>
-                                <span>🎭 <?php echo htmlspecialchars($item['hall_name']); ?> (<?php echo htmlspecialchars($item['experience_type']); ?>)</span>
+                            <div class="wishlist-meta" style="display:grid; gap:4px;">
+                                <span style="color:var(--color-text-main); font-weight:700;">
+                                    <?= date('D, j M Y', strtotime($item['screening_date'])) ?> · <?= date('g:i A', strtotime($item['screening_time'])) ?>
+                                </span>
+                                <span>
+                                    <strong><?= htmlspecialchars($item['hall_name']) ?></strong> · <?= htmlspecialchars($item['experience_type']) ?>
+                                </span>
                             </div>
 
                             <div style="font-size: 13px; color: var(--color-text-muted);">
@@ -157,7 +160,12 @@ require_once __DIR__ . '/includes/header.php';
                             <div class="wishlist-btn-row">
                                 <button type="submit" form="wishlistAction<?= $wishlistId ?>" name="action" value="move_up" class="btn btn--ghost btn--sm" title="Increase Preference Rank">▲</button>
                                 <button type="submit" form="wishlistAction<?= $wishlistId ?>" name="action" value="move_down" class="btn btn--ghost btn--sm" title="Decrease Preference Rank">▼</button>
-                                <a href="booking.php?screening_id=<?php echo $screeningId; ?>&wishlist_id=<?= $wishlistId ?>" class="btn btn--outline btn--sm" title="Modify Seats">✏️ Edit</a>
+                                <a href="booking.php?screening_id=<?php echo $screeningId; ?>&wishlist_id=<?= $wishlistId ?>" class="btn btn--outline btn--sm" title="Modify Seats">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="m14 6 4 4M4 20l4-1 12-12a2.8 2.8 0 0 0-4-4L4 15l-1 5Z"/>
+                                    </svg>
+                                    Edit
+                                </a>
                                 <button type="submit" form="wishlistAction<?= $wishlistId ?>" name="action" value="remove" class="btn btn--danger btn--sm" title="Remove">Remove</button>
                             </div>
                         </div>
@@ -201,7 +209,10 @@ require_once __DIR__ . '/includes/header.php';
 <?php else: ?>
     <!-- Empty Wishlist State -->
     <div class="form-card" style="text-align: center; max-width: 540px; padding: 48px 24px;">
-        <span style="font-size: 48px; display: block; margin-bottom: 16px;">📋</span>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block; margin:0 auto 16px;">
+            <rect x="8" y="2" width="8" height="4" rx="1"/>
+            <path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2M8 11h8M8 15h8M8 19h5"/>
+        </svg>
         <h2 style="font-size: 24px; color: #ffffff; margin-bottom: 8px;">Your Wishlist is Empty</h2>
         <p style="color: var(--color-text-muted); margin-bottom: 24px; line-height: 1.6;">
             You have not shortlisted any movie showtimes yet. Explore our Now Showing titles, pick your preferred seats, and add them to your wishlist to compare and confirm!

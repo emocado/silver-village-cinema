@@ -1,0 +1,92 @@
+.account-card {
+    position: relative;
+    max-width: 740px;
+    margin: 0 auto 48px;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    background: var(--color-bg-card);
+}
+
+.account-anchor {
+    position: absolute;
+    inset: 0 auto auto 0;
+    scroll-margin-top: 160px;
+}
+
+.account-banner {
+    padding: 24px clamp(20px, 5vw, 40px) 20px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.account-banner h1 {
+    margin: 0;
+    color: var(--color-text-main);
+    font: 800 clamp(28px, 4vw, 40px)/1.15 var(--font-heading);
+}
+
+.account-body { padding: 20px clamp(20px, 5vw, 40px) clamp(24px, 5vw, 40px); }
+
+.account-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.account-tabs a {
+    display: grid;
+    place-items: center;
+    min-height: 44px;
+    padding: 8px;
+    border-bottom: 2px solid transparent;
+    color: var(--color-text-muted);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.account-tabs a:hover { background: var(--color-bg-elevated); }
+.account-card:not(:is(:has(#register:target), .account-card--register:not(:has(#sign-in:target)))) .account-tabs a[href="#sign-in"],
+.account-card:is(:has(#register:target), .account-card--register:not(:has(#sign-in:target))) .account-tabs a[href="#register"] {
+    border-bottom-color: var(--color-primary-light);
+    color: var(--color-primary-light);
+}
+
+.account-register,
+.account-card:is(:has(#register:target), .account-card--register:not(:has(#sign-in:target))) .account-sign-in { display: none; }
+.account-card:is(:has(#register:target), .account-card--register:not(:has(#sign-in:target))) .account-register { display: block; }
+
+.account-intro { margin: 0 0 24px; color: var(--color-text-muted); }
+.account-card .form-group { margin-bottom: 20px; min-width: 0; }
+.account-card .form-label { color: var(--color-text-main); }
+.account-card .form-label span[aria-hidden] { color: var(--color-primary-light); }
+.account-card .form-control { min-width: 0; }
+.account-field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.account-password { position: relative; }
+.account-password .form-control { padding-right: 50px; }
+
+.account-password-toggle {
+    position: absolute;
+    inset: 3px 3px 3px auto;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-bg-surface);
+    cursor: pointer;
+}
+
+.account-password-toggle[hidden],
+.account-password-toggle:not([data-visible]) .account-eye-slash { display: none; }
+.account-password-toggle:hover { background: var(--color-text-body); }
+.account-password-toggle:focus-visible { outline: 2px solid var(--color-primary-dark); outline-offset: -2px; }
+.account-tabs a:focus-visible,
+.account-card .btn:focus-visible { outline: 2px solid var(--color-primary-light); outline-offset: 3px; }
+.account-card .account-terms { flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 10px; }
+.account-terms input { margin-top: 4px; accent-color: var(--color-primary); }
+.account-terms-label { flex: 1; color: var(--color-text-muted); cursor: pointer; }
+.account-terms .form-error-msg { flex-basis: 100%; }
+@media (max-width: 560px) {
+    .account-field-row { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}

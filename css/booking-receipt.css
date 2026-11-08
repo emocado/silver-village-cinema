@@ -1,0 +1,44 @@
+.booking-receipt { max-width: 740px; margin: 0 auto; }
+.receipt-heading { display: flex; align-items: center; gap: 12px; }
+.booking-receipt .receipt-heading h1 { margin: 0; font-size: clamp(28px, 4vw, 40px); line-height: 1.15; }
+.receipt-check {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #81e5b1;
+    background: #153a37;
+}
+.booking-receipt .receipt-intro { margin: 10px 0 24px; color: var(--color-text-muted); }
+.receipt-ticket { margin-bottom: 14px; border: 1px solid var(--color-border); background: var(--color-bg-surface); }
+.receipt-ticket-main { padding: clamp(16px, 3vw, 24px); }
+.receipt-ticket h2 { margin: 0; font-size: clamp(22px, 3vw, 30px); line-height: 1.2; }
+.receipt-ticket .receipt-showtime { margin: 6px 0 16px; color: var(--color-text-muted); }
+.receipt-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin: 0; }
+.receipt-details dt, .receipt-reference span, .receipt-reference p { color: var(--color-text-muted); font-size: 13px; }
+.receipt-details dd { margin: 2px 0 0; font-weight: 700; overflow-wrap: anywhere; }
+.receipt-reference {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px clamp(16px, 3vw, 24px);
+    background: var(--color-bg-elevated);
+    border-top: 1px dashed #6686a8;
+}
+.receipt-reference > div { min-width: 0; }
+.receipt-reference-value { display: block; overflow-wrap: anywhere; }
+.receipt-reference p { margin: 3px 0 0; }
+.receipt-copy[hidden] { display: none; }
+.receipt-total { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--color-border); }
+.receipt-total strong { font-size: 21px; }
+.booking-receipt .receipt-email { margin: 14px 0 18px; color: var(--color-text-muted); }
+.booking-receipt .receipt-email.alert--warning { color: inherit; }
+.receipt-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 380px) {
+    .receipt-details { grid-template-columns: 1fr; }
+}
