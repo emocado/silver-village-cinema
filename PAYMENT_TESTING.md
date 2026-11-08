@@ -7,7 +7,7 @@ This local coursework version is not connected to a payment processor and does n
 | Field | Approved test payment | Declined test payment |
 |---|---|---|
 | Name on card | Any test name, e.g. Alex Tan | Any test name |
-| Card number | 4242 4242 4242 4242 | 4000 0000 0000 0002 |
+| Card number (16 digits, spaced automatically) | 4242 4242 4242 4242 | 4000 0000 0000 0002 |
 | Expiry | Any future MM/YY, e.g. 12/39 | Any future MM/YY |
 | Security code | 123 | 123 |
 

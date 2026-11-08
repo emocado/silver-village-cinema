@@ -12,7 +12,9 @@ if($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['account_action']??'')==='sign
         if($user && password_verify($loginPassword,$user['password_hash'])) {
             session_regenerate_id(true);
             $_SESSION=['user_id'=>(int)$user['user_id'],'user_name'=>$user['full_name'],'user_email'=>$user['email'],'user_role'=>$user['role']];
-            header('Location: '.$redirectUrl,true,303); exit;
+            $destination = isAdmin() ? cinemaUrl('admin/index.php') : $redirectUrl;
+            header('Location: '.$destination, true, 303);
+            exit;
         }
         $error='Invalid email address or password.';
     }
@@ -50,9 +52,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['account_action'] ?? '') ==
         $errors['full_name'] = "Name must only contain letters, spaces, and hyphens (2-50 characters).";
     }
 
+    $emailDomain = strtolower(substr(strrchr($email, '@') ?: '', 1));
+    $domainLabelCount = substr_count($emailDomain, '.') + 1;
+    $invalidDomain =
+        (str_ends_with($emailDomain, '.com') && $domainLabelCount !== 2) ||
+        (str_ends_with($emailDomain, '.sg') && $domainLabelCount > 4) ||
+        str_starts_with($emailDomain, 'gmail.com.') ||
+        str_ends_with($emailDomain, '.sg.sg');
+
     if (empty($email)) {
         $errors['email'] = "Email address is required.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL) || $invalidDomain) {
         $errors['email'] = "Please provide a valid email address.";
     }
 
@@ -147,16 +157,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['account_action'] ?? '') ==
 $pageTitle='Your Account - CinéPop';
 require __DIR__.'/includes/header.php';
 ?>
-<h1>Your cinema account</h1><p>Sign in to manage bookings, or create your account.</p>
-<div class="account-layout"><section id="sign-in"><div class="form-card" style="max-width: 480px;">
-    <div class="form-header">
-        <span style="font-size: 36px; display: block; margin-bottom: 8px;">🔐</span>
-        <h2 class="form-title">Member Sign In</h2>
-        <p class="form-subtitle">
-            Access your bookings, manage your preference shortlist, and book cinema tickets.
-        </p>
-    </div>
-
+<link rel="stylesheet" href="css/account.css">
+<div class="account-card<?= !empty($errors) ? ' account-card--register' : '' ?>">
+    <span id="sign-in" class="account-anchor"></span>
+    <span id="register" class="account-anchor"></span>
+    <header class="account-banner"><h1>My account</h1></header>
+    <div class="account-body">
+        <nav class="account-tabs" aria-label="Account options">
+            <a href="#sign-in">Log in</a>
+            <a href="#register">Register</a>
+        </nav>
+        <section class="account-sign-in" aria-label="Log in">
     <?php if (!empty($error)): ?>
         <div class="alert alert--danger">
             ⚠️ <?php echo htmlspecialchars($error); ?>
@@ -168,36 +179,33 @@ require __DIR__.'/includes/header.php';
 
         <!-- Email Field -->
         <div class="form-group">
-            <label class="form-label" for="login_email">Email Address</label>
-            <input type="email" id="login_email" name="email" class="form-control" placeholder="user@cinepop.local" required autofocus>
+            <label class="form-label" for="login_email"><span>Email Address <span aria-hidden="true">*</span></span></label>
+            <input type="email" id="login_email" name="email" class="form-control" placeholder="Your email address" autocomplete="username" required>
         </div>
 
         <!-- Password Field -->
         <div class="form-group">
-            <label class="form-label" for="login_password">Password</label>
-            <input type="password" id="login_password" name="password" class="form-control" placeholder="Your password" required>
+            <label class="form-label" for="login_password"><span>Password <span aria-hidden="true">*</span></span></label>
+            <div class="account-password">
+                <input type="password" id="login_password" name="password" class="form-control" placeholder="Your password" autocomplete="current-password" required>
+                <button type="button" class="account-password-toggle" aria-controls="login_password" aria-label="Show password" hidden>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                        <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/>
+                        <circle cx="12" cy="12" r="2.5"/>
+                        <path class="account-eye-slash" d="m3 3 18 18"/>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn--primary btn--block btn--lg" style="margin-top: 16px;">
-            Sign In &rarr;
+        <button type="submit" class="btn btn--primary btn--block btn--lg">
+            Log in
         </button>
-
-        <p style="text-align: center; font-size: 14px; margin-top: 20px; color: var(--color-text-muted);">
-            Don't have an account? <a href="#register" style="font-weight: 600;">Register Here &rarr;</a>
-        </p>
     </form>
-</div>
-
-</section><section id="register"><div class="form-card">
-    <div class="form-header">
-        <span style="font-size: 36px; display: block; margin-bottom: 8px;">👑</span>
-        <h2 class="form-title">Create an account</h2>
-        <p class="form-subtitle">
-            Create an account to book tickets, manage your preference wishlists, and receive e-tickets directly.
-        </p>
-    </div>
-
+        </section>
+        <section class="account-register" aria-label="Register">
+            <p class="account-intro">Create an account to book tickets, manage your preference wishlists, and receive e-tickets directly.</p>
     <!-- General Error Banner -->
     <?php if (!empty($errors) && isset($errors[0])): ?>
         <div class="alert alert--danger">
@@ -232,6 +240,7 @@ require __DIR__.'/includes/header.php';
             <?php endif; ?>
         </div>
 
+        <div class="account-field-row">
         <!-- Field 3: Mobile Phone -->
         <div class="form-group">
             <label class="form-label" for="phone">
@@ -256,12 +265,23 @@ require __DIR__.'/includes/header.php';
             <?php endif; ?>
         </div>
 
+        </div>
+
         <!-- Field 5: Password -->
         <div class="form-group">
             <label class="form-label" for="password">
                 <span>Account Password <span style="color:var(--color-primary-light);">*</span></span>
             </label>
-            <input type="password" id="password" name="password" class="form-control <?php echo isset($errors['password']) ? 'is-invalid' : ''; ?>" placeholder="Min. 8 characters, 1 uppercase, 1 digit" required>
+            <div class="account-password">
+                <input type="password" id="password" name="password" class="form-control <?php echo isset($errors['password']) ? 'is-invalid' : ''; ?>" placeholder="Min. 8 characters, 1 uppercase, 1 digit" autocomplete="new-password" required>
+                <button type="button" class="account-password-toggle" aria-controls="password" aria-label="Show password" hidden>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                        <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/>
+                        <circle cx="12" cy="12" r="2.5"/>
+                        <path class="account-eye-slash" d="m3 3 18 18"/>
+                    </svg>
+                </button>
+            </div>
             <div class="password-meter-wrap">
                 <div class="password-meter-bar">
                     <div id="pwdStrengthFill" class="password-meter-fill"></div>
@@ -278,17 +298,26 @@ require __DIR__.'/includes/header.php';
             <label class="form-label" for="confirm_password">
                 <span>Confirm Password <span style="color:var(--color-primary-light);">*</span></span>
             </label>
-            <input type="password" id="confirm_password" name="confirm_password" class="form-control <?php echo isset($errors['confirm_password']) ? 'is-invalid' : ''; ?>" placeholder="Re-type your password" required>
+            <div class="account-password">
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control <?php echo isset($errors['confirm_password']) ? 'is-invalid' : ''; ?>" placeholder="Re-type your password" autocomplete="new-password" required>
+                <button type="button" class="account-password-toggle" aria-controls="confirm_password" aria-label="Show password" hidden>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                        <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/>
+                        <circle cx="12" cy="12" r="2.5"/>
+                        <path class="account-eye-slash" d="m3 3 18 18"/>
+                    </svg>
+                </button>
+            </div>
             <?php if (isset($errors['confirm_password'])): ?>
                 <div class="form-error-msg" style="display:block;"><?php echo htmlspecialchars($errors['confirm_password']); ?></div>
             <?php endif; ?>
         </div>
 
         <!-- Terms Agreement Checkbox -->
-        <div class="form-group" style="flex-direction: row; align-items: flex-start; gap: 10px; margin-top: 10px;">
-            <input type="checkbox" id="terms" name="terms" style="margin-top: 4px; accent-color: var(--color-primary);" <?php echo isset($_POST['terms']) ? 'checked' : ''; ?> required>
-            <label for="terms" style="font-size: 13px; color: var(--color-text-muted); cursor: pointer;">
-                I agree to the CinéPop Booking Terms of Service and Privacy Policy.
+        <div class="form-group account-terms">
+            <input type="checkbox" id="terms" name="terms" <?php echo isset($_POST['terms']) ? 'checked' : ''; ?> required>
+            <label for="terms" class="account-terms-label">
+                <span aria-hidden="true" style="color: var(--color-primary-light);">*</span> I agree to the CinéPop Booking Terms of Service and Privacy Policy.
             </label>
         </div>
         <?php if (isset($errors['terms'])): ?>
@@ -296,15 +325,12 @@ require __DIR__.'/includes/header.php';
         <?php endif; ?>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn--primary btn--block btn--lg" style="margin-top: 16px;">
+        <button type="submit" class="btn btn--primary btn--block btn--lg">
             Create Account & Start Booking
         </button>
-
-        <p style="text-align: center; font-size: 14px; margin-top: 20px; color: var(--color-text-muted);">
-            Already have an account? <a href="#sign-in" style="font-weight: 600;">Sign In Here &rarr;</a>
-        </p>
     </form>
+        </section>
+    </div>
 </div>
-
-</section></div>
+<script src="js/account.js" defer></script>
 <?php require __DIR__.'/includes/footer.php'; ?>

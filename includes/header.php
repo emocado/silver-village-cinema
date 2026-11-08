@@ -21,8 +21,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
 <!-- External Custom CSS (Project Requirement: external stylesheet with min 4 styles) -->
-    <link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/cinema-theme.css?v=20261030">
-    <?php if($currentPage==='booking.php'): ?><link rel="stylesheet" href="css/booking-seats.css?v=20261030"><?php endif; ?>
+    <link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/cinema-theme.css?v=<?= filemtime(__DIR__ . '/../css/cinema-theme.css') ?>">
+    <?php if($currentPage==='booking.php'): ?><link rel="stylesheet" href="css/booking-seats.css?v=screen-glow-top"><?php endif; ?>
 </head>
 <body class="page-<?= htmlspecialchars(str_replace('_','-',pathinfo($currentPage,PATHINFO_FILENAME))) ?> <?= $currentPage==='index.php'?'has-quickbook':'' ?>">
     <!-- Top Navigation Bar -->
