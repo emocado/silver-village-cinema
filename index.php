@@ -78,7 +78,6 @@ $comingSoonResult = $conn->query("SELECT * FROM movies WHERE status = 'coming_so
         <button type="button" data-feature-prev aria-label="Previous featured movie">&#8592;</button>
         <span data-feature-position>1 / <?= count($featuredMovies) ?></span>
         <button type="button" data-feature-next aria-label="Next featured movie">&#8594;</button>
-        <button type="button" data-feature-pause>Pause rotation</button>
     </div>
     <?php endif; ?>
 </section>
