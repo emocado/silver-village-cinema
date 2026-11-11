@@ -1,0 +1,12 @@
+
+/* CinéPop - Tailwind CSS enhancements */
+
+/* Preserve existing styling by excluding Tailwind Preflight */
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme) prefix(tw);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
+
+/* Pages using Tailwind */
+@source "../booking.php";
+@source "../confirmation.php";

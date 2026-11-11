@@ -10,3 +10,4 @@ test_auth.php
 generate_posters.py
 generate_hero.py
 update_passwords.php
+node_modules/
