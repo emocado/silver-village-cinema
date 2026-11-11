@@ -1,14 +1,14 @@
 # CinéPop — IE4727 Theme 5
 
-Cinema booking project using HTML, external CSS, vanilla JavaScript, PHP and MySQL. The additional seat-selection version uses Vue 3 and Tailwind; modern dependencies and JSON serialization are confined to enhanced/.
+Cinema booking project using HTML, external CSS, vanilla JavaScript, PHP and MySQL.
 
 ## Run locally
 
-1. Install XAMPP and place this project at `C:\xampp\htdocs\silver-village-cinema`.
+1. Install XAMPP and place this project at `C:\xampp\htdocs\cinepop`.
 2. Start Apache, MySQL and Mercury.
 3. For a **new database only**, import sql/schema.sql through phpMyAdmin. This script rebuilds the demo tables and seed data; do not re-import it over bookings you want to keep.
 4. For an **existing installation**, run only sql/upgrade_20261030.sql. It adds the enquiries table without resetting users or bookings.
-5. This computer's Apache uses port 8000: open http://localhost:8000/silver-village-cinema/ . If your Apache uses port 80, omit :8000.
+5. This computer's Apache uses port 8000: open http://localhost:8000/cinepop/ . If your Apache uses port 80, omit :8000.
 6. Follow THUNDERBIRD_SETUP.md to receive the local acknowledgements in Thunderbird.
 
 The original customer demo credentials are user@cinepop.local / Pass1234! and sarah@cinepop.local / Pass1234!. The administrator demo is admin@cinepop.local / Admin123!. Existing installations keep their current user records and passwords; the update does not reset them.
@@ -62,7 +62,7 @@ There are **11 rendered base pages: one homepage plus ten content pages**, inclu
 | about.php | Cinema information and saved contact enquiries |
 | admin/index.php | Dashboard, movies, screenings, booking report and enquiries on one page |
 
-login.php, register.php, mailbox.php and the old admin URLs are compatibility redirects and contain no content views. logout.php is a POST action. Includes are not directly accessible. The enhanced version is additional work. The static Stitch prototypes are reference-only and are blocked from HTTP access; they are not base content pages or wireframes.
+login.php, register.php, mailbox.php and the old admin URLs are compatibility redirects and contain no content views. logout.php is a POST action. Includes are not directly accessible. The static Stitch prototypes are reference-only and are blocked from HTTP access; they are not base content pages or wireframes.
 
 ## Local email
 
@@ -78,7 +78,7 @@ Testing evidence is in TEST_RESULTS.md. Project design/report notes are in imple
 
 ## Customer checkout
 
-Checkout uses a normal card form and a single Pay button. The local adapter determines approval or decline; customers do not choose an outcome. Use the test details in PAYMENT_TESTING.md. This version rejects real cards and does not collect payment.
+Checkout uses a normal card form and a single Pay button. The local adapter simulates approval for correctly formatted demo details with an unexpired date. Use fictional details from PAYMENT_TESTING.md. No payment is collected.
 
 
 ## Visual design

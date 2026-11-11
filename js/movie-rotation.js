@@ -2,7 +2,7 @@
     const hero = document.querySelector('.movie-rotation');
     const data = document.getElementById('featuredMovieData');
     if (!hero || !data) return;
-    const movies = JSON.parse(data.textContent);
+    const movies = Array.from(data.children, item => item.dataset);
     if (movies.length < 2) return;
     const controls = hero.querySelector('.movie-rotation-controls');
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -22,13 +22,13 @@
         hero.querySelector('.hero-title').textContent = movie.title;
         const metadata = hero.querySelector('.hero-meta').children;
         metadata[0].textContent = movie.rating;
-        metadata[1].textContent = movie.duration_minutes + ' Mins';
+        metadata[1].textContent = movie.durationMinutes + ' Mins';
         metadata[2].textContent = movie.genre;
-        hero.querySelector('[data-feature-booking]').href = 'movie_details.php?id=' + Number(movie.movie_id);
-        hero.querySelector('.hero-backdrop').style.backgroundImage = `url(${JSON.stringify(movie.backdrop)})`;
+        hero.querySelector('[data-feature-booking]').href = 'movie_details.php?id=' + Number(movie.movieId);
+        hero.querySelector('.hero-backdrop').style.backgroundImage = `url(${CSS.escape(movie.backdrop)})`;
         hero.querySelector('.hero-backdrop').classList.toggle(
             'is-poster',
-            movie.is_poster
+            movie.isPoster === '1'
         );
         document.querySelector('.featured-synopsis').textContent = movie.synopsis;
         hero.querySelector('[data-feature-position]').textContent = `${current + 1} / ${movies.length}`;

@@ -47,7 +47,6 @@ flowchart TD
     Home --> Feedback
     Home --> About[About and contact]
     Account --> Admin[Single administration page]
-    Seats -. Additional version .-> Enhanced[Vue / Tailwind seat selection]
 ```
 
 Success/failure are states of confirmation.php, not additional pages. Administration sections and sign-in/registration forms are combined on their respective single pages. The complete eleven-page inventory is in README.md and includes administration.
@@ -124,8 +123,10 @@ ADMINISTRATION (one page)
 
 See TEST_RESULTS.md for executed checks, methods and outcomes. The repeatable test script lives in the accompanying workspace at tmp/test_fixed_website.py. It uses isolated data and a simulated SMTP server; real Thunderbird retrieval must be demonstrated separately after account setup. Add screenshots and any additional manual results to the final report instead of labelling unexecuted tests as passed.
 
-## Additional version and justification
+## Features beyond the core booking requirements
 
-Vue 3 in enhanced/booking_enhanced.php provides reactive seat selection, seat removal and calculated totals. Tailwind provides responsive styling on that enhanced page. It submits back to the same validated PHP booking handler with a CSRF token. Its Vue/Tailwind/JSON usage remains outside the traditional base pages.
+- Homepage featured-film carousel and quick booking by film and date.
+- My Bookings lets customers cancel eligible bookings and resend booking receipts.
+- The admin dashboard manages movies and showtimes, and provides a booking report and contact enquiries.
+- Successful bookings display a popcorn celebration that respects reduced-motion preferences.
 
-The base version's implemented requirements must be demonstrated before claiming completion of the modern component. This document cannot verify the historical order of implementation, original authorship or the rule against reusing work for other assessed courses.

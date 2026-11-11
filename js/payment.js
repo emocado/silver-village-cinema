@@ -3,18 +3,22 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!form) return;
     const number = form.elements.card_number;
     const expiry = form.elements.expiry;
+    const securityCode = form.elements.security_code;
 
     number.addEventListener('input', function () {
-        if (!/^[0-9 ]*$/.test(this.value)) return;
-
-        const digitsBeforeCursor = this.value.slice(0, this.selectionStart).replace(/ /g, '').length;
-        const formatted = this.value.replace(/ /g, '').replace(/([0-9]{4})(?=[0-9])/g, '$1 ');
+        const digits = this.value.replace(/[^0-9]/g, '').slice(0, 16);
+        const digitsBeforeCursor = Math.min(digits.length, this.value.slice(0, this.selectionStart).replace(/[^0-9]/g, '').length);
+        const formatted = digits.replace(/([0-9]{4})(?=[0-9])/g, '$1 ');
         if (formatted !== this.value) {
             this.value = formatted;
             const spacesBeforeCursor = Math.floor(Math.max(0, digitsBeforeCursor - 1) / 4);
             const cursor = digitsBeforeCursor + spacesBeforeCursor;
             this.setSelectionRange(cursor, cursor);
         }
+    });
+    securityCode.addEventListener('input', function () {
+        const digits = this.value.replace(/[^0-9]/g, '').slice(0, 3);
+        if (this.value !== digits) this.value = digits;
     });
     expiry.addEventListener('input', function () {
         const digits = this.value.replace(/\D/g, '').slice(0, 4);
@@ -25,13 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (number.validity.patternMismatch || !/^[0-9]{16}$/.test(digits)) {
             return 'Enter exactly 16 digits.';
         }
-        let sum = 0;
-        [...digits].reverse().forEach((digit, index) => {
-            let value = Number(digit);
-            if (index % 2) { value *= 2; if (value > 9) value -= 9; }
-            sum += value;
-        });
-        return sum === 0 || sum % 10 !== 0 ? 'Check your card number and try again.' : '';
+        return '';
     }
 
     function expiryError() {
@@ -46,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function () {
             value.trim().length < 2 || value.trim().length > 100 ? 'Enter the name shown on your card.' : ''],
         [number, cardError],
         [expiry, expiryError],
-        [form.elements.security_code, value =>
-            /^[0-9]{3,4}$/.test(value) ? '' : 'Enter the 3 or 4 digit security code.'],
+        [securityCode, value =>
+            /^[0-9]{3}$/.test(value) ? '' : 'Enter exactly 3 digits for the security code.'],
     ];
 
     function validate(field, getError) {
