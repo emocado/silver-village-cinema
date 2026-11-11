@@ -1,10 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('paymentForm');
     if (!form) return;
+    const cardholder = form.elements.cardholder;
     const number = form.elements.card_number;
     const expiry = form.elements.expiry;
     const securityCode = form.elements.security_code;
 
+    cardholder.addEventListener('input', function () {
+        const name = this.value.replace(/\p{N}/gu, '');
+        if (name === this.value) return;
+
+        const cursor = this.value.slice(0, this.selectionStart).replace(/\p{N}/gu, '').length;
+        this.value = name;
+        this.setSelectionRange(cursor, cursor);
+    });
     number.addEventListener('input', function () {
         const digits = this.value.replace(/[^0-9]/g, '').slice(0, 16);
         const digitsBeforeCursor = Math.min(digits.length, this.value.slice(0, this.selectionStart).replace(/[^0-9]/g, '').length);
@@ -40,8 +49,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const fields = [
-        [form.elements.cardholder, value =>
-            value.trim().length < 2 || value.trim().length > 100 ? 'Enter the name shown on your card.' : ''],
+        [cardholder, value => {
+            if (/\p{N}/u.test(value)) return 'Enter a name without numbers.';
+            return value.trim().length < 2 || value.trim().length > 100 ? 'Enter the name shown on your card.' : '';
+        }],
         [number, cardError],
         [expiry, expiryError],
         [securityCode, value =>
