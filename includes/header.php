@@ -23,6 +23,10 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <!-- External Custom CSS (Project Requirement: external stylesheet with min 4 styles) -->
     <link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/cinema-theme.css?v=<?= filemtime(__DIR__ . '/../css/cinema-theme.css') ?>">
     <?php if($currentPage==='booking.php'): ?><link rel="stylesheet" href="css/booking-seats.css?v=screen-glow-top"><?php endif; ?>
+        <?php if (in_array($currentPage, ['booking.php', 'confirmation.php'], true)): ?>
+            <link rel="stylesheet"
+            href="css/tailwind-enhanced.css?v=<?= filemtime(__DIR__ . '/../css/tailwind-enhanced.css') ?>">
+            <?php endif; ?>
 </head>
 <body class="page-<?= htmlspecialchars(str_replace('_','-',pathinfo($currentPage,PATHINFO_FILENAME))) ?> <?= $currentPage==='index.php'?'has-quickbook':'' ?>">
     <!-- Top Navigation Bar -->

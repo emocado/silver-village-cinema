@@ -77,9 +77,9 @@ require __DIR__.'/includes/header.php';
             </div>
         <?php endif; ?>
         <?php foreach ($receipt['bookings'] as $ticket): ?>
-            <article class="receipt-ticket">
-                <div class="receipt-ticket-main">
-                    <h2><?= htmlspecialchars($ticket['title']) ?></h2>
+            <article class="receipt-ticket tw:overflow-hidden tw:rounded-xl tw:shadow-xl">
+            <div class="tw:h-1 tw:bg-linear-to-r tw:from-sky-300 tw:via-blue-600 tw:to-slate-800" aria-hidden="true"></div>                
+            <div class="receipt-ticket-main">                    <h2><?= htmlspecialchars($ticket['title']) ?></h2>
                     <p class="receipt-showtime"><?= htmlspecialchars(date('D, j M Y · g:i a', strtotime($ticket['screening_date'].' '.$ticket['screening_time']))) ?></p>
                     <dl class="receipt-details">
                         <div><dt>Cinema hall</dt><dd><?= htmlspecialchars($ticket['hall_name']) ?></dd></div>
@@ -92,14 +92,13 @@ require __DIR__.'/includes/header.php';
                 <div class="receipt-reference">
                     <div>
                         <span>Booking reference</span>
-                        <strong class="receipt-reference-value"><?= htmlspecialchars($ticket['booking_ref']) ?></strong>
-                        <p>Show this reference at the cinema.</p>
+                        <strong class="receipt-reference-value tw:font-mono tw:tracking-wider tw:text-sky-200"><?= htmlspecialchars($ticket['booking_ref']) ?></strong>                        <p>Show this reference at the cinema.</p>
                     </div>
                     <button type="button" class="btn btn--outline btn--sm receipt-copy" hidden aria-live="polite">Copy reference</button>
                 </div>
             </article>
         <?php endforeach; ?>
-        <div class="receipt-total"><span>Total paid</span><strong>SGD $<?= number_format($receipt['total'], 2) ?></strong></div>
+        <div class="receipt-total tw:my-4 tw:rounded-lg tw:bg-[#102e50] tw:px-4! tw:py-4!"><span>Total paid</span><strong>SGD $<?= number_format($receipt['total'], 2) ?></strong></div>
         <?php if (!empty($receipt['mail']['accepted'])): ?>
             <p class="receipt-email" role="status">Your booking acknowledgement is on its way.</p>
         <?php else: ?>
