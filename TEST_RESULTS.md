@@ -1,6 +1,6 @@
 # Verification results — 30 October 2026
 
-The corrected website was installed at C:\xampp\htdocs\silver-village-cinema after creating an original-file backup. Existing user records, passwords and bookings were preserved. An additive migration created the enquiries table; the demo schema was not re-imported over live records.
+The corrected website was installed at the original XAMPP project folder after creating an original-file backup. Existing user records, passwords and bookings were preserved. An additive migration created the enquiries table; the demo schema was not re-imported over live records.
 
 ## Automated application checks
 

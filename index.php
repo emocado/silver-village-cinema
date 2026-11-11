@@ -83,7 +83,20 @@ $comingSoonResult = $conn->query("SELECT * FROM movies WHERE status = 'coming_so
 </section>
 <p class="featured-synopsis"><?php echo htmlspecialchars($featuredMovie['synopsis']); ?></p>
 <p class="sr-only" id="featuredMovieAnnouncement" aria-live="polite" aria-atomic="true"></p>
-<script type="application/json" id="featuredMovieData"><?= json_encode($featuredMovies, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE) ?></script>
+<div id="featuredMovieData" hidden>
+    <?php foreach ($featuredMovies as $movie): ?>
+        <div
+            data-movie-id="<?= (int)$movie['movie_id'] ?>"
+            data-title="<?= htmlspecialchars($movie['title'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-rating="<?= htmlspecialchars($movie['rating'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-duration-minutes="<?= (int)$movie['duration_minutes'] ?>"
+            data-genre="<?= htmlspecialchars($movie['genre'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-backdrop="<?= htmlspecialchars($movie['backdrop'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-is-poster="<?= $movie['is_poster'] ? '1' : '0' ?>"
+            data-synopsis="<?= htmlspecialchars($movie['synopsis'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+        ></div>
+    <?php endforeach; ?>
+</div>
 <script src="js/movie-rotation.js?v=<?= filemtime(__DIR__ . '/js/movie-rotation.js') ?>" defer></script>
 <?php endif; ?>
 

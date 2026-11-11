@@ -234,7 +234,6 @@ require __DIR__.'/includes/header.php';
                 <span>Email Address <span style="color:var(--color-primary-light);">*</span></span>
             </label>
             <input type="email" id="email" name="email" class="form-control <?php echo isset($errors['email']) ? 'is-invalid' : ''; ?>" placeholder="e.g. user@cinepop.local" value="<?php echo htmlspecialchars($email); ?>" required>
-            <small class="form-help-text">For this course demo, receipts go to your local Mercury mailbox in Thunderbird.</small>
             <?php if (isset($errors['email'])): ?>
                 <div class="form-error-msg" style="display:block;"><?php echo htmlspecialchars($errors['email']); ?></div>
             <?php endif; ?>

@@ -51,7 +51,7 @@ Mozilla documents the manual-configuration process in [Manual Account Configurat
 ## 4. Test it with a real booking
 
 1. Keep Apache, MySQL and Mercury running.
-2. Open [the local website](http://localhost:8000/silver-village-cinema/).
+2. Open [the local website](http://localhost:8000/cinepop/).
 3. Sign in with your existing cinema account.
 4. Choose a **future** screening, select available seats, and either add them to your wishlist or proceed directly to checkout.
 5. On the payment page, enter the approved test card from PAYMENT_TESTING.md and click **Pay**.
