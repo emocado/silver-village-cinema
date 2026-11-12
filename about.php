@@ -1,11 +1,13 @@
 <?php
 require_once __DIR__.'/includes/db_connect.php';
 require_once __DIR__.'/includes/auth.php';
+require_once __DIR__.'/includes/email_validation.php';
 $contactSuccess=false; $contactError=''; $cName=''; $cEmail=''; $cSubject=''; $cMessage='';
 if($_SERVER['REQUEST_METHOD']==='POST') {
     $cName=trim($_POST['contact_name']??''); $cEmail=trim($_POST['contact_email']??''); $cSubject=trim($_POST['contact_subject']??''); $cMessage=trim($_POST['contact_message']??'');
     if(strlen($cName)<2 || strlen($cName)>100) $contactError='Enter a name between 2 and 100 characters.';
-    elseif(!filter_var($cEmail,FILTER_VALIDATE_EMAIL) || strlen($cEmail)>120) $contactError='Enter a valid email address.';
+    elseif($cEmail==='') $contactError='Email address is required.';
+    elseif(!isValidCinemaEmail($cEmail) || strlen($cEmail)>120) $contactError='Please provide a valid email address.';
     elseif(strlen($cSubject)>150) $contactError='Keep the subject within 150 characters.';
     elseif(strlen($cMessage)<10 || strlen($cMessage)>5000) $contactError='Enter a message between 10 and 5,000 characters.';
     else {
@@ -136,11 +138,11 @@ $pageTitle='About Us & Contact - CinéPop'; require __DIR__.'/includes/header.ph
 
             <div class="form-group">
                 <label class="form-label" for="contact_email">Email Address</label>
-                <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="user@cinepop.local" required value="<?= htmlspecialchars($cEmail) ?>">
+                <input type="email" id="contact_email" name="contact_email" class="form-control" maxlength="120" placeholder="user@cinepop.local" required value="<?= htmlspecialchars($cEmail) ?>">
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="contact_subject">Subject</label>
+                <label class="form-label" for="contact_subject">Subject (optional)</label>
                 <input type="text" id="contact_subject" name="contact_subject" class="form-control" placeholder="e.g. Corporate Hall Booking Enquiry" value="<?= htmlspecialchars($cSubject) ?>">
             </div>
 

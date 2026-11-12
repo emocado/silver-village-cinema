@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__.'/includes/db_connect.php';
 require_once __DIR__.'/includes/auth.php';
+require_once __DIR__.'/includes/email_validation.php';
 if(isLoggedIn()) { header('Location: index.php'); exit; }
 $error='';
 $redirectUrl=safeLocalRedirect($_GET['redirect']??$_POST['redirect_url']??'index.php');
@@ -52,17 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['account_action'] ?? '') ==
         $errors['full_name'] = "Name must only contain letters, spaces, and hyphens (2-50 characters).";
     }
 
-    $emailDomain = strtolower(substr(strrchr($email, '@') ?: '', 1));
-    $domainLabelCount = substr_count($emailDomain, '.') + 1;
-    $invalidDomain =
-        (str_ends_with($emailDomain, '.com') && $domainLabelCount !== 2) ||
-        (str_ends_with($emailDomain, '.sg') && $domainLabelCount > 4) ||
-        str_starts_with($emailDomain, 'gmail.com.') ||
-        str_ends_with($emailDomain, '.sg.sg');
-
     if (empty($email)) {
         $errors['email'] = "Email address is required.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL) || $invalidDomain) {
+    } elseif (!isValidCinemaEmail($email)) {
         $errors['email'] = "Please provide a valid email address.";
     }
 

@@ -85,6 +85,6 @@
     </footer>
 
     <!-- Client-Side Form Validation JS (Project requirement) -->
-    <script src="js/validation.js<?= $currentPage === 'account.php' ? '?v=registration-gmail' : '' ?>"></script><script src="js/site.js"></script>
+    <script src="js/validation.js?v=live-enquiry-validation"></script><script src="js/site.js"></script>
 </body>
 </html>
